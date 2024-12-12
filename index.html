@@ -20,13 +20,17 @@
                     <button onclick="showRegisterForm()" class="nav-btn register-btn">회원가입</button>
                 </div>
                 <div class="nav-user hidden" id="navUser">
-                    <span class="user-info">
-                        <i class="fas fa-user"></i>
-                        <span id="userEmail"></span>
-                    </span>
                     <button onclick="showQuiz()" class="nav-btn">퀴즈</button>
-                    <button onclick="showMyPage()" class="nav-btn">마이페이지</button>
-                    <button onclick="logout()" class="nav-btn logout-btn">로그아웃</button>
+                    <div class="profile-menu">
+                        <button onclick="showMyPage()" class="profile-btn">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="userEmail"></span>
+                        </button>
+                        <div class="profile-dropdown hidden">
+                            <a href="#" onclick="showMyPage(); return false;">마이페이지</a>
+                            <a href="#" onclick="logout(); return false;">로그아웃</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -206,7 +210,7 @@
                     </div>
                     
                     <div class="achievement-section">
-                        <h2>나의 업적</h2>
+                        <h2>나의 업��</h2>
                         <div class="achievement-grid">
                             <!-- 업적 카드들은 JavaScript로 동적 생성됩니다 -->
                         </div>

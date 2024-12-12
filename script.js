@@ -122,7 +122,7 @@ async function startLearning() {
     }
 }
 
-// 사용자 데이터 불러오�� 함수
+// 사용자 데이터 불러오기 함수
 function loadUserData() {
     // 저장된 진도 불러오기
     const savedProgress = localStorage.getItem('userProgress');
@@ -365,7 +365,7 @@ function updateProgress() {
         Math.round((correctCount / (correctCount + wrongCount)) * 100);
     document.getElementById('accuracyRate').textContent = `${accuracyRate}%`;
 
-    // 최근 학습 정보 업��이트
+    // 최근 학습 정보 업데이트
     if (userProgress.lastStudy) {
         document.getElementById('lastStudyDate').textContent = 
             new Date(userProgress.lastStudy).toLocaleDateString();
@@ -552,7 +552,7 @@ function showQuestion() {
     updateProgressBar();
 }
 
-// 답안 ��크 함수
+// 답안 체크 함수
 function checkAnswer(index) {
     const question = questions[currentQuestion];
     const buttons = document.querySelectorAll('.option-btn');
@@ -591,7 +591,7 @@ function showQuizResult() {
     }
 }
 
-// 프로필 관련 함수들
+// 프로필 관련 함수��
 function loadUserProfile() {
     // 사용자 정보를 가져와서 프로필을 업데이트합니다
     const user = getCurrentUser(); // 이 함수는 현재 로그인된 사용자 정보를 반환해야 합니다
@@ -720,7 +720,7 @@ function calculateStudyStreak() {
     if (diffDays > 1) {
         userProgress.streak = 0;
     } else if (diffDays === 1) {
-        // 어제 학습했으면 연속 학습 유지
+        // 어제 학습했으면 연속 학��� 유지
         userProgress.streak = (userProgress.streak || 0) + 1;
     }
 
@@ -825,4 +825,24 @@ function checkAchievements() {
         
         achievementGrid.appendChild(card);
     });
-} 
+}
+
+// 프로필 드롭다운 토글
+function toggleProfileDropdown() {
+    const dropdown = document.querySelector('.profile-dropdown');
+    dropdown.classList.toggle('hidden');
+}
+
+// 프로필 버튼에 클릭 이벤트 리스너 추가
+document.querySelector('.profile-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleProfileDropdown();
+});
+
+// 문서 클릭 시 드롭다운 닫기
+document.addEventListener('click', () => {
+    const dropdown = document.querySelector('.profile-dropdown');
+    if (!dropdown.classList.contains('hidden')) {
+        dropdown.classList.add('hidden');
+    }
+}); 

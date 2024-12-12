@@ -26,12 +26,12 @@ body {
 
 /* 네비게이션 바 */
 .global-nav {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background-color: white;
-    box-shadow: var(--shadow);
     z-index: 1000;
 }
 
@@ -44,35 +44,141 @@ body {
     align-items: center;
 }
 
-.logo {
+.nav-left .logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: #FF4B4B;
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.nav-btn {
+.nav-left .logo:hover {
+    color: #FF6B6B;
+}
+
+/* 네비게이션 바 스타일 수정 */
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* 프로필 메뉴 스타일 */
+.profile-menu {
+    position: relative;
+}
+
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 1rem;
-    margin-left: 1rem;
+    background-color: transparent;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-btn i {
+    font-size: 1.5rem;
+    color: #FF4B4B;
+}
+
+.profile-btn span {
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.profile-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* 드롭다운 메뉴 */
+.profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 0.5rem 0;
+    min-width: 150px;
+    z-index: 1000;
+}
+
+.profile-dropdown a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.profile-dropdown a:hover {
+    background-color: #f0f0f0;
+}
+
+/* 퀴즈 버튼 스타일 */
+.nav-btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
     font-weight: 500;
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+}
+
+/* 로그인/회원가입 버튼 스타일 */
+.nav-guest {
+    display: flex;
+    gap: 1rem;
 }
 
 .login-btn {
     background-color: transparent;
-    color: var(--primary-color);
+    border: 2px solid #FF4B4B;
+    color: #FF4B4B;
+}
+
+.login-btn:hover {
+    background-color: #FF4B4B;
+    color: white;
 }
 
 .register-btn {
-    background-color: var(--primary-color);
+    background-color: #FF4B4B;
     color: white;
 }
 
-.logout-btn {
-    background-color: var(--error-color);
-    color: white;
+.register-btn:hover {
+    background-color: #FF6B6B;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .nav-content {
+        padding: 1rem;
+    }
+    
+    .nav-btn {
+        padding: 0.4rem 0.8rem;
+        margin-left: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .user-info {
+        display: none;
+    }
 }
 
 /* 메인 컨테이너 */
