@@ -6,187 +6,216 @@
     <title>당고링고</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <!-- 전역 네비게이션 바 -->
     <nav class="global-nav">
         <div class="nav-content">
             <div class="nav-left">
-                <a href="#" class="logo">당고링고</a>
+                <a href="#" class="logo" onclick="showDashboard(); return false;">당고링고</a>
             </div>
             <div class="nav-right" id="navRight">
-                <!-- 로그인 전 -->
                 <div class="nav-guest" id="navGuest">
                     <button onclick="showLoginForm()" class="nav-btn login-btn">로그인</button>
                     <button onclick="showRegisterForm()" class="nav-btn register-btn">회원가입</button>
                 </div>
-                <!-- 로그인 후 -->
                 <div class="nav-user hidden" id="navUser">
                     <span class="user-info">
                         <i class="fas fa-user"></i>
                         <span id="userEmail"></span>
                     </span>
-                    <button onclick="showDashboard()" class="nav-btn">대시보드</button>
+                    <button onclick="showQuiz()" class="nav-btn">퀴즈</button>
+                    <button onclick="showMyPage()" class="nav-btn">마이페이지</button>
                     <button onclick="logout()" class="nav-btn logout-btn">로그아웃</button>
                 </div>
             </div>
         </div>
     </nav>
-
-    <!-- 메인 컨테이너 -->
+    
     <main class="main-container">
-        <!-- 서비스 소개 페이지 -->
-        <section class="intro-section" id="introSection">
-            <div class="intro-hero">
-                <h1>당신의 일본어 학습 파트너</h1>
-                <p class="hero-subtitle">JLPT N5부터 N3까지, 체계적인 단어 학습을 시작하세요</p>
-                <button onclick="startLearning()" class="cta-button">무료로 시작하기</button>
-            </div>
-            <div class="intro-features">
-                <div class="feature-card">
-                    <i class="fas fa-graduation-cap"></i>
-                    <h3>레벨별 학습</h3>
-                    <p>자신의 수준에 맞는 단계부터 시작하세요</p>
+        <div id="page-container">
+            <section class="intro-section" id="introSection">
+                <div class="intro-hero">
+                    <h1>당신의 일본어 학습 파트너</h1>
+                    <p class="hero-subtitle">JLPT N5부터 N3까지, 체계적인 단어 학습을 시작하세요</p>
+                    <button onclick="startLearning()" class="cta-button">무료로 시작하기</button>
                 </div>
-                <div class="feature-card">
-                    <i class="fas fa-gamepad"></i>
-                    <h3>퀴즈 모드</h3>
-                    <p>게임하듯 재미있게 복습하세요</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-volume-up"></i>
-                    <h3>발음 학습</h3>
-                    <p>네이티브 발음으로 정확하게 학습하세요</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-book"></i>
-                    <h3>오답 노트</h3>
-                    <p>틀린 문제를 효과적으로 관리하세요</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 로그인/회원가입 모달 부분을 수정 -->
-        <div class="modal-overlay hidden" id="authModal">
-            <div class="modal-content">
-                <!-- 로그인 폼 -->
-                <div class="auth-form" id="loginForm">
-                    <h2>로그인</h2>
-                    <button class="modal-close" onclick="closeAuthModal()">×</button>
-                    <input type="email" id="loginEmail" placeholder="이메일">
-                    <input type="password" id="loginPassword" placeholder="비밀번호">
-                    <button onclick="login()" class="auth-btn">로그인</button>
-                    <p>계정이 없으신가요? <a href="#" onclick="toggleAuthForm()">회원가입</a></p>
-                </div>
-                <!-- 회원가입 폼 -->
-                <div class="auth-form hidden" id="registerForm">
-                    <h2>회원가입</h2>
-                    <button class="modal-close" onclick="closeAuthModal()">×</button>
-                    <input type="email" id="registerEmail" placeholder="이메일">
-                    <input type="password" id="registerPassword" placeholder="비밀번호">
-                    <input type="password" id="confirmPassword" placeholder="비밀번호 확인">
-                    <button onclick="register()" class="auth-btn">회원가입</button>
-                    <p>이미 계정이 있으신가요? <a href="#" onclick="toggleAuthForm()">로그인</a></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 대시보드 섹션 -->
-        <section class="dashboard-section hidden" id="dashboardSection">
-            <div class="dashboard-header">
-                <h1>학습 현황</h1>
-                <p class="welcome-message">안녕하세요, <span id="userDisplayName"></span>님!</p>
-            </div>
-
-            <div class="dashboard-grid">
-                <!-- 전체 진도 카드 -->
-                <div class="dashboard-card main-progress">
-                    <h2>전체 학습 진도</h2>
-                    <div class="progress-circle-container">
-                        <div class="progress-circle" id="totalProgressCircle">
-                            <span class="progress-number" id="totalProgressText">0%</span>
-                        </div>
+                <div class="intro-features">
+                    <div class="feature-card">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>레벨별 학습</h3>
+                        <p>자신의 수준에 맞는 단계부터 시작하세요</p>
                     </div>
-                    <p class="progress-detail">총 <span id="totalStudiedWords">0</span>/<span id="totalWords">0</span> 단어 학습</p>
+                    <div class="feature-card">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>퀴즈 모드</h3>
+                        <p>게임하듯 재미있게 복습하세요</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-volume-up"></i>
+                        <h3>발음 학습</h3>
+                        <p>네이티브 발음으로 정확하게 학습하세요</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-book"></i>
+                        <h3>오답 노트</h3>
+                        <p>틀린 문제를 효과적으로 관리하세요</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="dashboard-section hidden" id="dashboardSection">
+                <div class="dashboard-header">
+                    <h1>학습 현황</h1>
+                    <p class="welcome-message">안녕하세요, <span id="userEmail"></span>님!</p>
                 </div>
 
-                <!-- 레벨별 진도 카드 -->
-                <div class="dashboard-card level-progress">
-                    <h2>레벨별 진도</h2>
-                    <div class="level-bars">
-                        <div class="level-bar-item">
-                            <span class="level-label">N5</span>
-                            <div class="progress-bar">
-                                <div id="n5Progress" class="progress-fill"></div>
+                <div class="dashboard-grid">
+                    <!-- 전체 진도 카드 -->
+                    <div class="dashboard-card main-progress">
+                        <h2>전체 학습 진도</h2>
+                        <div class="progress-circle-container">
+                            <div class="progress-circle" id="totalProgressCircle">
+                                <span class="progress-number" id="totalProgressText">0%</span>
                             </div>
-                            <span id="n5ProgressText" class="progress-text">0%</span>
                         </div>
-                        <div class="level-bar-item">
-                            <span class="level-label">N4</span>
-                            <div class="progress-bar">
-                                <div id="n4Progress" class="progress-fill"></div>
+                        <p class="progress-detail">총 <span id="totalStudiedWords">0</span>/<span id="totalWords">0</span> 단어 학습</p>
+                    </div>
+
+                    <!-- 레벨별 진도 카드 -->
+                    <div class="dashboard-card level-progress">
+                        <h2>레벨별 진도</h2>
+                        <div class="level-bars">
+                            <div class="level-bar-item">
+                                <span class="level-label">N5</span>
+                                <div class="progress-bar">
+                                    <div id="n5Progress" class="progress-fill"></div>
+                                </div>
+                                <span id="n5ProgressText" class="progress-text">0%</span>
                             </div>
-                            <span id="n4ProgressText" class="progress-text">0%</span>
-                        </div>
-                        <div class="level-bar-item">
-                            <span class="level-label">N3</span>
-                            <div class="progress-bar">
-                                <div id="n3Progress" class="progress-fill"></div>
+                            <div class="level-bar-item">
+                                <span class="level-label">N4</span>
+                                <div class="progress-bar">
+                                    <div id="n4Progress" class="progress-fill"></div>
+                                </div>
+                                <span id="n4ProgressText" class="progress-text">0%</span>
                             </div>
-                            <span id="n3ProgressText" class="progress-text">0%</span>
+                            <div class="level-bar-item">
+                                <span class="level-label">N3</span>
+                                <div class="progress-bar">
+                                    <div id="n3Progress" class="progress-fill"></div>
+                                </div>
+                                <span id="n3ProgressText" class="progress-text">0%</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <!-- 학습 통계 카드 -->
-                <div class="dashboard-card stats">
-                    <h2>학습 통계</h2>
-                    <div class="stats-grid">
-                        <div class="stat-item">
+            <!-- 퀴즈 섹션 -->
+            <section class="quiz-section hidden" id="quizSection">
+                <div class="quiz-header">
+                    <h1>일본어 단어 퀴즈</h1>
+                    <div class="quiz-controls">
+                        <select id="quizLevel" class="quiz-select">
+                            <option value="N5">JLPT N5</option>
+                            <option value="N4">JLPT N4</option>
+                            <option value="N3">JLPT N3</option>
+                        </select>
+                        <button onclick="startQuiz()" class="quiz-start-btn">퀴즈 시작</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-container hidden" id="quizContainer">
+                    <div class="quiz-progress">
+                        <div class="progress-bar">
+                            <div id="quizProgressFill" class="progress-fill"></div>
+                        </div>
+                        <span id="questionCounter">1/10</span>
+                    </div>
+                    
+                    <div class="quiz-content">
+                        <div class="quiz-question">
+                            <h2 id="questionWord">単語</h2>
+                            <p id="questionHint" class="question-hint">ヒント</p>
+                        </div>
+                        
+                        <div class="quiz-options">
+                            <button class="option-btn" onclick="checkAnswer(0)"></button>
+                            <button class="option-btn" onclick="checkAnswer(1)"></button>
+                            <button class="option-btn" onclick="checkAnswer(2)"></button>
+                            <button class="option-btn" onclick="checkAnswer(3)"></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-result hidden" id="quizResult">
+                    <h2>퀴즈 결과</h2>
+                    <div class="result-stats">
+                        <div class="result-item">
                             <i class="fas fa-check"></i>
-                            <div class="stat-info">
-                                <span class="stat-number" id="dashboardCorrect">0</span>
-                                <span class="stat-label">정답</span>
-                            </div>
+                            <span>정답: <span id="correctAnswers">0</span>개</span>
                         </div>
-                        <div class="stat-item">
+                        <div class="result-item">
                             <i class="fas fa-times"></i>
-                            <div class="stat-info">
-                                <span class="stat-number" id="dashboardWrong">0</span>
-                                <span class="stat-label">오답</span>
+                            <span>오답: <span id="wrongAnswers">0</span>개</span>
+                        </div>
+                        <div class="result-item">
+                            <i class="fas fa-percentage"></i>
+                            <span>정답률: <span id="quizAccuracy">0</span>%</span>
+                        </div>
+                    </div>
+                    <button onclick="retryQuiz()" class="quiz-retry-btn">다시 도전하기</button>
+                </div>
+            </section>
+
+            <!-- 마이페이지 섹션 -->
+            <section class="mypage-section hidden" id="mypageSection">
+                <div class="mypage-header">
+                    <h1>마이페이지</h1>
+                </div>
+                
+                <div class="mypage-content">
+                    <div class="profile-card">
+                        <div class="profile-info">
+                            <div class="profile-image">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="profile-details">
+                                <h2 id="profileName">사용자명</h2>
+                                <p id="profileEmail">user@example.com</p>
                             </div>
                         </div>
-                        <div class="stat-item">
-                            <i class="fas fa-percentage"></i>
-                            <div class="stat-info">
-                                <span class="stat-number" id="accuracyRate">0%</span>
-                                <span class="stat-label">정답률</span>
+                        <button onclick="editProfile()" class="edit-profile-btn">프로필 수정</button>
+                    </div>
+                    
+                    <div class="study-history">
+                        <h2>학습 이력</h2>
+                        <div class="history-cards">
+                            <div class="history-card">
+                                <h3>최근 학습</h3>
+                                <p>최근 학습 날짜: <span id="lastStudyDate">2024-03-21</span></p>
+                                <p>학습한 단어: <span id="lastStudyWords">30</span>개</p>
+                            </div>
+                            <div class="history-card">
+                                <h3>학습 통계</h3>
+                                <p>총 학습 시간: <span id="totalStudyTime">24</span>시간</p>
+                                <p>연속 학습: <span id="studyStreak">5</span>일</p>
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="achievement-section">
+                        <h2>나의 업적</h2>
+                        <div class="achievement-grid">
+                            <!-- 업적 카드들은 JavaScript로 동적 생성됩니다 -->
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="dashboard-actions">
-                <button onclick="continueStudy()" class="action-btn continue-btn">
-                    <i class="fas fa-play"></i>
-                    학습 시작하기
-                </button>
-                <button onclick="showWrongAnswers()" class="action-btn review-btn">
-                    <i class="fas fa-book"></i>
-                    오답 노트
-                </button>
-            </div>
-        </section>
-
-        <!-- 학습 섹션 -->
-        <section class="study-section hidden" id="mainSection">
-            <!-- 기존 학습 관련 내용 -->
-        </section>
+            </section>
+        </div>
     </main>
 
-    <!-- 푸터 -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">당고링고</div>
@@ -202,6 +231,30 @@
             </div>
         </div>
     </footer>
+
+    <div class="modal-overlay hidden" id="authModal">
+        <div class="modal-content">
+            <!-- 로그인 폼 -->
+            <div class="auth-form" id="loginForm">
+                <h2>로그인</h2>
+                <button class="modal-close" onclick="closeAuthModal()">×</button>
+                <input type="email" id="loginEmail" placeholder="이메일">
+                <input type="password" id="loginPassword" placeholder="비밀번호">
+                <button onclick="login()" class="auth-btn">로그인</button>
+                <p>계정이 없으신가요? <a href="#" onclick="toggleAuthForm()">회원가입</a></p>
+            </div>
+            <!-- 회원가입 폼 -->
+            <div class="auth-form hidden" id="registerForm">
+                <h2>회원가입</h2>
+                <button class="modal-close" onclick="closeAuthModal()">×</button>
+                <input type="email" id="registerEmail" placeholder="이메일">
+                <input type="password" id="registerPassword" placeholder="비밀번호">
+                <input type="password" id="confirmPassword" placeholder="비밀번호 확인">
+                <button onclick="register()" class="auth-btn">회원가입</button>
+                <p>이미 계정이 있으신가요? <a href="#" onclick="toggleAuthForm()">로그인</a></p>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

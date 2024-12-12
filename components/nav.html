@@ -1,0 +1,24 @@
+<nav class="global-nav">
+    <div class="nav-content">
+        <div class="nav-left">
+            <a href="#" class="logo" onclick="showDashboard(); return false;">당고링고</a>
+        </div>
+        <div class="nav-right" id="navRight">
+            <!-- 로그인 전 -->
+            <div class="nav-guest" id="navGuest">
+                <button onclick="showLoginForm()" class="nav-btn login-btn">로그인</button>
+                <button onclick="showRegisterForm()" class="nav-btn register-btn">회원가입</button>
+            </div>
+            <!-- 로그인 후 -->
+            <div class="nav-user hidden" id="navUser">
+                <span class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span id="userEmail"></span>
+                </span>
+                <button onclick="showQuiz()" class="nav-btn">퀴즈</button>
+                <button onclick="showMyPage()" class="nav-btn">마이페이지</button>
+                <button onclick="logout()" class="nav-btn logout-btn">로그아웃</button>
+            </div>
+        </div>
+    </div>
+</nav> 

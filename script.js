@@ -72,7 +72,8 @@ function toggleAuth() {
     document.getElementById('registerBox').classList.toggle('hidden');
 }
 
-function login() {
+// 로그인 함수 수정
+async function login() {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
@@ -83,28 +84,45 @@ function login() {
     
     // 임시 로그인 처리
     currentUser = { email };
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
     
     // UI 업데이트
     document.getElementById('userEmail').textContent = email;
-    document.getElementById('userDisplayName').textContent = email.split('@')[0];
     document.getElementById('navGuest').classList.add('hidden');
     document.getElementById('navUser').classList.remove('hidden');
     
     // 모달 닫기
     closeAuthModal();
     
-    // 인트로 섹션 숨기기
-    document.getElementById('introSection').classList.add('hidden');
-    
-    // 대시보드 표시 및 업데이트
-    document.getElementById('dashboardSection').classList.remove('hidden');
-    updateProgress();
-    
-    // 저장된 데이터 불러오기
-    loadUserData();
+    // 대시보드로 이동
+    await showDashboard();
 }
 
-// 사용자 데이터 불러오기 함수
+// 로그아웃 함수 수정
+async function logout() {
+    stopStudyTimer();
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    
+    // UI 업데이트
+    document.getElementById('navGuest').classList.remove('hidden');
+    document.getElementById('navUser').classList.add('hidden');
+    
+    // 인트로 페이지로 이동
+    await loadPage('intro');
+}
+
+// 학습 시작 함수 수정
+async function startLearning() {
+    if (currentUser) {
+        await showDashboard();
+        startStudyTimer();
+    } else {
+        showLoginForm();
+    }
+}
+
+// 사용자 데이터 불러오�� 함수
 function loadUserData() {
     // 저장된 진도 불러오기
     const savedProgress = localStorage.getItem('userProgress');
@@ -148,19 +166,6 @@ function register() {
     
     // 임시 회원가입 처리
     login();
-}
-
-function logout() {
-    currentUser = null;
-    
-    // UI 업데이트
-    document.getElementById('navGuest').classList.remove('hidden');
-    document.getElementById('navUser').classList.add('hidden');
-    
-    // 인트로 페이지로 이동
-    document.getElementById('dashboardSection').classList.add('hidden');
-    document.getElementById('mainSection').classList.add('hidden');
-    document.getElementById('introSection').classList.remove('hidden');
 }
 
 // 모드 전환
@@ -360,7 +365,7 @@ function updateProgress() {
         Math.round((correctCount / (correctCount + wrongCount)) * 100);
     document.getElementById('accuracyRate').textContent = `${accuracyRate}%`;
 
-    // 최근 학습 정보 업데이트
+    // 최근 학습 정보 업��이트
     if (userProgress.lastStudy) {
         document.getElementById('lastStudyDate').textContent = 
             new Date(userProgress.lastStudy).toLocaleDateString();
@@ -374,6 +379,7 @@ function startLearning() {
     if (currentUser) {
         // 이미 로그인된 경우 대시보드로 이동
         showDashboard();
+        startStudyTimer(); // 학습 시작 시 타이머 시작
     } else {
         // 로그인되지 않은 경우 로그인 모달 표시
         showLoginForm();
@@ -421,7 +427,11 @@ function toggleAuthForm() {
 
 // 대시보드 표시 함수
 function showDashboard() {
-    document.getElementById('introSection').classList.add('hidden');
+    if (!currentUser) {
+        showIntro();
+        return;
+    }
+    hideAllSections();
     document.getElementById('dashboardSection').classList.remove('hidden');
     updateProgress();
 }
@@ -475,4 +485,344 @@ window.onload = () => {
         document.getElementById('navGuest').classList.remove('hidden');
         document.getElementById('navUser').classList.add('hidden');
     }
-}; 
+};
+
+// 섹션 표시 관련 함수들
+function showQuiz() {
+    if (!currentUser) {
+        showIntro();
+        return;
+    }
+    hideAllSections();
+    document.getElementById('quizSection').classList.remove('hidden');
+}
+
+function showMyPage() {
+    if (!currentUser) {
+        showIntro();
+        return;
+    }
+    hideAllSections();
+    document.getElementById('mypageSection').classList.remove('hidden');
+    loadUserProfile();
+}
+
+function showIntro() {
+    hideAllSections();
+    document.getElementById('introSection').classList.remove('hidden');
+}
+
+// 퀴즈 관련 변수들
+let currentQuestion = 0;
+let questions = [];
+let score = 0;
+
+// 퀴즈 시작 함수
+function startQuiz() {
+    const level = document.getElementById('quizLevel').value;
+    // 여기서 선택된 레벨에 따른 문제를 가져옵니다
+    loadQuizQuestions(level);
+    
+    document.getElementById('quizContainer').classList.remove('hidden');
+    document.querySelector('.quiz-controls').classList.add('hidden');
+    showQuestion();
+}
+
+// 문제 표시 함수
+function showQuestion() {
+    if (currentQuestion >= questions.length) {
+        showQuizResult();
+        return;
+    }
+
+    const question = questions[currentQuestion];
+    document.getElementById('questionWord').textContent = question.word;
+    document.getElementById('questionHint').textContent = question.hint;
+    
+    // 보기 버튼들 업데이트
+    const optionButtons = document.querySelectorAll('.option-btn');
+    question.options.forEach((option, index) => {
+        optionButtons[index].textContent = option;
+        optionButtons[index].className = 'option-btn';
+    });
+
+    // 진행 상황 업데이트
+    document.getElementById('questionCounter').textContent = 
+        `${currentQuestion + 1}/${questions.length}`;
+    updateProgressBar();
+}
+
+// 답안 ��크 함수
+function checkAnswer(index) {
+    const question = questions[currentQuestion];
+    const buttons = document.querySelectorAll('.option-btn');
+    
+    buttons.forEach(btn => btn.disabled = true);
+    
+    if (index === question.correctIndex) {
+        buttons[index].classList.add('correct');
+        score++;
+    } else {
+        buttons[index].classList.add('wrong');
+        buttons[question.correctIndex].classList.add('correct');
+    }
+
+    setTimeout(() => {
+        currentQuestion++;
+        showQuestion();
+    }, 1500);
+}
+
+// 퀴즈 결과 표시 함수
+function showQuizResult() {
+    document.getElementById('quizContainer').classList.add('hidden');
+    document.getElementById('quizResult').classList.remove('hidden');
+    
+    const accuracy = Math.round((score / questions.length) * 100);
+    document.getElementById('correctAnswers').textContent = score;
+    document.getElementById('wrongAnswers').textContent = questions.length - score;
+    document.getElementById('quizAccuracy').textContent = `${accuracy}%`;
+    
+    // 100% 정답 업적 체크
+    if (accuracy === 100) {
+        userProgress.perfectQuiz = true;
+        localStorage.setItem('userProgress', JSON.stringify(userProgress));
+        checkAchievements();
+    }
+}
+
+// 프로필 관련 함수들
+function loadUserProfile() {
+    // 사용자 정보를 가져와서 프로필을 업데이트합니다
+    const user = getCurrentUser(); // 이 함수는 현재 로그인된 사용자 정보를 반환해야 합니다
+    
+    document.getElementById('profileName').textContent = user.name || '사용자';
+    document.getElementById('profileEmail').textContent = user.email;
+    
+    // 학습 이력 업데이트
+    updateStudyHistory(user);
+}
+
+function editProfile() {
+    // 프로필 수정 모달을 표시합니다
+    // 구현 필요
+}
+
+// 모든 섹션 숨기기
+function hideAllSections() {
+    const sections = [
+        'introSection',
+        'dashboardSection',
+        'quizSection',
+        'mypageSection'
+    ];
+    sections.forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+    });
+}
+
+// 퀴즈 문제 로드
+function loadQuizQuestions(level) {
+    // 선택된 레벨의 단어들을 가져옵니다
+    const words = wordDatabase[level];
+    questions = [];
+    currentQuestion = 0;
+    score = 0;
+
+    // 10개의 문제를 만듭니다
+    const selectedWords = [...words]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 10);
+
+    selectedWords.forEach(word => {
+        // 오답 보기를 만듭니다
+        const otherWords = words.filter(w => w !== word);
+        const wrongOptions = otherWords
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 3)
+            .map(w => w.meaning);
+
+        // 모든 보기를 합치고 섞습니다
+        const options = [...wrongOptions, word.meaning]
+            .sort(() => Math.random() - 0.5);
+
+        questions.push({
+            word: word.japanese,
+            hint: word.reading,
+            options: options,
+            correctIndex: options.indexOf(word.meaning)
+        });
+    });
+}
+
+// 진행 바 업데이트
+function updateProgressBar() {
+    const progress = (currentQuestion / questions.length) * 100;
+    document.getElementById('quizProgressFill').style.width = `${progress}%`;
+}
+
+// 퀴즈 재시도
+function retryQuiz() {
+    const level = document.getElementById('quizLevel').value;
+    loadQuizQuestions(level);
+    
+    document.getElementById('quizResult').classList.add('hidden');
+    document.getElementById('quizContainer').classList.remove('hidden');
+    showQuestion();
+}
+
+// 사용자 정보 가져오기
+function getCurrentUser() {
+    return currentUser || {
+        email: '게스트',
+        name: '게스트',
+        studyHistory: {
+            lastStudyDate: new Date().toISOString(),
+            totalStudyTime: 0,
+            studyStreak: 0
+        }
+    };
+}
+
+// 학습 이력 업데이트
+function updateStudyHistory(user) {
+    // 최근 학습 날짜
+    const lastStudyDate = new Date(userProgress.lastStudy || new Date());
+    document.getElementById('lastStudyDate').textContent = 
+        lastStudyDate.toLocaleDateString();
+
+    // 학습한 단어 수
+    const totalStudied = Object.values(userProgress).reduce((sum, level) => {
+        if (level.studied) return sum + level.studied.length;
+        return sum;
+    }, 0);
+    document.getElementById('lastStudyWords').textContent = totalStudied;
+
+    // 총 학습 시간 (임시 데이터)
+    const totalStudyTime = Math.floor(Math.random() * 100);
+    document.getElementById('totalStudyTime').textContent = totalStudyTime;
+
+    // 연속 학습 일수 계산
+    let streak = calculateStudyStreak();
+    document.getElementById('studyStreak').textContent = streak;
+}
+
+// 연속 학습 일수 계산
+function calculateStudyStreak() {
+    if (!userProgress.lastStudy) return 0;
+
+    const lastStudy = new Date(userProgress.lastStudy);
+    const today = new Date();
+    const diffTime = Math.abs(today - lastStudy);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    // 하루가 지났으면 연속 학습 초기화
+    if (diffDays > 1) {
+        userProgress.streak = 0;
+    } else if (diffDays === 1) {
+        // 어제 학습했으면 연속 학습 유지
+        userProgress.streak = (userProgress.streak || 0) + 1;
+    }
+
+    return userProgress.streak || 0;
+}
+
+// 학습 시간 관리를 위한 변수들
+let studyStartTime = null;
+let totalStudyTime = 0;
+let studyTimer = null;
+
+// 학습 시간 측정 시작
+function startStudyTimer() {
+    studyStartTime = new Date();
+    studyTimer = setInterval(() => {
+        const now = new Date();
+        const elapsed = Math.floor((now - studyStartTime) / 1000); // 초 단위
+        totalStudyTime = (userProgress.totalStudyTime || 0) + elapsed;
+        
+        // 시간 형식으로 변환 (시:분:초)
+        const hours = Math.floor(totalStudyTime / 3600);
+        const minutes = Math.floor((totalStudyTime % 3600) / 60);
+        const seconds = totalStudyTime % 60;
+        
+        document.getElementById('totalStudyTime').textContent = 
+            `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+}
+
+// 학습 시간 측정 종료
+function stopStudyTimer() {
+    if (studyTimer) {
+        clearInterval(studyTimer);
+        studyTimer = null;
+        
+        // 총 학습 시간 저장
+        userProgress.totalStudyTime = totalStudyTime;
+        localStorage.setItem('userProgress', JSON.stringify(userProgress));
+    }
+}
+
+// 업적 정의
+const achievements = {
+    firstStudy: {
+        id: 'firstStudy',
+        title: '첫 학습 완료',
+        description: '첫 번째 학습을 완료했습니다!',
+        icon: 'fa-star',
+        condition: (progress) => progress.N5.studied.length > 0
+    },
+    weekStreak: {
+        id: 'weekStreak',
+        title: '7일 연속 학습',
+        description: '7일 연속으로 학습을 완료하세요',
+        icon: 'fa-calendar-check',
+        condition: (progress) => progress.streak >= 7
+    },
+    hundredWords: {
+        id: 'hundredWords',
+        title: '단어 마스터 100',
+        description: '100개의 단어를 학습하세요',
+        icon: 'fa-book',
+        condition: (progress) => {
+            const totalStudied = Object.values(progress).reduce((sum, level) => {
+                if (level.studied) return sum + level.studied.length;
+                return sum;
+            }, 0);
+            return totalStudied >= 100;
+        }
+    },
+    perfectQuiz: {
+        id: 'perfectQuiz',
+        title: '퀴즈 완벽주의자',
+        description: '퀴즈에서 100% 정답을 기록하세요',
+        icon: 'fa-crown',
+        condition: (progress) => progress.hasOwnProperty('perfectQuiz')
+    },
+    studyTime: {
+        id: 'studyTime',
+        title: '열정적인 학습자',
+        description: '총 학습 시간 10시간 달성',
+        icon: 'fa-clock',
+        condition: (progress) => (progress.totalStudyTime || 0) >= 36000 // 10시간 = 36000초
+    }
+};
+
+// 업적 체크 함수 업데이트
+function checkAchievements() {
+    const achievementGrid = document.querySelector('.achievement-grid');
+    achievementGrid.innerHTML = ''; // 기존 업적 초기화
+    
+    Object.values(achievements).forEach(achievement => {
+        const achieved = achievement.condition(userProgress);
+        const card = document.createElement('div');
+        card.className = `achievement-card ${achieved ? '' : 'locked'}`;
+        
+        card.innerHTML = `
+            <i class="fas ${achievement.icon}"></i>
+            <h3>${achievement.title}</h3>
+            <p>${achievement.description}</p>
+        `;
+        
+        achievementGrid.appendChild(card);
+    });
+} 

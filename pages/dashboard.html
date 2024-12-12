@@ -1,0 +1,60 @@
+<section class="dashboard-section" id="dashboardSection">
+    <div class="dashboard-header">
+        <h1>학습 현황</h1>
+        <p class="welcome-message">안녕하세요, <span id="userEmail"></span>님!</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- 전체 진도 카드 -->
+        <div class="dashboard-card main-progress">
+            <h2>전체 학습 진도</h2>
+            <div class="progress-circle-container">
+                <div class="progress-circle" id="totalProgressCircle">
+                    <span class="progress-number" id="totalProgressText">0%</span>
+                </div>
+            </div>
+            <p class="progress-detail">총 <span id="totalStudiedWords">0</span>/<span id="totalWords">0</span> 단어 학습</p>
+        </div>
+
+        <!-- 레벨별 진도 카드 -->
+        <div class="dashboard-card level-progress">
+            <h2>레벨별 진도</h2>
+            <div class="level-bars">
+                <div class="level-bar-item">
+                    <span class="level-label">N5</span>
+                    <div class="progress-bar">
+                        <div id="n5Progress" class="progress-fill"></div>
+                    </div>
+                    <span id="n5ProgressText" class="progress-text">0%</span>
+                </div>
+                <!-- N4, N3 진도 바 -->
+            </div>
+        </div>
+
+        <!-- 학습 통계 카드 -->
+        <div class="dashboard-card stats">
+            <h2>학습 통계</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fas fa-check"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="dashboardCorrect">0</span>
+                        <span class="stat-label">정답</span>
+                    </div>
+                </div>
+                <!-- 오답, 정답률 통계 -->
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-actions">
+        <button onclick="continueStudy()" class="action-btn continue-btn">
+            <i class="fas fa-play"></i>
+            학습 시작하기
+        </button>
+        <button onclick="showWrongAnswers()" class="action-btn review-btn">
+            <i class="fas fa-book"></i>
+            오답 노트
+        </button>
+    </div>
+</section> 

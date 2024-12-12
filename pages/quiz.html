@@ -1,0 +1,44 @@
+<section class="quiz-section" id="quizSection">
+    <div class="quiz-header">
+        <h1>일본어 단어 퀴즈</h1>
+        <div class="quiz-controls">
+            <select id="quizLevel" class="quiz-select">
+                <option value="N5">JLPT N5</option>
+                <option value="N4">JLPT N4</option>
+                <option value="N3">JLPT N3</option>
+            </select>
+            <button onclick="startQuiz()" class="quiz-start-btn">퀴즈 시작</button>
+        </div>
+    </div>
+    
+    <div class="quiz-container hidden" id="quizContainer">
+        <div class="quiz-progress">
+            <div class="progress-bar">
+                <div id="quizProgressFill" class="progress-fill"></div>
+            </div>
+            <span id="questionCounter">1/10</span>
+        </div>
+        
+        <div class="quiz-content">
+            <div class="quiz-question">
+                <h2 id="questionWord">単語</h2>
+                <p id="questionHint" class="question-hint">ヒント</p>
+            </div>
+            
+            <div class="quiz-options">
+                <button class="option-btn" onclick="checkAnswer(0)"></button>
+                <button class="option-btn" onclick="checkAnswer(1)"></button>
+                <button class="option-btn" onclick="checkAnswer(2)"></button>
+                <button class="option-btn" onclick="checkAnswer(3)"></button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="quiz-result hidden" id="quizResult">
+        <h2>퀴즈 결과</h2>
+        <div class="result-stats">
+            <!-- 퀴즈 결과 통계 -->
+        </div>
+        <button onclick="retryQuiz()" class="quiz-retry-btn">다시 도전하기</button>
+    </div>
+</section> 
