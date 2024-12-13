@@ -1,5 +1,6 @@
 :root {
     --primary-color: #FF6B6B;
+    --primary-color-dark: #FF4B4B;
     --secondary-color: #4ECDC4;
     --accent-color: #FFE66D;
     --text-color: #2C3E50;
@@ -99,25 +100,24 @@ body {
     position: absolute;
     top: 100%;
     right: 0;
-    margin-top: 0.5rem;
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    padding: 0.5rem 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 0;
     min-width: 150px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     z-index: 1000;
 }
 
 .profile-dropdown a {
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 8px 16px;
     color: #333;
     text-decoration: none;
-    transition: background-color 0.2s ease;
 }
 
 .profile-dropdown a:hover {
-    background-color: #f0f0f0;
+    background-color: #f5f5f5;
 }
 
 /* 퀴즈 버튼 스타일 */
@@ -372,7 +372,7 @@ body {
 }
 
 .hidden {
-    display: none !important;
+    display: none;
 }
 
 /* 대시보드 스타일 */
@@ -385,6 +385,7 @@ body {
 .dashboard-header {
     text-align: center;
     margin-bottom: 2rem;
+    position: relative;
 }
 
 .welcome-message {
@@ -746,4 +747,30 @@ body {
     background-color: #f5f5f5;
     padding: 1rem;
     border-radius: 4px;
+}
+
+.dashboard-quiz-btn {
+    margin-top: 1rem;
+    padding: 0.8rem 2rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.dashboard-quiz-btn i {
+    font-size: 1.2rem;
+}
+
+.dashboard-quiz-btn:hover {
+    transform: translateY(-2px);
+    background-color: var(--primary-color-dark);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
 } 

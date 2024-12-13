@@ -122,7 +122,7 @@ async function startLearning() {
     }
 }
 
-// 사용자 데이터 불러오기 함수
+// 사용자 데이터 불러오�� 함수
 function loadUserData() {
     // 저장된 진도 불러오기
     const savedProgress = localStorage.getItem('userProgress');
@@ -493,8 +493,8 @@ function showQuiz() {
         showIntro();
         return;
     }
-    hideAllSections();
-    document.getElementById('quizSection').classList.remove('hidden');
+    // URL 변경
+    window.location.href = '/quiz.html';
 }
 
 function showMyPage() {
@@ -591,10 +591,10 @@ function showQuizResult() {
     }
 }
 
-// 프로필 관련 함수��
+// 프로필 관련 함수
 function loadUserProfile() {
     // 사용자 정보를 가져와서 프로필을 업데이트합니다
-    const user = getCurrentUser(); // 이 함수는 현재 로그인된 사용자 정보를 반환해야 합니다
+    const user = getCurrentUser(); // 이 함수는 현재 로그인된 사용자 정보를 반환해야 합니
     
     document.getElementById('profileName').textContent = user.name || '사용자';
     document.getElementById('profileEmail').textContent = user.email;
@@ -642,7 +642,7 @@ function loadQuizQuestions(level) {
             .slice(0, 3)
             .map(w => w.meaning);
 
-        // 모든 보기를 합치고 섞습니다
+        // 모든 보기를 ��치고 섞습니다
         const options = [...wrongOptions, word.meaning]
             .sort(() => Math.random() - 0.5);
 
@@ -720,7 +720,7 @@ function calculateStudyStreak() {
     if (diffDays > 1) {
         userProgress.streak = 0;
     } else if (diffDays === 1) {
-        // 어제 학습했으면 연속 학��� 유지
+        // 어제 학습했으면 연속 학 유지
         userProgress.streak = (userProgress.streak || 0) + 1;
     }
 
@@ -807,7 +807,7 @@ const achievements = {
     }
 };
 
-// 업적 체크 함수 업데이트
+// 업적 체크 함수 ���데이트
 function checkAchievements() {
     const achievementGrid = document.querySelector('.achievement-grid');
     achievementGrid.innerHTML = ''; // 기존 업적 초기화
@@ -827,22 +827,26 @@ function checkAchievements() {
     });
 }
 
-// 프로필 드롭다운 토글
-function toggleProfileDropdown() {
-    const dropdown = document.querySelector('.profile-dropdown');
-    dropdown.classList.toggle('hidden');
-}
+// 프로필 드롭다운 관련 이벤트 리스너
+document.addEventListener('DOMContentLoaded', function() {
+    const profileBtn = document.querySelector('.profile-btn');
+    const profileDropdown = document.querySelector('.profile-dropdown');
 
-// 프로필 버튼에 클릭 이벤트 리스너 추가
-document.querySelector('.profile-btn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleProfileDropdown();
-});
+    profileBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation(); // 이벤트 전파 중단
+        profileDropdown.classList.toggle('hidden');
+    });
 
-// 문서 클릭 시 드롭다운 닫기
-document.addEventListener('click', () => {
-    const dropdown = document.querySelector('.profile-dropdown');
-    if (!dropdown.classList.contains('hidden')) {
-        dropdown.classList.add('hidden');
-    }
+    // 드롭다운 외부 클릭시 닫기
+    document.addEventListener('click', function(e) {
+        if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+    });
+
+    // 드롭다운 내부 클릭 시 이벤트 전파 중단
+    profileDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
 }); 
