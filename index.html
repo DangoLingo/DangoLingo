@@ -68,19 +68,32 @@
             </section>
 
             <section class="dashboard-section hidden" id="dashboardSection">
-                <div class="dashboard-header">
-                    <h1>학습 현황</h1>
-                    <p class="welcome-message">안녕하세요, <span id="userEmail"></span>님!</p>
-                    <button onclick="showQuiz()" class="dashboard-quiz-btn">
-                        <i class="fas fa-gamepad"></i>
-                        퀴즈 풀기
-                    </button>
+                <div class="dashboard-hero">
+                    <div class="dango-mascot">
+                        <span class="dango-emoji">🍡</span>
+                    </div>
+                    <div class="welcome-box">
+                        <h1>어서오세요, <span id="userEmail"></span>님!</h1>
+                        <p class="welcome-subtitle">오늘도 맛있는 당고처럼 달콤한 학습되세요 🍡</p>
+                        <div class="welcome-buttons">
+                            <button onclick="window.location.href='/quiz.html'" class="dango-quiz-btn">
+                                <i class="fas fa-gamepad"></i>
+                                퀴즈 풀기
+                            </button>
+                            <button onclick="window.location.href='/create-quiz.html'" class="dango-create-btn">
+                                <i class="fas fa-plus-circle"></i>
+                                퀴즈 만들기
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="dashboard-grid">
-                    <!-- 전체 진도 카드 -->
-                    <div class="dashboard-card main-progress">
-                        <h2>전체 학습 진도</h2>
+                <div class="dashboard-features">
+                    <div class="feature-card learning-status">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>나의 학습 현황</h3>
+                        </div>
                         <div class="progress-circle-container">
                             <div class="progress-circle" id="totalProgressCircle">
                                 <span class="progress-number" id="totalProgressText">0%</span>
@@ -89,9 +102,11 @@
                         <p class="progress-detail">총 <span id="totalStudiedWords">0</span>/<span id="totalWords">0</span> 단어 학습</p>
                     </div>
 
-                    <!-- 레벨별 진도 카드 -->
-                    <div class="dashboard-card level-progress">
-                        <h2>레벨별 진도</h2>
+                    <div class="feature-card level-progress">
+                        <div class="card-header">
+                            <i class="fas fa-layer-group"></i>
+                            <h3>JLPT 레벨별 진도</h3>
+                        </div>
                         <div class="level-bars">
                             <div class="level-bar-item">
                                 <span class="level-label">N5</span>
@@ -115,6 +130,47 @@
                                 <span id="n3ProgressText" class="progress-text">0%</span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="feature-card study-streak">
+                        <div class="card-header">
+                            <i class="fas fa-fire"></i>
+                            <h3>학습 스트릭</h3>
+                        </div>
+                        <div class="streak-display">
+                            <span class="streak-number" id="studyStreak">0</span>
+                            <span class="streak-text">일 연속</span>
+                        </div>
+                        <div class="dango-streak">
+                            🍡 <!-- 스트릭 수에 따라 당고 이모지 개수가 늘어남 -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="study-calendar">
+                    <div class="calendar-header">
+                        <h2>학습 기록</h2>
+                        <div class="calendar-legend">
+                            <span class="legend-item">
+                                <span class="legend-box level-0"></span>
+                                0회
+                            </span>
+                            <span class="legend-item">
+                                <span class="legend-box level-1"></span>
+                                1-3회
+                            </span>
+                            <span class="legend-item">
+                                <span class="legend-box level-2"></span>
+                                4-6회
+                            </span>
+                            <span class="legend-item">
+                                <span class="legend-box level-3"></span>
+                                7회+
+                            </span>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="studyCalendar">
+                        <!-- JavaScript로 동적 생성됨 -->
                     </div>
                 </div>
             </section>
@@ -229,7 +285,7 @@
             <div class="footer-links">
                 <a href="#">서비스 소개</a>
                 <a href="#">이용약관</a>
-                <a href="#">개인정��처리방침</a>
+                <a href="#">개인정처리방침</a>
             </div>
             <div class="footer-social">
                 <a href="#"><i class="fab fa-twitter"></i></a>

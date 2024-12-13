@@ -122,7 +122,7 @@ async function startLearning() {
     }
 }
 
-// 사용자 데이터 불러오�� 함수
+// 사용자 데이터 불러오기 함수
 function loadUserData() {
     // 저장된 진도 불러오기
     const savedProgress = localStorage.getItem('userProgress');
@@ -433,7 +433,15 @@ function showDashboard() {
     }
     hideAllSections();
     document.getElementById('dashboardSection').classList.remove('hidden');
+    
+    // 더미 데이터 생성 (처음 한 번만)
+    if (!userProgress.studyHistory) {
+        userProgress.studyHistory = generateDummyStudyData();
+        localStorage.setItem('userProgress', JSON.stringify(userProgress));
+    }
+    
     updateProgress();
+    initializeStudyCalendar();
 }
 
 // 초기 단어 표시
@@ -593,13 +601,13 @@ function showQuizResult() {
 
 // 프로필 관련 함수
 function loadUserProfile() {
-    // 사용자 정보를 가져와서 프로필을 업데이트합니다
+    // 사용자 ���보를 가져와서 프로필을 업데이트합니다
     const user = getCurrentUser(); // 이 함수는 현재 로그인된 사용자 정보를 반환해야 합니
     
     document.getElementById('profileName').textContent = user.name || '사용자';
     document.getElementById('profileEmail').textContent = user.email;
     
-    // 학습 이력 업데이트
+    // 학습 력 업데이트
     updateStudyHistory(user);
 }
 
@@ -642,7 +650,7 @@ function loadQuizQuestions(level) {
             .slice(0, 3)
             .map(w => w.meaning);
 
-        // 모든 보기를 ��치고 섞습니다
+        // 모든 보기를 치고 섞습니다
         const options = [...wrongOptions, word.meaning]
             .sort(() => Math.random() - 0.5);
 
@@ -686,45 +694,45 @@ function getCurrentUser() {
 
 // 학습 이력 업데이트
 function updateStudyHistory(user) {
-    // 최근 학습 날짜
-    const lastStudyDate = new Date(userProgress.lastStudy || new Date());
+    // 최근 학습 ��짜 찾기
+    const dates = Object.keys(userProgress.studyHistory || {}).sort().reverse();
+    const lastStudyDate = dates[0] || new Date().toISOString().split('T')[0];
+    
     document.getElementById('lastStudyDate').textContent = 
-        lastStudyDate.toLocaleDateString();
+        new Date(lastStudyDate).toLocaleDateString();
 
-    // 학습한 단어 수
-    const totalStudied = Object.values(userProgress).reduce((sum, level) => {
-        if (level.studied) return sum + level.studied.length;
-        return sum;
-    }, 0);
-    document.getElementById('lastStudyWords').textContent = totalStudied;
+    // 총 학습 횟수 계산
+    const totalStudyCount = Object.values(userProgress.studyHistory || {})
+        .reduce((sum, count) => sum + count, 0);
+    document.getElementById('lastStudyWords').textContent = totalStudyCount;
 
-    // 총 학습 시간 (임시 데이터)
-    const totalStudyTime = Math.floor(Math.random() * 100);
-    document.getElementById('totalStudyTime').textContent = totalStudyTime;
-
-    // 연속 학습 일수 계산
-    let streak = calculateStudyStreak();
+    // 스트릭 업데이트
+    const streak = calculateStudyStreak();
     document.getElementById('studyStreak').textContent = streak;
+    updateDangoStreak(streak);
 }
 
 // 연속 학습 일수 계산
 function calculateStudyStreak() {
-    if (!userProgress.lastStudy) return 0;
+    if (!userProgress.studyHistory) return 0;
 
-    const lastStudy = new Date(userProgress.lastStudy);
+    let streak = 0;
     const today = new Date();
-    const diffTime = Math.abs(today - lastStudy);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    // 하루가 지났으면 연속 학습 초기화
-    if (diffDays > 1) {
-        userProgress.streak = 0;
-    } else if (diffDays === 1) {
-        // 어제 학습했으면 연속 학 유지
-        userProgress.streak = (userProgress.streak || 0) + 1;
+    today.setHours(0, 0, 0, 0);
+    
+    for (let i = 0; i < 30; i++) { // 최근 30일 확인
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        
+        if (userProgress.studyHistory[dateStr] > 0) {
+            streak++;
+        } else {
+            break;
+        }
     }
 
-    return userProgress.streak || 0;
+    return streak;
 }
 
 // 학습 시간 관리를 위한 변수들
@@ -807,7 +815,7 @@ const achievements = {
     }
 };
 
-// 업적 체크 함수 ���데이트
+// 업적 체크 함수 데이트
 function checkAchievements() {
     const achievementGrid = document.querySelector('.achievement-grid');
     achievementGrid.innerHTML = ''; // 기존 업적 초기화
@@ -849,4 +857,158 @@ document.addEventListener('DOMContentLoaded', function() {
     profileDropdown.addEventListener('click', function(e) {
         e.stopPropagation();
     });
-}); 
+});
+
+// 스트릭에 따른 당고 이모지 업데이트
+function updateDangoStreak(streak) {
+    const dangoStreakElement = document.querySelector('.dango-streak');
+    let dangos = '';
+    
+    // 스트릭 수에 따라 당고 이모지 추가 (최대 5개)
+    const dangoCount = Math.min(streak, 5);
+    for (let i = 0; i < dangoCount; i++) {
+        dangos += '🍡';
+    }
+    
+    // 스트릭이 없으면 회색 당고 하나 표시
+    if (streak === 0) {
+        dangos = '🍡';
+        dangoStreakElement.style.opacity = '0.5';
+    } else {
+        dangoStreakElement.style.opacity = '1';
+    }
+    
+    dangoStreakElement.textContent = dangos;
+}
+
+// 더미 학습 데이터 생성 함수 수정
+function generateDummyStudyData() {
+    const dummyData = {};
+    const today = new Date();
+    const startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - 364);
+
+    for (let i = 0; i <= 364; i++) {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(currentDate.getDate() + i);
+        const dateStr = currentDate.toISOString().split('T')[0];
+        
+        // 패턴 생성 (주중에는 더 높은 확률로 학습)
+        const dayOfWeek = currentDate.getDay();
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+        const studyProbability = isWeekend ? 0.3 : 0.8;
+        
+        if (Math.random() < studyProbability) {
+            // 주중에는 더 많은 학습량
+            const maxCount = isWeekend ? 5 : 10;
+            dummyData[dateStr] = Math.floor(Math.random() * maxCount) + 1;
+        }
+    }
+
+    // 최근 7일은 무조건 학습한 것으로 표시
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        if (!dummyData[dateStr]) {
+            dummyData[dateStr] = Math.floor(Math.random() * 5) + 3;
+        }
+    }
+
+    return dummyData;
+}
+
+// 습 캘린더 관련 함수 추가
+function initializeStudyCalendar() {
+    const calendarGrid = document.getElementById('studyCalendar');
+    if (!calendarGrid) return;
+
+    calendarGrid.innerHTML = '';
+    
+    // 요일 레이블 추가
+    const dayLabels = document.createElement('div');
+    dayLabels.className = 'day-labels';
+    ['일', '월', '화', '수', '목', '금', '토'].forEach(day => {
+        const label = document.createElement('div');
+        label.className = 'day-label';
+        label.textContent = day;
+        dayLabels.appendChild(label);
+    });
+    calendarGrid.parentElement.insertBefore(dayLabels, calendarGrid);
+
+    // 1년치 데이터 생성
+    const today = new Date();
+    const startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - 364);
+    startDate.setHours(0, 0, 0, 0);
+
+    // 시작 날짜를 일요일로 맞추기
+    while (startDate.getDay() !== 0) {
+        startDate.setDate(startDate.getDate() - 1);
+    }
+
+    // 캘린더 그리드 생성
+    const endDate = new Date(today);
+    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'calendar-day';
+        dayElement.dataset.date = date.toISOString().split('T')[0];
+        
+        const studyCount = getStudyCountForDate(date);
+        dayElement.classList.add(getStudyLevelClass(studyCount));
+        
+        const dateStr = date.toLocaleDateString();
+        dayElement.title = `${dateStr}\n학습: ${studyCount}회`;
+        
+        calendarGrid.appendChild(dayElement);
+    }
+}
+
+// 특정 날짜의 학습 횟수 가져오기
+function getStudyCountForDate(date) {
+    const dateStr = date.toISOString().split('T')[0];
+    return userProgress.studyHistory?.[dateStr] || 0;
+}
+
+// 학습 횟수에 따른 레벨 클래스 반환
+function getStudyLevelClass(count) {
+    if (count === 0) return 'level-0';
+    if (count <= 3) return 'level-1';
+    if (count <= 6) return 'level-2';
+    return 'level-3';
+}
+
+// 학습 기록 업데이트
+function updateStudyHistory() {
+    const today = new Date().toISOString().split('T')[0];
+    
+    if (!userProgress.studyHistory) {
+        userProgress.studyHistory = {};
+    }
+    
+    if (!userProgress.studyHistory[today]) {
+        userProgress.studyHistory[today] = 0;
+    }
+    
+    userProgress.studyHistory[today]++;
+    localStorage.setItem('userProgress', JSON.stringify(userProgress));
+    
+    // 캘린더 업데이트
+    updateCalendarDay(today);
+}
+
+// 특정 날짜의 캘린더 셀 업데이트
+function updateCalendarDay(dateStr) {
+    const dayElement = document.querySelector(`.calendar-day[data-date="${dateStr}"]`);
+    if (dayElement) {
+        const studyCount = userProgress.studyHistory[dateStr];
+        dayElement.className = `calendar-day ${getStudyLevelClass(studyCount)}`;
+        dayElement.title = `${new Date(dateStr).toLocaleDateString()}\n학습: ${studyCount}회`;
+    }
+}
+
+// 퀴즈나 학습 완료 시 학습 기록 업데이트
+function completeStudy() {
+    updateStudyHistory();
+    // 기존 완료 처리 코드...
+} 
