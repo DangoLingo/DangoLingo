@@ -15,6 +15,8 @@ BEGIN
 		mStudyDate		DATE;						-- 마지막 학습 일자
 		mStudyTime		TIMESTAMP;					-- 총 학습 시간
 		mStudyDay		NUMBER;						-- 연속 학습일
+		mQuizCount		NUMBER;						-- 퀴즈 문제 수
+		mQuizRight		NUMBER;						-- 퀴즈 정답 수
 		mPoint			NUMBER;						-- 포인트
 	BEGIN
 		mKey := 1;
@@ -34,6 +36,8 @@ BEGIN
 						LPAD(ROUND(DBMS_RANDOM.VALUE(1, 28), 0), 2, '0');
 			mStudyTime	:= SYSTIMESTAMP;
 			mStudyDay	:= ROUND(DBMS_RANDOM.VALUE(1, 300), 0);
+			mQuizCount := ROUND(DBMS_RANDOM.VALUE(300, 1000), 0);
+			mQuizRight := ROUND(DBMS_RANDOM.VALUE(1, 300), 0);
 			mPoint := ROUND(DBMS_RANDOM.VALUE(1, 25000), 0);
 
 			INSERT INTO TB_USER
