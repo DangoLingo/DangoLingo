@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'LaundryGothicOTF';
+    src: url('../../Main/fonts/LaundryGothicOTF.otf') format('opentype');
+}
+
+.footer {
+    width: 100%;
+    padding: 24px 0;
+    border-top: 1px solid #eee;
+    background-color: white;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1060px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 24px;
+}
+
+.footer-logo {
+    font-family: 'LaundryGothicOTF', sans-serif;
+    font-size: 18px;
+    color: #212529;
+}
+
+.footer-links {
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a {
+    color: #868E96;
+    text-decoration: none;
+    font-size: 13px;
+} 
