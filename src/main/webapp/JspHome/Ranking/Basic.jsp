@@ -14,8 +14,15 @@
     </header>
 
     <main class="main-container">
+        <!-- 탭 버튼 -->
+        <div class="ranking-tabs">
+            <button class="tab-button active" data-tab="words">학습 단어</button>
+            <button class="tab-button" data-tab="points">누적 포인트</button>
+            <button class="tab-button" data-tab="dangos">당고 수집</button>
+        </div>
+
         <!-- 학습 단어 랭킹 -->
-        <section class="ranking-section">
+        <section class="ranking-section active" id="words-ranking">
             <h2 class="ranking-title">학습 단어</h2>
             <!-- 상위 3등 -->
             <div class="top-rankers">
@@ -239,7 +246,7 @@
         </section>
 
         <!-- 누적 포인트 랭킹 -->
-        <section class="ranking-section">
+        <section class="ranking-section" id="points-ranking">
             <h2 class="ranking-title">누적 포인트</h2>
             <div class="top-rankers">
                 <!-- 2등 -->
@@ -466,7 +473,7 @@
         </section>
 
         <!-- 당고 수집 랭킹 -->
-        <section class="ranking-section">
+        <section class="ranking-section" id="dangos-ranking">
             <h2 class="ranking-title">당고 수집</h2>
             <div class="top-rankers">
                 <!-- 2등 -->
