@@ -80,7 +80,7 @@ body {
 }
 
 .ranking-section.active {
-    display: block;
+    display: block !important;
 }
 
 /* 상위 3등 스타일 */
