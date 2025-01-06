@@ -13,9 +13,9 @@
             </a>
             <% if (isLoggedIn) { %>
                 <nav class="nav-menu">
-                    <a href="${pageContext.request.contextPath}/JspHome/Main/Basic.jsp" class="nav-item">당고</a>
-                    <a href="${pageContext.request.contextPath}/JspHome/Vocabulary/List.jsp" class="nav-item">단어장</a>
-                    <a href="${pageContext.request.contextPath}/JspHome/Ranking/List.jsp" class="nav-item">랭킹</a>
+                    <a href="${pageContext.request.contextPath}/JspHome/Dango/Basic.jsp" class="nav-item">당고</a>
+                    <a href="${pageContext.request.contextPath}/JspHome/Words/Basic.jsp" class="nav-item">단어장</a>
+                    <a href="${pageContext.request.contextPath}/JspHome/Ranking/Basic.jsp" class="nav-item">랭킹</a>
                 </nav>
             <% } %>
         </div>

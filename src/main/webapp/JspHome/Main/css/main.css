@@ -140,6 +140,8 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .study-button:hover {
@@ -288,4 +290,123 @@ body {
     border-radius: 50%;
     object-fit: cover;
     display: block;
+}
+
+@media screen and (max-width: 768px) {
+    /* 소개 페이지 모바일 스타일 */
+    .hero-section {
+        flex-direction: column-reverse;
+        padding: 16px;
+        text-align: center;
+    }
+
+    .hero-content {
+        padding: 16px;
+    }
+
+    .main-title {
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .sub-text {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .dango-image {
+        width: 160px;
+        padding: 16px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    /* 로그인 후 메인 페이지 모바일 스타일 */
+    .user-profile {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+        gap: 1.5rem;
+    }
+
+    .profile-image-container {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-header h2 {
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .profile-header p {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .statistics {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .stat-item {
+        padding: 1.25rem;
+    }
+
+    .stat-item h3 {
+        font-size: 12px;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-number {
+        font-size: 18px;
+    }
+
+    /* 스트릭 차트 모바일 조정 */
+    .streak-tracker {
+        padding: 1.5rem;
+        overflow-x: auto;  /* 가로 스크롤 가능하도록 */
+    }
+
+    .streak-chart {
+        min-width: 700px;  /* 최소 너비 설정하여 스크롤 가능하게 */
+        padding: 1rem 0 1rem 2rem;
+    }
+
+    .streak-days span {
+        font-size: 10px;
+        padding-right: 0.5rem;
+    }
+
+    .streak-cell {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* 더 작은 화면을 위한 추가 조정 */
+@media screen and (max-width: 480px) {
+    .main-container {
+        padding: 16px;
+    }
+
+    .profile-header h2 {
+        font-size: 20px;
+    }
+
+    .statistics {
+        grid-template-columns: 1fr;  /* 모바일에서는 한 줄로 */
+    }
+
+    .auth-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .auth-button {
+        width: 100%;  /* 버튼 전체 너비로 */
+    }
 } 

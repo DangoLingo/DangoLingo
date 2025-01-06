@@ -61,7 +61,7 @@
                     <header class="profile-header">
                         <h2>안녕하세요, <%= userNickname %>님</h2>
                         <p>오늘도 당고링고와 함께 달콤한 하루되세요.</p>
-                        <button class="study-button">학습하기</button>
+                        <a href="${pageContext.request.contextPath}/JspHome/Words/Basic.jsp" class="study-button">학습하기</a>
                     </header>
                 </article>
                 
