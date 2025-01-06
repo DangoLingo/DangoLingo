@@ -1,0 +1,99 @@
+@font-face {
+    font-family: 'LaundryGothicOTF';
+    src: url('../Main/fonts/LaundryGothicOTF.otf') format('opentype');
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    border-bottom: 1px solid #eee;
+    z-index: 1000;
+    height: 60px;
+}
+
+.header-content {
+    width: 100%;
+    max-width: 1060px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    height: 100%;
+}
+
+.logo {
+    font-family: 'LaundryGothicOTF', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #212529;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.auth-button {
+    padding: 6px 16px;
+    border: 1px solid #DEE2E6;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+    color: #495057;
+    border-radius: 4px;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 24px;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #868E96;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 0;
+}
+
+.nav-item:hover {
+    color: #212529;
+}
+
+.nav-item.active {
+    color: #212529;
+    font-weight: 600;
+}
+
+.profile-menu {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 0;
+    background-color: #F8F9FA;
+    border: 1px solid #DEE2E6;
+    display: block;
+} 
