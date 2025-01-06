@@ -180,6 +180,7 @@ body {
     background-color: #fff;
     padding: 2rem;
     border-radius: 1rem;
+    position: relative;
 }
 
 .streak-tracker h3 {
@@ -234,14 +235,10 @@ body {
     position: relative;
 }
 
-.streak-cell:hover {
-    transform: scale(1.2);
-}
-
 .streak-cell::before {
     content: attr(data-count);
     position: absolute;
-    bottom: 100%;
+    bottom: 120%;
     left: 50%;
     transform: translateX(-50%);
     padding: 4px 8px;
@@ -254,7 +251,12 @@ body {
     opacity: 0;
     transition: opacity 0.2s ease;
     pointer-events: none;
-    z-index: 1;
+    z-index: 1000;
+}
+
+.streak-cell:hover {
+    transform: scale(1.2);
+    z-index: 100;
 }
 
 .streak-cell:hover::before {
