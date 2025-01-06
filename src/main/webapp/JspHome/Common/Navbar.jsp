@@ -3,7 +3,7 @@
     String userNickname = (String) session.getAttribute("userNickname");
     boolean isLoggedIn = userNickname != null;
 %>
-<link rel="stylesheet" href="../Common/css/navbar.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Common/css/navbar.css">
 
 <div class="header">
     <div class="header-content">

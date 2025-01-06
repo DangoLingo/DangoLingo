@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>당고링고</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-jp.css" />
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/main.css">
 </head>
 <body>
     <header>
