@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'LaundryGothicOTF';
-    src: url('../../Main/fonts/LaundryGothicOTF.otf') format('opentype');
+    src: url('../Main/fonts/LaundryGothicOTF.otf') format('opentype');
 }
 
 .header {
