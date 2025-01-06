@@ -23,8 +23,6 @@
 
         <!-- 학습 단어 랭킹 -->
         <section class="ranking-section active" id="words-ranking">
-            <h2 class="ranking-title">학습 단어</h2>
-            <!-- 상위 3등 -->
             <div class="top-rankers">
                 <!-- 2등 -->
                 <div class="top-rank second">
@@ -57,7 +55,6 @@
                     </div>
                 </div>
             </div>
-            <!-- 나머지 순위 -->
             <div class="ranking-list">
                 <!-- 4-5등은 유지하고 6-20등 추가 -->
                 <div class="ranking-item">
@@ -247,7 +244,6 @@
 
         <!-- 누적 포인트 랭킹 -->
         <section class="ranking-section" id="points-ranking">
-            <h2 class="ranking-title">누적 포인트</h2>
             <div class="top-rankers">
                 <!-- 2등 -->
                 <div class="top-rank second">
@@ -280,7 +276,6 @@
                     </div>
                 </div>
             </div>
-            <!-- 나머지 순위 -->
             <div class="ranking-list">
                 <div class="ranking-item">
                     <div class="rank-number">4</div>
@@ -474,7 +469,6 @@
 
         <!-- 당고 수집 랭킹 -->
         <section class="ranking-section" id="dangos-ranking">
-            <h2 class="ranking-title">당고 수집</h2>
             <div class="top-rankers">
                 <!-- 2등 -->
                 <div class="top-rank second">
@@ -507,7 +501,6 @@
                     </div>
                 </div>
             </div>
-            <!-- 나머지 순위 -->
             <div class="ranking-list">
                 <div class="ranking-item">
                     <div class="rank-number">4</div>
@@ -705,21 +698,132 @@
     </footer>
 
     <script>
+        // 랭킹 데이터를 저장할 객체
+        const rankingData = {
+            words: [], // 학습 단어 랭킹 데이터
+            points: [], // 누적 포인트 랭킹 데이터
+            dangos: []  // 당고 수집 랭킹 데이터
+        };
+
+        // 초기 데이터 로드
+        function loadRankingData() {
+            // 목업 데이터
+            const mockData = [
+                { name: "하리보", subtitle: "공부는 이제 그만", words: 2483, points: 2483, dangos: 2483 },
+                { name: "헤나뼈", subtitle: "일본 여행 좋아~", words: 2179, points: 2179, dangos: 2179 },
+                { name: "김초심", subtitle: "초심을 되찾자", words: 2135, points: 2135, dangos: 2135 },
+                { name: "암기왕", subtitle: "다 외울 때까지 숨 참음", words: 1924, points: 1924, dangos: 1924 },
+                { name: "원피스", subtitle: "보물 찾기 동료 구함", words: 1897, points: 1897, dangos: 1897 },
+                { name: "당고마스터", subtitle: "당고를 먹으며 공부중", words: 1756, points: 1756, dangos: 1756 },
+                { name: "일본어초보", subtitle: "열심히 배우는 중", words: 1634, points: 1634, dangos: 1634 },
+                { name: "애니매니아", subtitle: "자막없이 보는 그날까지", words: 1589, points: 1589, dangos: 1589 },
+                { name: "도쿄여행러", subtitle: "여행 준비중", words: 1445, points: 1445, dangos: 1445 },
+                { name: "JLPT고수", subtitle: "N1 준비중", words: 1398, points: 1398, dangos: 1398 },
+                { name: "만화책읽는중", subtitle: "원서 정복!", words: 1287, points: 1287, dangos: 1287 },
+                { name: "일본문화러버", subtitle: "문화로 배우는 일본어", words: 1156, points: 1156, dangos: 1156 },
+                { name: "게임번역가", subtitle: "게임으로 배우는 중", words: 1089, points: 1089, dangos: 1089 },
+                { name: "오사카여행", subtitle: "타코야키 먹으러 갈래요", words: 987, points: 987, dangos: 987 },
+                { name: "일드매니아", subtitle: "드라마로 배우는 일본어", words: 923, points: 923, dangos: 923 },
+                { name: "스시좋아", subtitle: "먹방으로 배우는 일본어", words: 867, points: 867, dangos: 867 },
+                { name: "교토구경", subtitle: "전통문화 탐방중", words: 812, points: 812, dangos: 812 },
+                { name: "J팝러버", subtitle: "노래로 배우는 일본어", words: 756, points: 756, dangos: 756 },
+                { name: "라멘마스터", subtitle: "라멘집 투어중", words: 701, points: 701, dangos: 701 },
+                { name: "후지산등반", subtitle: "정상에서 만나요", words: 645, points: 645, dangos: 645 }
+            ];
+
+            // 각 카테고리별로 데이터 복사 및 정렬
+            rankingData.words = [...mockData].sort((a, b) => b.words - a.words);
+            rankingData.points = [...mockData].sort((a, b) => b.points - a.points);
+            rankingData.dangos = [...mockData].sort((a, b) => b.dangos - a.dangos);
+        }
+
+        // 단위 표시 함수
+        function getUnit(type) {
+            switch(type) {
+                case 'words': return '단어';
+                case 'points': return 'pt';
+                case 'dangos': return '개';
+                default: return '';
+            }
+        }
+
+        // 랭킹 섹션 업데이트
+        function updateRankingSection(type) {
+            const data = rankingData[type];
+            const section = document.getElementById(`${type}-ranking`);
+            const unit = getUnit(type);
+            
+            // 상위 3등 업데이트
+            const topRankersHtml = `
+                <div class="top-rank second">
+                    <div class="crown">🥈</div>
+                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango-profile.png" alt="프로필" class="profile-image">
+                    <div class="user-details">
+                        <div class="user-name">${data[1].name}</div>
+                        <div class="user-subtitle">${data[1].subtitle}</div>
+                        <div class="user-points">${data[1][type].toLocaleString()} ${unit}</div>
+                    </div>
+                </div>
+                <div class="top-rank first">
+                    <div class="crown">👑</div>
+                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango-profile.png" alt="프로필" class="profile-image">
+                    <div class="user-details">
+                        <div class="user-name">${data[0].name}</div>
+                        <div class="user-subtitle">${data[0].subtitle}</div>
+                        <div class="user-points">${data[0][type].toLocaleString()} ${unit}</div>
+                    </div>
+                </div>
+                <div class="top-rank third">
+                    <div class="crown">🥉</div>
+                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango-profile.png" alt="프로필" class="profile-image">
+                    <div class="user-details">
+                        <div class="user-name">${data[2].name}</div>
+                        <div class="user-subtitle">${data[2].subtitle}</div>
+                        <div class="user-points">${data[2][type].toLocaleString()} ${unit}</div>
+                    </div>
+                </div>
+            `;
+            section.querySelector('.top-rankers').innerHTML = topRankersHtml;
+
+            // 나머지 순위 업데이트 (4-20등)
+            const rankingListHtml = data.slice(3).map((user, index) => `
+                <div class="ranking-item">
+                    <div class="rank-number">${index + 4}</div>
+                    <div class="user-info">
+                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango-profile.png" alt="프로필" class="profile-image">
+                        <div class="user-details">
+                            <div class="user-name">${user.name}</div>
+                            <div class="user-subtitle">${user.subtitle}</div>
+                        </div>
+                    </div>
+                    <div class="user-points">${user[type].toLocaleString()} ${unit}</div>
+                </div>
+            `).join('');
+            section.querySelector('.ranking-list').innerHTML = rankingListHtml;
+        }
+
+        // 페이지 로드 시 초기 데이터 로드 및 표시
+        window.addEventListener('load', () => {
+            loadRankingData();
+            updateRankingSection('words');
+        });
+
+        // 탭 전환 이벤트
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', () => {
-                // 모든 탭 버튼에서 active 클래스 제거
+                const type = button.dataset.tab;
+                
                 document.querySelectorAll('.tab-button').forEach(btn => {
                     btn.classList.remove('active');
                 });
-                // 클릭된 탭 버튼에 active 클래스 추가
                 button.classList.add('active');
 
-                // 모든 랭킹 섹션 숨기기
                 document.querySelectorAll('.ranking-section').forEach(section => {
                     section.classList.remove('active');
                 });
-                // 선택된 랭킹 섹션 보이기
-                document.getElementById(`${button.dataset.tab}-ranking`).classList.add('active');
+                document.getElementById(`${type}-ranking`).classList.add('active');
+
+                updateRankingSection(type);
             });
         });
     </script>
