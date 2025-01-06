@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'LaundryGothicOTF';
-    src: url('../../Main/fonts/LaundryGothicOTF.otf') format('opentype');
+    src: url('../Main/fonts/LaundryGothicOTF.otf') format('opentype');
 }
 
 .header {
@@ -46,4 +46,54 @@
     font-size: 14px;
     color: #495057;
     border-radius: 4px;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 24px;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #868E96;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 0;
+}
+
+.nav-item:hover {
+    color: #212529;
+}
+
+.nav-item.active {
+    color: #212529;
+    font-weight: 600;
+}
+
+.profile-menu {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 0;
+    background-color: #F8F9FA;
+    border: 1px solid #DEE2E6;
+    display: block;
 } 
