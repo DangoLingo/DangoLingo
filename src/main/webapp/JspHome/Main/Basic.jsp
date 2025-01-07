@@ -1,18 +1,24 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="mock.MockDataManager" %>
+<%@ page import="model.UserDTO" %>
+<%@ page import="model.StudyDTO" %>
 <% 
     request.setCharacterEncoding("UTF-8");
     
     // ---------------------------------------------------------------------
     // [JSP 지역 변수 선언 : 세션 관련 변수]
     // ---------------------------------------------------------------------
-    // 테스트를 위한 임시 세션 설정
-    session.setAttribute("userNickname", "테스트사용자");
+    // 목업 데이터 매니저에서 현재 사용자 정보 가져오기
+    MockDataManager mockManager = MockDataManager.getInstance();
+    UserDTO currentUser = mockManager.getCurrentUser();
     
-    // 세션에서 사용자 정보 가져오기
-    String userNickname = (String) session.getAttribute("userNickname");
-    boolean isLoggedIn = userNickname != null;
+    // 세션에 사용자 정보 설정
+    session.setAttribute("userNickname", currentUser.getNickname());
+    String userNickname = currentUser.getNickname();
+    boolean isLoggedIn = true;
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -80,8 +86,8 @@
                         <img src="images/dango-profile.png" alt="프로필 이미지">
                     </div>
                     <header class="profile-header">
-                        <h2>안녕하세요, <%= userNickname %>님</h2>
-                        <p>오늘도 당고링고와 함께 달콤한 하루되세요.</p>
+                        <h2>안녕하세요, <%= currentUser.getNickname() %>님</h2>
+                        <p><%= currentUser.getIntro() %></p>
                         <a href="${pageContext.request.contextPath}/JspHome/Words/Basic.jsp" class="study-button">학습하기</a>
                     </header>
                 </article>
@@ -89,19 +95,22 @@
                 <section class="statistics">
                     <article class="stat-item">
                         <h3>학습 단어</h3>
-                        <p class="stat-number">100개</p>
+                        <p class="stat-number"><%= currentUser.getQuizRight() %>개</p>
                     </article>
                     <article class="stat-item">
                         <h3>연속 학습</h3>
-                        <p class="stat-number">10일</p>
+                        <p class="stat-number"><%= currentUser.getStudyDay() %>일</p>
                     </article>
                     <article class="stat-item">
                         <h3>학습 포인트</h3>
-                        <p class="stat-number">1,300점</p>
+                        <p class="stat-number"><%= String.format("%,d", currentUser.getPoint()) %>점</p>
                     </article>
                     <article class="stat-item">
-                        <h3>랭킹</h3>
-                        <p class="stat-number">13위</p>
+                        <h3>포인트 랭킹</h3>
+                        <p class="stat-number">
+                            <%= mockManager.getUserRank(currentUser.getUserId(), "point") %>
+                            <span class="rank-total">위</span>
+                        </p>
                     </article>
                 </section>
                 
@@ -118,18 +127,24 @@
                             <span>Sun</span>
                         </div>
                         <% 
-                        // 52주 그리드 생성
+                        // 현재 사용자의 스트릭 데이터 조회
+                        List<StudyDTO> streaks = mockManager.getStudyStreak(currentUser.getUserId());
+                        int streakIndex = 0;
+                        
                         for(int week = 0; week < 52; week++) { 
                         %>
                             <div class="streak-grid">
                                 <% 
                                 // 각 주의 7일 생성
                                 for(int day = 0; day < 7; day++) {
-                                    // 임시로 랜덤한 레벨 할당 (실제로는 DB에서 데이터를 가져와야 함)
-                                    int level = (int)(Math.random() * 5);
-                                    int count = level * 2;  // 임시 학습 횟수
+                                    StudyDTO study = streaks.get(streakIndex++);
+                                    int level = study.getStudyLevel();
+                                    int count = study.getStudyCount();
                                 %>
-                                    <div class="streak-cell level-<%= level %>" data-count="<%= count %>회 학습"></div>
+                                    <div class="streak-cell level-<%= level %>" 
+                                         data-count="<%= count %>회 학습"
+                                         data-date="<%= new SimpleDateFormat("yyyy-MM-dd").format(study.getStudyDate()) %>">
+                                    </div>
                                 <% } %>
                             </div>
                         <% } %>
