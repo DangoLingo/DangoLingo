@@ -190,6 +190,13 @@ body {
     font-weight: 600;
 }
 
+.streak-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -2rem;
+    padding: 0 2rem;
+}
+
 .streak-chart {
     width: 100%;
     min-height: 160px;
@@ -214,7 +221,7 @@ body {
 .streak-days span {
     height: 15px;
     line-height: 15px;
-    padding-right: 0.75rem;
+    padding-right: 1rem;
     font-size: 11px;
 }
 
@@ -369,23 +376,38 @@ body {
 
     /* 스트릭 차트 모바일 조정 */
     .streak-tracker {
-        padding: 1.5rem;
-        overflow-x: auto;  /* 가로 스크롤 가능하도록 */
+        padding: 1.25rem;
+    }
+
+    .streak-container {
+        margin: 0 -1.25rem;
+        padding: 0 1.25rem;
     }
 
     .streak-chart {
-        min-width: 700px;  /* 최소 너비 설정하여 스크롤 가능하게 */
-        padding: 1rem 0 1rem 2rem;
+        min-width: 700px;
+        padding: 0.75rem 0 0.75rem 2rem;
     }
 
     .streak-days span {
         font-size: 10px;
-        padding-right: 0.5rem;
+        padding-right: 0.75rem;
     }
 
     .streak-cell {
-        width: 10px;
-        height: 10px;
+        width: 12px;
+        height: 12px;
+    }
+
+    /* 스트릭 툴팁 조정 */
+    .streak-cell::before {
+        padding: 4px 6px;
+        font-size: 11px;
+        bottom: 140%;
+    }
+
+    .streak-cell:hover {
+        transform: scale(1.1);
     }
 }
 
@@ -410,6 +432,35 @@ body {
 
     .auth-button {
         width: 100%;  /* 버튼 전체 너비로 */
+    }
+
+    .streak-tracker {
+        padding: 1rem;
+    }
+
+    .streak-container {
+        margin: 0 -1rem;
+        padding: 0 1rem;
+    }
+
+    .streak-tracker h3 {
+        font-size: 16px;
+        margin-bottom: 16px;
+    }
+
+    .streak-chart {
+        min-width: 600px;
+        padding: 0.5rem 0 0.5rem 1.5rem;
+    }
+
+    .streak-cell {
+        width: 10px;
+        height: 10px;
+    }
+
+    .streak-days span {
+        font-size: 9px;
+        padding-right: 0.5rem;
     }
 }
 

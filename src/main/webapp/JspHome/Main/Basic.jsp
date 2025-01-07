@@ -116,39 +116,41 @@
                 </section>
                 
                 <section class="streak-tracker">
-                    <h3>스트릭</h3>
-                    <div class="streak-chart">
-                        <div class="streak-days">
-                            <span>Mon</span>
-                            <span>Tue</span>
-                            <span>Wed</span>
-                            <span>Thu</span>
-                            <span>Fri</span>
-                            <span>Sat</span>
-                            <span>Sun</span>
-                        </div>
-                        <% 
-                        // 현재 사용자의 스트릭 데이터 조회
-                        List<StudyDTO> streaks = mockManager.getStudyStreak(currentUser.getUserId());
-                        int streakIndex = 0;
-                        
-                        for(int week = 0; week < 52; week++) { 
-                        %>
-                            <div class="streak-grid">
-                                <% 
-                                // 각 주의 7일 생성
-                                for(int day = 0; day < 7; day++) {
-                                    StudyDTO study = streaks.get(streakIndex++);
-                                    int level = study.getStudyLevel();
-                                    int count = study.getStudyCount();
-                                %>
-                                    <div class="streak-cell level-<%= level %>" 
-                                         data-count="<%= count %>회 학습"
-                                         data-date="<%= new SimpleDateFormat("yyyy-MM-dd").format(study.getStudyDate()) %>">
-                                    </div>
-                                <% } %>
+                    <h3>학습 기록</h3>
+                    <div class="streak-container">
+                        <div class="streak-chart">
+                            <div class="streak-days">
+                                <span>월</span>
+                                <span>화</span>
+                                <span>수</span>
+                                <span>목</span>
+                                <span>금</span>
+                                <span>토</span>
+                                <span>일</span>
                             </div>
-                        <% } %>
+                            <% 
+                            // 현재 사용자의 스트릭 데이터 조회
+                            List<StudyDTO> streaks = mockManager.getStudyStreak(currentUser.getUserId());
+                            int streakIndex = 0;
+                            
+                            for(int week = 0; week < 52; week++) { 
+                            %>
+                                <div class="streak-grid">
+                                    <% 
+                                    // 각 주의 7일 생성
+                                    for(int day = 0; day < 7; day++) {
+                                        StudyDTO study = streaks.get(streakIndex++);
+                                        int level = study.getStudyLevel();
+                                        int count = study.getStudyCount();
+                                    %>
+                                        <div class="streak-cell level-<%= level %>" 
+                                             data-count="<%= count %>회 학습"
+                                             data-date="<%= new SimpleDateFormat("yyyy-MM-dd").format(study.getStudyDate()) %>">
+                                        </div>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                        </div>
                     </div>
                 </section>
             </section>
