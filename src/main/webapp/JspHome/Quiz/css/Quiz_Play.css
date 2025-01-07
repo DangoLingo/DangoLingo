@@ -1,0 +1,104 @@
+body {
+	background-color: #F6F7F5;
+	font-family: "Pretendard JP";
+	display: flex;
+	position: relative;
+	flex-direction: column; /* 세로 방향으로 배치 */
+	min-height: 100vh; /* 페이지 전체 높이를 100vh로 설정 */
+	height: 100%;
+	margin: 0;
+	justify-content: center;
+	align-items: center;
+}
+
+main {
+	margin-top: 84px;
+	width: 500px;
+	height: 449px;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+}
+
+/* -----------------------------------------------------------------
+	1) 상단 진행상황 표시
+   ----------------------------------------------------------------- */
+/* 상단 진행상황 */
+.progress {
+	display: flex;
+	justify-content: space-between;
+	width: 400px;
+	height: 40px;
+	margin-bottom: 40px;
+	font-feature-settings: 'ss10' on;
+	font-size: 17px;
+	font-weight: 600;
+	line-height: 146.7%; /* 24.939px */
+	color: #000000;
+	align-items: center;
+}
+/* 우측 상단 퀴즈 진행 시간과 나가기 버튼이 들어있는 span */
+.time-container {
+	display: inline-flex; /* Flexbox 사용 */
+	align-items: center; /* 텍스트를 세로 중앙 정렬 */
+	gap: 8px; /* 텍스트와 SVG 간격 */
+}
+/* 퀴즈 진행 시간 경과 */
+#timePassed {
+	font-weight: 300;
+	margin-right: 16px;
+}
+/* 나가기 버튼 */
+circle {
+	cursor: pointer;
+}
+
+/* -----------------------------------------------------------------
+	2) 문제 제시
+   ----------------------------------------------------------------- */
+.word-display {
+	font-size: 48px;
+	font-weight: bold;
+	color: #000000;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+/* -----------------------------------------------------------------
+	3) 정답 선택 버튼
+   ----------------------------------------------------------------- */
+/* 정답 선택 버튼들 */
+.buttons {
+	width: 400px;
+	margin-top: 80px;
+	display: grid; /*2*2로 버튼 배열하기*/
+	grid-template-columns: repeat(2, 1fr); /* 2열로 설정 */
+	gap: 40px; /* 버튼 간의 간격 */
+}
+/* 정답 선택 버튼 4개 */
+.button {
+	display: flex;
+	width: 180px;
+	height: 50px;
+	padding: 24px 16px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+	border-radius: 16px;
+	border: 2px solid var(--ButtonColor, #5C8B6C);
+	background: var(--Schemes-On-Primary, #FFF);
+	font-family: "Pretendard JP";
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 400;
+}
+
+button:hover {
+	background-color: #5C8B6C;
+}
+
+/* ----------------------------------------------------------------- */
