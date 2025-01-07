@@ -259,3 +259,154 @@ body {
 .ranking-title {
     display: none;
 } 
+
+.ranking-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.ranking-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.ranking-header h1 {
+    font-size: 32px;
+    margin-bottom: 24px;
+}
+
+.ranking-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.tab {
+    padding: 8px 24px;
+    border-radius: 20px;
+    background-color: #f1f3f5;
+    color: #495057;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.tab.active {
+    background-color: #4a9c5d;
+    color: white;
+}
+
+.my-rank {
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rank-info {
+    display: flex;
+    align-items: baseline;
+}
+
+.rank-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4a9c5d;
+}
+
+.rank-total {
+    font-size: 14px;
+    color: #868e96;
+    margin-left: 4px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.nickname {
+    font-weight: 500;
+}
+
+.score {
+    font-size: 18px;
+    font-weight: bold;
+    color: #212529;
+}
+
+.ranking-table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.rank-row {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.rank-row:last-child {
+    border-bottom: none;
+}
+
+.rank-row.current-user {
+    background-color: #e8f5e9;
+}
+
+.rank-row .rank-number {
+    width: 48px;
+    text-align: center;
+}
+
+.rank-row .user-info {
+    flex: 1;
+}
+
+.rank-row .score {
+    width: 120px;
+    text-align: right;
+}
+
+@media (max-width: 640px) {
+    .ranking-container {
+        padding: 16px;
+    }
+    
+    .ranking-tabs {
+        gap: 8px;
+    }
+    
+    .tab {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    .rank-row {
+        padding: 12px;
+    }
+    
+    .profile-image {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .score {
+        font-size: 16px;
+    }
+} 

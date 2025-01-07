@@ -76,6 +76,7 @@ public class UserDAO {
             pstmt.setString(3, user.getName());
             pstmt.setString(4, user.getNickname());
             pstmt.setString(5, user.getIntro());
+            pstmt.setString(6, user.getProfileImage());
             
             success = pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -148,8 +149,8 @@ public class UserDAO {
         ResultSet rs = null;
         
         String query = switch (type) {
-            case "study" -> "USER.SELECT_RANKING_STUDY";
-            case "quiz" -> "USER.SELECT_RANKING_QUIZ";
+            case "words" -> "USER.SELECT_RANKING_STUDY";
+            case "dangos" -> "USER.SELECT_RANKING_QUIZ";
             default -> "USER.SELECT_RANKING_POINTS";
         };
         
@@ -181,12 +182,14 @@ public class UserDAO {
         user.setName(rs.getString("name"));
         user.setNickname(rs.getString("nickname"));
         user.setIntro(rs.getString("intro"));
+        user.setProfileImage(rs.getString("profile_image"));
         user.setStudyDate(rs.getDate("study_date"));
         user.setStudyTime(rs.getTimestamp("study_time"));
         user.setStudyDay(rs.getInt("study_day"));
         user.setQuizCount(rs.getInt("quiz_count"));
         user.setQuizRight(rs.getInt("quiz_right"));
         user.setPoint(rs.getInt("point"));
+        user.setDangos(rs.getInt("dangos"));
         return user;
     }
 } 

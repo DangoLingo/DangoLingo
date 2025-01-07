@@ -2,6 +2,7 @@ package mock;
 
 import model.UserDTO;
 import model.StudyDTO;
+import model.RankingDTO;
 import java.util.*;
 
 public class MockDataManager {
@@ -121,5 +122,34 @@ public class MockDataManager {
         
         sortedUsers.sort(comparator);
         return sortedUsers.subList(0, Math.min(limit, sortedUsers.size()));
+    }
+    
+    // 랭킹 목록 조회
+    public List<RankingDTO> getRankings(String type, int limit) {
+        List<RankingDTO> rankings = new ArrayList<>();
+        List<UserDTO> users = getRankingList(type, limit);
+        
+        for (int i = 0; i < users.size(); i++) {
+            UserDTO user = users.get(i);
+            RankingDTO ranking = new RankingDTO();
+            ranking.setRank(i + 1);
+            ranking.setUserId(user.getUserId());
+            ranking.setNickname(user.getNickname());
+            ranking.setProfileImage(user.getProfileImage());
+            ranking.setScore(getScoreByType(user, type));
+            ranking.setType(type);
+            rankings.add(ranking);
+        }
+        
+        return rankings;
+    }
+    
+    private int getScoreByType(UserDTO user, String type) {
+        return switch (type) {
+            case "words" -> user.getQuizRight();
+            case "points" -> user.getPoint();
+            case "dangos" -> user.getDangos();
+            default -> user.getPoint();
+        };
     }
 } 

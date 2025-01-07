@@ -16,6 +16,7 @@ public class UserDTO {
     private int quizCount;
     private int quizRight;
     private int point;
+    private int dangos;
 
     // 생성자
     public UserDTO() {}
@@ -59,4 +60,7 @@ public class UserDTO {
 
     public int getPoint() { return point; }
     public void setPoint(int point) { this.point = point; }
+
+    public int getDangos() { return dangos; }
+    public void setDangos(int dangos) { this.dangos = dangos; }
 } 
