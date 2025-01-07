@@ -108,10 +108,7 @@
                     </article>
                     <article class="stat-item">
                         <h3>포인트 랭킹</h3>
-                        <p class="stat-number">
-                            <%= mockManager.getUserRank(currentUser.getUserId(), "point") %>
-                            <span class="rank-total">위</span>
-                        </p>
+                        <p class="stat-number"><%= mockManager.getUserRank(currentUser.getUserId(), "point") %>위</p>
                     </article>
                 </section>
                 
