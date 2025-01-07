@@ -8,11 +8,16 @@
 <div class="header">
     <div class="header-content">
         <div class="header-left">
+            <button class="hamburger" id="hamburgerBtn" aria-label="메뉴 열기">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <a href="${pageContext.request.contextPath}/JspHome/Main/Basic.jsp" class="logo-link">
                 <div class="logo">당고링고</div>
             </a>
             <% if (isLoggedIn) { %>
-                <nav class="nav-menu">
+                <nav class="nav-menu" id="navMenu">
                     <a href="${pageContext.request.contextPath}/JspHome/Dango/Basic.jsp" class="nav-item">당고</a>
                     <a href="${pageContext.request.contextPath}/JspHome/Words/Basic.jsp" class="nav-item">단어장</a>
                     <a href="${pageContext.request.contextPath}/JspHome/Ranking/Basic.jsp" class="nav-item">랭킹</a>
@@ -31,4 +36,11 @@
             <% } %>
         </div>
     </div>
-</div> 
+</div>
+
+<script>
+    document.getElementById('hamburgerBtn').addEventListener('click', function() {
+        document.getElementById('navMenu').classList.toggle('show');
+        this.classList.toggle('active');
+    });
+</script> 

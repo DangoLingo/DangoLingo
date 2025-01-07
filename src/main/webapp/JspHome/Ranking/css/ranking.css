@@ -36,6 +36,9 @@ body {
     display: flex;
     justify-content: center;
     gap: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
 }
 
 .tab {
@@ -46,6 +49,7 @@ body {
     text-decoration: none;
     font-weight: 600;
     transition: all 0.2s;
+    white-space: nowrap;
 }
 
 .tab:hover {
@@ -270,27 +274,124 @@ body {
 
 /* 모바일 대응 */
 @media screen and (max-width: 768px) {
+    body {
+        padding-top: 56px;
+    }
+
+    .ranking-container {
+        padding: 16px 12px;
+    }
+
+    .ranking-tabs {
+        margin: 0 -12px;
+        padding: 0 12px 8px;
+    }
+
+    .tab {
+        padding: 10px 24px;
+        font-size: 15px;
+    }
+
     .top-rankers {
         flex-direction: column;
         gap: 24px;
-        margin: 40px 0;
+        margin: 32px 0;
+        padding-top: 20px;
     }
 
     .top-rank {
         width: 100%;
-        max-width: 240px;
+        max-width: 280px;
         padding: 24px;
         margin-top: 0 !important;
     }
 
-    .top-rank.first {
-        order: -1;
-        padding-top: 32px;
-        margin-top: 0;
+    .top-rank .profile-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .top-rank .user-name {
+        font-size: 16px;
     }
 
     .medal {
         top: -20px;
         font-size: 24px;
+    }
+
+    .my-rank {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .my-rank .rank-info {
+        justify-content: center;
+    }
+
+    .my-rank .user-info {
+        justify-content: center;
+    }
+
+    .my-rank .score {
+        margin: 0;
+    }
+
+    .ranking-list {
+        padding: 16px 12px;
+    }
+
+    .rank-row {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .rank-row .rank-number {
+        width: 32px;
+        font-size: 15px;
+    }
+
+    .rank-row .user-info {
+        gap: 10px;
+        margin-right: 12px;
+    }
+
+    .rank-row .profile-image {
+        width: 36px;
+        height: 36px;
+    }
+
+    .rank-row .nickname {
+        font-size: 15px;
+    }
+
+    .rank-row .score {
+        font-size: 15px;
+    }
+
+    .intro {
+        font-size: 13px;
+    }
+}
+
+/* 작은 모바일 화면 대응 */
+@media screen and (max-width: 360px) {
+    .ranking-container {
+        padding: 12px 8px;
+    }
+
+    .tab {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .top-rank {
+        padding: 20px 16px;
+    }
+
+    .rank-row {
+        padding: 10px 8px;
     }
 } 

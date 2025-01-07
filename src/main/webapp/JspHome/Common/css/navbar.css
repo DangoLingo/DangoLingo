@@ -96,4 +96,117 @@
     background-color: #F8F9FA;
     border: 1px solid #DEE2E6;
     display: block;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: white;
+    z-index: 1000;
+    border-bottom: 1px solid #E9ECEF;
+}
+
+.navbar-container {
+    max-width: 1060px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+}
+
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    margin-right: 8px;
+}
+
+.hamburger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: #212529;
+    margin: 4px 0;
+    transition: transform 0.2s ease-in-out;
+    transform-origin: center;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        height: 56px;
+    }
+
+    .header-content {
+        padding: 0 16px;
+    }
+
+    .header-left {
+        gap: 8px;
+    }
+
+    .hamburger {
+        display: block;
+        padding: 8px 4px;
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 56px;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 8px 0;
+        border-bottom: 1px solid #E9ECEF;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-menu.show {
+        display: flex;
+    }
+
+    .nav-item {
+        padding: 16px 24px;
+        width: 100%;
+        text-align: center;
+        font-size: 15px;
+        border-bottom: 1px solid #F1F3F5;
+    }
+
+    .nav-item:last-child {
+        border-bottom: none;
+    }
+
+    .nav-item:hover {
+        background-color: #F8F9FA;
+    }
+
+    .profile-menu {
+        gap: 12px;
+    }
+
+    .auth-button {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
 } 
