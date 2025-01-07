@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="DangoLingo:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/DangoLingo_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="DangoLingo/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="DangoLingo" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="ojdbc8" />
+        </element>
+        <element id="library" level="project" name="javax.servlet.api" />
+        <element id="library" level="project" name="ojdbc8" />
+      </element>
+    </root>
+  </artifact>
+</component>
