@@ -1,7 +1,12 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% 
     request.setCharacterEncoding("UTF-8");
     
+    // ---------------------------------------------------------------------
+    // [JSP 지역 변수 선언 : 세션 관련 변수]
+    // ---------------------------------------------------------------------
     // 테스트를 위한 임시 세션 설정
     session.setAttribute("userNickname", "테스트사용자");
     
@@ -12,20 +17,34 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <%----------------------------------------------------------------------
+    [HTML Page - 헤드 영역]
+    --------------------------------------------------------------------------%>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>당고링고</title>
+    <%----------------------------------------------------------------------
+    [HTML Page - 스타일쉬트 구현 영역]
+    --------------------------------------------------------------------------%>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-jp.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/main.css">
 </head>
 <body>
+    <%----------------------------------------------------------------------
+    [HTML Page - 헤더 영역]
+    --------------------------------------------------------------------------%>
     <header>
         <jsp:include page="../Common/Navbar.jsp" />
     </header>
 
+    <%----------------------------------------------------------------------
+    [HTML Page - 메인 컨텐츠 영역]
+    --------------------------------------------------------------------------%>
     <main class="main-container">
         <% if (!isLoggedIn) { %>
-            <!-- 비로그인 상태일 때 표시될 내용 -->
+            <%------------------------------------------------------------------
+            비로그인 상태일 때 표시될 내용
+            -------------------------------------------------------------------%>
             <section class="hero-section">
                 <article class="hero-content">
                     <h1 class="main-title">달콤한 일본어 학습 파트너,<br>당고링고</h1>
@@ -52,7 +71,9 @@
                 </article>
             </section>
         <% } else { %>
-            <!-- 로그인 상태일 때 표시될 내용 -->
+            <%------------------------------------------------------------------
+            로그인 상태일 때 표시될 내용
+            -------------------------------------------------------------------%>
             <section class="dashboard">
                 <article class="user-profile">
                     <div class="profile-image-container">
@@ -118,6 +139,9 @@
         <% } %>
     </main>
 
+    <%----------------------------------------------------------------------
+    [HTML Page - 푸터 영역]
+    --------------------------------------------------------------------------%>
     <footer>
         <jsp:include page="../Common/Footer.jsp" />
     </footer>
