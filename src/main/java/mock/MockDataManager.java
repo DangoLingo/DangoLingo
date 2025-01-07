@@ -28,6 +28,10 @@ public class MockDataManager {
             "보물 찾기 동료 구함", "당고를 먹으며 공부중", "열심히 배우는 중", "자막없이 보는 그날까지",
             "여행 준비중", "N1 준비중"
         };
+        String[] profileImages = {
+            "dango-profile-1.png", "dango-profile-2.png", "dango-profile-3.png", "dango-profile-4.png", "dango-profile-5.png",
+            "dango-profile-6.png", "dango-profile-7.png", "dango-profile-8.png", "dango-profile-9.png", "dango-profile-10.png"
+        };
         
         for (int i = 0; i < 10; i++) {
             UserDTO user = new UserDTO();
@@ -36,6 +40,7 @@ public class MockDataManager {
             user.setName("사용자" + (i + 1));
             user.setNickname(nicknames[i]);
             user.setIntro(intros[i]);
+            user.setProfileImage(profileImages[i]);
             user.setStudyDay(30 - i);
             user.setQuizCount(100 + (i * 10));
             user.setQuizRight(80 + (i * 8));

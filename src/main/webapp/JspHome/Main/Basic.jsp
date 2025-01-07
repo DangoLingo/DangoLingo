@@ -83,7 +83,8 @@
             <section class="dashboard">
                 <article class="user-profile">
                     <div class="profile-image-container">
-                        <img src="images/dango-profile.png" alt="프로필 이미지">
+                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/<%= currentUser.getProfileImage() %>" 
+                             alt="<%= currentUser.getNickname() %>님의 프로필">
                     </div>
                     <header class="profile-header">
                         <h2>안녕하세요, <%= currentUser.getNickname() %>님</h2>

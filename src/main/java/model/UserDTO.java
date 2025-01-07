@@ -9,6 +9,7 @@ public class UserDTO {
     private String name;
     private String nickname;
     private String intro;
+    private String profileImage;
     private Date studyDate;
     private Date studyTime;
     private int studyDay;
@@ -37,6 +38,9 @@ public class UserDTO {
 
     public String getIntro() { return intro; }
     public void setIntro(String intro) { this.intro = intro; }
+
+    public String getProfileImage() { return profileImage; }
+    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
 
     public Date getStudyDate() { return studyDate; }
     public void setStudyDate(Date studyDate) { this.studyDate = studyDate; }
