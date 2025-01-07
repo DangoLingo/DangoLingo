@@ -149,8 +149,8 @@ public class UserDAO {
         ResultSet rs = null;
         
         String query = switch (type) {
-            case "words" -> "USER.SELECT_RANKING_STUDY";
-            case "dangos" -> "USER.SELECT_RANKING_QUIZ";
+            case "words" -> "USER.SELECT_RANKING_WORDS";
+            case "dangos" -> "USER.SELECT_RANKING_DANGOS";
             default -> "USER.SELECT_RANKING_POINTS";
         };
         

@@ -46,6 +46,7 @@ public class MockDataManager {
             user.setQuizCount(100 + (i * 10));
             user.setQuizRight(80 + (i * 8));
             user.setPoint(2500 - (i * 100));
+            user.setDangos(50 - (i * 3));
             
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_MONTH, -i);
@@ -115,8 +116,9 @@ public class MockDataManager {
         List<UserDTO> sortedUsers = new ArrayList<>(mockUsers);
         
         Comparator<UserDTO> comparator = switch (type) {
-            case "study" -> Comparator.comparing(UserDTO::getStudyDay).reversed();
-            case "quiz" -> Comparator.comparing(UserDTO::getQuizRight).reversed();
+            case "words" -> Comparator.comparing(UserDTO::getQuizRight).reversed();
+            case "dangos" -> Comparator.comparing(UserDTO::getDangos).reversed();
+            case "points" -> Comparator.comparing(UserDTO::getPoint).reversed();
             default -> Comparator.comparing(UserDTO::getPoint).reversed();
         };
         

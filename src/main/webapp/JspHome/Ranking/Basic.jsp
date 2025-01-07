@@ -32,12 +32,36 @@
 
     <main class="ranking-container">
         <section class="ranking-header">
-            <h1>랭킹</h1>
             <div class="ranking-tabs">
                 <a href="?type=words" class="tab <%= rankingType.equals("words") ? "active" : "" %>">학습 단어</a>
                 <a href="?type=points" class="tab <%= rankingType.equals("points") ? "active" : "" %>">누적 포인트</a>
                 <a href="?type=dangos" class="tab <%= rankingType.equals("dangos") ? "active" : "" %>">당고 수집</a>
             </div>
+        </section>
+
+        <section class="top-rankers">
+            <% for (int i = 0; i < Math.min(3, rankings.size()); i++) { 
+                UserDTO user = rankings.get(i);
+                String rankClass = i == 0 ? "first" : i == 1 ? "second" : "third";
+            %>
+                <div class="top-rank <%= rankClass %>">
+                    <% if (i == 0) { %>
+                        <span class="medal">🥇</span>
+                    <% } else if (i == 1) { %>
+                        <span class="medal">🥈</span>
+                    <% } else if (i == 2) { %>
+                        <span class="medal">🥉</span>
+                    <% } %>
+                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/<%= user.getProfileImage() %>" 
+                         alt="<%= user.getNickname() %>님의 프로필" class="profile-image">
+                    <div class="user-name"><%= user.getNickname() %></div>
+                    <div class="user-intro"><%= user.getIntro() %></div>
+                    <div class="score">
+                        <%= getScoreByType(user, rankingType) %>
+                        <%= getScoreUnit(rankingType) %>
+                    </div>
+                </div>
+            <% } %>
         </section>
 
         <section class="ranking-list">
@@ -66,7 +90,10 @@
                         <div class="user-info">
                             <img src="${pageContext.request.contextPath}/JspHome/Main/images/<%= user.getProfileImage() %>" 
                                  alt="<%= user.getNickname() %>님의 프로필" class="profile-image">
-                            <span class="nickname"><%= user.getNickname() %></span>
+                            <div class="user-details">
+                                <div class="nickname"><%= user.getNickname() %></div>
+                                <div class="intro"><%= user.getIntro() %></div>
+                            </div>
                         </div>
                         <div class="score">
                             <%= getScoreByType(user, rankingType) %>
@@ -87,20 +114,20 @@
 <%!
     // 랭킹 타입에 따른 점수 반환
     private int getScoreByType(UserDTO user, String type) {
-        return switch (type) {
-            case "words" -> user.getQuizRight();
-            case "dangos" -> user.getDangos();
-            default -> user.getPoint();
-        };
+        switch (type) {
+            case "words": return user.getQuizRight();
+            case "dangos": return user.getDangos();
+            default: return user.getPoint();
+        }
     }
     
     // 랭킹 타입에 따른 단위 반환
     private String getScoreUnit(String type) {
-        return switch (type) {
-            case "words" -> "개";
-            case "points" -> "P";
-            case "dangos" -> "개";
-            default -> "";
-        };
+        switch (type) {
+            case "words": return "개";
+            case "points": return "P";
+            case "dangos": return "개";
+            default: return "";
+        }
     }
 %>
