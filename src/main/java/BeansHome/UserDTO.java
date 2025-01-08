@@ -1,4 +1,4 @@
-package model;
+package BeansHome;
 
 import java.util.Date;
 

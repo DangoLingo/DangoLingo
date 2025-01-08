@@ -10,8 +10,8 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="mock.MockDataManager" %>
-<%@ page import="model.UserDTO" %>
-<%@ page import="model.StudyDTO" %>
+<%@ page import="BeansHome.UserDTO" %>
+<%@ page import="BeansHome.StudyDTO" %>
 <% 
     request.setCharacterEncoding("UTF-8");
     

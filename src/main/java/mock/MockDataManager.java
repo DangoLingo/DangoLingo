@@ -1,8 +1,8 @@
 package mock;
 
-import model.UserDTO;
-import model.StudyDTO;
-import model.RankingDTO;
+import BeansHome.UserDTO;
+import BeansHome.StudyDTO;
+import BeansHome.RankingDTO;
 import java.util.*;
 
 public class MockDataManager {

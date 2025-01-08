@@ -1,4 +1,4 @@
-package model;
+package BeansHome;
 
 public class RankingDTO {
     private int rank;           // 순위
