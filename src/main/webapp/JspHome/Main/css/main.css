@@ -196,6 +196,7 @@ body {
     -webkit-overflow-scrolling: touch;
     margin: 0 -2rem;
     padding: 0 2rem;
+    padding-top: 32px;
 }
 
 .streak-chart {
@@ -246,7 +247,7 @@ body {
 .streak-cell::before {
     content: attr(data-count);
     position: absolute;
-    bottom: 120%;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
     padding: 4px 8px;
@@ -259,7 +260,22 @@ body {
     opacity: 0;
     transition: opacity 0.2s ease;
     pointer-events: none;
-    z-index: 1000;
+    z-index: 2000;
+}
+
+.streak-cell::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px;
+    border-style: solid;
+    border-color: #212529 transparent transparent transparent;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 2000;
 }
 
 .streak-cell:hover {
@@ -268,6 +284,11 @@ body {
 }
 
 .streak-cell:hover::before {
+    visibility: visible;
+    opacity: 1;
+}
+
+.streak-cell:hover::after {
     visibility: visible;
     opacity: 1;
 }
@@ -383,6 +404,7 @@ body {
     .streak-container {
         margin: 0 -1.25rem;
         padding: 0 1.25rem;
+        padding-top: 28px;
     }
 
     .streak-chart {
@@ -404,7 +426,7 @@ body {
     .streak-cell::before {
         padding: 4px 6px;
         font-size: 11px;
-        bottom: 140%;
+        bottom: 22px;
     }
 
     .streak-cell:hover {
