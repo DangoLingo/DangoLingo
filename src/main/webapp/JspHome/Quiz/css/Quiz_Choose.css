@@ -1,0 +1,113 @@
+body {
+	background-color: #F6F7F5;
+	font-family: "Pretendard JP";
+	display: flex;
+	flex-direction: column; /* 세로 방향으로 배치 */
+	min-height: 100vh; /* 페이지 전체 높이를 100vh로 설정 */
+	height: 100%;
+	margin: 0;
+	justify-content: center; /* 가로 중앙 정렬 */
+	align-items: center; /* 세로 중앙 정렬 */
+}
+
+main {
+	margin-top: 84px;
+	background-color: white;
+	width: 500px; /*단어장 고정 500px*/
+	display: flex;
+	flex-direction: column;
+	justify-content: center; /* 수평 중앙 정렬 */
+	align-items: center; /* 수직 중앙 정렬 */
+	border-radius: 10px;
+}
+
+form {
+	padding: 40px;
+}
+/* 퀴즈 개수, 퀴즈 유형 나타내는 헤딩 */
+.heading {
+	height: 20px;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 600;
+}
+/* -----------------------------------------------------------------
+				1) 퀴즈 개수
+		     ----------------------------------------------------------------- */
+/* 퀴즈 개수 선택하는 버튼들 전체 */
+.buttons {
+	margin-bottom: 40px;
+}
+/* 퀴즈 개수 선택하는 버튼 */
+.button {
+	border: none; /* 기본 테두리 제거 */
+	cursor: pointer; /* 클릭 가능한 상태 표시 */
+	background-color: #AEAEB2; /*회색*/
+	color: white;
+	border-radius: 16px;
+	width: 50px;
+	height: 30px;
+	margin-right: 5px;
+	font-size: 14px;
+	font-family: "Pretendard JP";
+	font-weight: 500;
+	text-align: center;
+}
+
+button:hover {
+	background-color: #5C8B6C;
+}
+/*퀴즈 버튼 클릭 시 초록색으로 변경-추후 js로 변경할 듯*/
+.checkedBtn {
+	background-color: #5C8B6C;
+}
+/* -----------------------------------------------------------------
+				2) 퀴즈 유형
+		     ----------------------------------------------------------------- */
+/* 라디오버튼과 라벨 담는 div */
+.quizTypes {
+	font-size: 17px;
+	margin-bottom: 10px;
+}
+/* 라디오버튼 */
+input[type="radio"] {
+	width: 20px;
+	height: 20px; /* 크기 조정 */
+	cursor: pointer;
+	margin: 0;
+}
+
+input[type="radio"]:checked {
+	display: none;
+}
+
+/* 라벨*/
+label {
+	margin-left: 10px;
+	cursor: pointer; /* 마우스 커서 스타일 */
+	vertical-align: 4px; /*라디오버튼과의 정렬 어긋난 것 맞추기*/
+}
+/* -----------------------------------------------------------------
+				3) submit 버튼
+		     ----------------------------------------------------------------- */
+/* form 하단 시작하기 버튼 */
+#submitBtn {
+	cursor: pointer; /* 클릭 가능한 상태 표시 */
+	width: 400px;
+	padding: 10px 16px; /* 버튼 여백 */
+	background-color: #5C8B6C; /* 배경색 */
+	color: white; /* 글자색 */
+	border: none; /* 기본 테두리 제거 */
+	border-radius: 16px; /* 둥근 모서리 */
+	display: flex;
+	align-items: center; /* 수직 중앙 정렬 */
+	justify-content: center; /* 수평 중앙 정렬 */
+	font-size: 16px; /* 글자 크기 */
+	text-align: center; /* 텍스트 중앙 정렬 */
+	margin-top: 40px;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 146.7%; /* 22.005px */
+	letter-spacing: 0.144px;
+}
