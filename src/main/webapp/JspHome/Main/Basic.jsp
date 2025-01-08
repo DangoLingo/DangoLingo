@@ -5,10 +5,8 @@
 <%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Collections" %>
-<%@ page import="mock.MockDataManager" %>
-<%@ page import="model.UserDTO" %>
-<%@ page import="model.StudyDTO" %>
+<%@ page import="mock.*" %>
+<%@ page import="model.*" %>
 <% 
     request.setCharacterEncoding("UTF-8");
     
