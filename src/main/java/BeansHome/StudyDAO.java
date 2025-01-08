@@ -7,11 +7,8 @@
 package BeansHome;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import DAO.DBOracleMgr;
-import BeansHome.StudyDTO;
 
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역
