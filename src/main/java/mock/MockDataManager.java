@@ -2,6 +2,7 @@ package mock;
 
 import model.UserDTO;
 import model.StudyDTO;
+import model.RankingDTO;
 import java.util.*;
 
 public class MockDataManager {
