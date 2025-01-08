@@ -1,7 +1,11 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Collections" %>
 <%@ page import="mock.MockDataManager" %>
 <%@ page import="model.UserDTO" %>
 <%@ page import="model.StudyDTO" %>
@@ -128,7 +132,19 @@
                             <% 
                             // 현재 사용자의 스트릭 데이터 조회
                             List<StudyDTO> streaks = mockManager.getStudyStreak(currentUser.getUserId());
-                            int streakIndex = 0;
+                            
+                            // 첫 번째 날짜의 요일 확인
+                            Calendar cal = Calendar.getInstance();
+                            cal.add(Calendar.DATE, -363);  // 52주 전부터 시작
+                            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);  // 월요일부터 시작
+                            
+                            Map<String, StudyDTO> studyMap = new HashMap<>();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            
+                            // 스트릭 데이터를 Map으로 변환
+                            for (StudyDTO study : streaks) {
+                                studyMap.put(sdf.format(study.getStudyDate()), study);
+                            }
                             
                             for(int week = 0; week < 52; week++) { 
                             %>
@@ -136,15 +152,26 @@
                                     <% 
                                     // 각 주의 7일 생성
                                     for(int day = 0; day < 7; day++) {
-                                        StudyDTO study = streaks.get(streakIndex++);
+                                        String dateStr = sdf.format(cal.getTime());
+                                        StudyDTO study = studyMap.get(dateStr);
+                                        
+                                        if (study == null) {
+                                            study = new StudyDTO();
+                                            study.setStudyLevel(0);
+                                            study.setStudyCount(0);
+                                            study.setStudyDate(cal.getTime());
+                                        }
+                                        
                                         int level = study.getStudyLevel();
                                         int count = study.getStudyCount();
                                     %>
                                         <div class="streak-cell level-<%= level %>" 
                                              data-count="<%= count %>회 학습"
-                                             data-date="<%= new SimpleDateFormat("yyyy-MM-dd").format(study.getStudyDate()) %>">
+                                             data-date="<%= dateStr %>">
                                         </div>
-                                    <% } %>
+                                    <% 
+                                        cal.add(Calendar.DATE, 1);  // 다음 날짜로
+                                    } %>
                                 </div>
                             <% } %>
                         </div>
