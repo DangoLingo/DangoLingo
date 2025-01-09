@@ -1,17 +1,12 @@
-<%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.Calendar"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="Mock.MockDataManager" %>
+<%@ page import="BeansHome.User.UserDTO" %>
+<%@ page import="BeansHome.Study.StudyDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Collections" %>
-<%@ page import="java.util.Calendar" %>
-<%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="mock.MockDataManager" %>
-<%@ page import="BeansHome.UserDTO" %>
-<%@ page import="BeansHome.StudyDTO" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <% 
     request.setCharacterEncoding("UTF-8");
     
@@ -162,7 +157,7 @@
                                             study = new StudyDTO();
                                             study.setStudyLevel(0);
                                             study.setStudyCount(0);
-                                            study.setStudyDate(cal.getTime());
+                                            study.setStudyDate(new java.sql.Date(cal.getTimeInMillis()));
                                         }
                                         
                                         int level = study.getStudyLevel();

@@ -1,96 +1,70 @@
 // #################################################################################################
-// StudyDAO.java - 학습 기록 DAO 모듈
+// RankingDTO.java - 랭킹 DTO 모듈
 // #################################################################################################
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 외부모듈 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
-package BeansHome;
+package BeansHome.Ranking;
 
-import java.sql.*;
-
-import DAO.DBOracleMgr;
+import Common.ExceptionMgr;
 
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
 /***********************************************************************
- * StudyDAO    : 학습 기록 DAO 클래스<br>
- * Inheritance : None
+ * RankingDTO     : 랭킹 DTO 클래스<br>
+ * Inheritance    : None
  ***********************************************************************/
-public class StudyDAO {
-    // —————————————————————————————————————————————————————————————————————————————————————
-    // 전역상수 관리 - 필수영역
-    // —————————————————————————————————————————————————————————————————————————————————————
-    private static final DBOracleMgr db = DBOracleMgr.getInstance();
-    
-    // —————————————————————————————————————————————————————————————————————————————————————
-    // 전역변수 관리 - 필수영역(정적변수)
-    // —————————————————————————————————————————————————————————————————————————————————————
-    
+public class RankingDTO {
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역변수 관리 - 필수영역(인스턴스변수)
     // —————————————————————————————————————————————————————————————————————————————————————
+    private int rank;           // 순위
+    private int userId;         // 사용자 ID
+    private String nickname;    // 닉네임
+    private String profileImage;// 프로필 이미지
+    private int score;         // 점수 (포인트/학습일수/퀴즈정답)
+    private String type;       // 랭킹 타입 (words/points/dangos)
     
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
-     * StudyDAO()   : 생성자
-     * @param void  : None
+     * RankingDTO()  : 생성자
+     * @param void   : None
      ***********************************************************************/
-    public StudyDAO() {
+    public RankingDTO() {
         try {
             // -----------------------------------------------------------------------------
-            // 초기화 작업 관리
+            // 기타 초기화 작업 관리
             // -----------------------------------------------------------------------------
-            
+            ExceptionMgr.SetMode(ExceptionMgr.RUN_MODE.DEBUG);
             // -----------------------------------------------------------------------------
         } catch (Exception Ex) {
-            Common.ExceptionMgr.DisplayException(Ex);    // 예외처리(콘솔)
+            ExceptionMgr.DisplayException(Ex);    // 예외처리(콘솔)
         }
     }
-    
-    // —————————————————————————————————————————————————————————————————————————————————————
-    // 전역함수 관리 - 필수영역(정적함수)
-    // —————————————————————————————————————————————————————————————————————————————————————
     
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역함수 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
-    /***********************************************************************
-     * addStudy()    : 학습 기록 추가
-     * @param study  : 학습 기록 DTO 객체
-     * @return boolean : 성공 여부
-     ***********************************************************************/
-    public boolean addStudy(StudyDTO study) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean success = false;
-        
-        try {
-            // -----------------------------------------------------------------------------
-            // 학습 기록 추가
-            // -----------------------------------------------------------------------------
-            conn = db.getConnection();
-            pstmt = db.getPreparedStatement(conn, "STUDY.INSERT");
-            pstmt.setInt(1, study.getUserId());
-            pstmt.setDate(2, new java.sql.Date(study.getStudyDate().getTime()));
-            pstmt.setInt(3, study.getStudyCount());
-            pstmt.setInt(4, study.getStudyLevel());
-            
-            success = pstmt.executeUpdate() > 0;
-            // -----------------------------------------------------------------------------
-        } catch (Exception Ex) {
-            Common.ExceptionMgr.DisplayException(Ex);    // 예외처리(콘솔)
-        } finally {
-            db.close(pstmt);
-            db.close(conn);
-        }
-        
-        return success;
-    }
-
-    // ... 나머지 메소드도 동일한 형식으로 구현 ...
+    public int getRank() { return rank; }
+    public void setRank(int rank) { this.rank = rank; }
+    
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+    
+    public String getNickname() { return nickname; }
+    public void setNickname(String nickname) { this.nickname = nickname; }
+    
+    public String getProfileImage() { return profileImage; }
+    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
+    
+    public int getScore() { return score; }
+    public void setScore(int score) { this.score = score; }
+    
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 }
 // #################################################################################################
 // <END>

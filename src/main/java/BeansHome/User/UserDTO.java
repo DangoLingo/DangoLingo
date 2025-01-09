@@ -53,6 +53,10 @@ public class UserDTO {
     private int quizRight;
     /** point         : 포인트 */
     private int point;
+    /** profileImage  : 프로필 이미지 */
+    private String profileImage;
+    /** dangos        : 당고 개수 */
+    private int dangos;
 
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
@@ -174,6 +178,22 @@ public class UserDTO {
 
     public void setPoint(int point) {
         this.point = point;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public int getDangos() {
+        return dangos;
+    }
+
+    public void setDangos(int dangos) {
+        this.dangos = dangos;
     }
     // —————————————————————————————————————————————————————————————————————————————————————
 }

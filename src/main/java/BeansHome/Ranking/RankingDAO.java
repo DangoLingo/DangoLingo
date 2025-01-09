@@ -1,135 +1,132 @@
 // #################################################################################################
-// StudyDTO.java - 학습 진행 기록 DTO 모듈
+// RankingDAO.java - 랭킹 DAO 모듈
 // #################################################################################################
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 외부모듈 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
-package BeansHome.Study;
+package BeansHome.Ranking;
 
-import Common.ExceptionMgr;
-import java.sql.Date;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import DAO.DBOracleMgr;
 
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
 /***********************************************************************
- * StudyDTO		    : 학습 진행 기록 DTO 클래스<br>
- * Inheritance	    : None
+ * RankingDAO  : 랭킹 DAO 클래스<br>
+ * Inheritance : None
  ***********************************************************************/
-public class StudyDTO
-{
+public class RankingDAO {
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
-
+    private static final DBOracleMgr db = DBOracleMgr.getInstance();
+    
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역변수 관리 - 필수영역(정적변수)
     // —————————————————————————————————————————————————————————————————————————————————————
-
+    
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역변수 관리 - 필수영역(인스턴스변수)
     // —————————————————————————————————————————————————————————————————————————————————————
-    /** studyId      : 학습 기록 번호 */
-    private int studyId;
-    /** userId       : 유저 번호 */
-    private int userId;
-    /** wordsId      : 단어장 번호 */
-    private int wordsId;
-    /** japaneseId   : 마지막 본 일본어 번호 */
-    private int japaneseId;
-    /** studyDate    : 학습 일자 */
-    private Date studyDate;
-    /** studyCount   : 총 학습 단어 개수 */
-    private int studyCount;
-    /** studyLevel   : 학습 레벨 (0-4) */
-    private int studyLevel;
-
+    
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
-     * StudyDTO()       :  기본 생성자
-     * @param void      : None
+     * RankingDAO() : 생성자
+     * @param void  : None
      ***********************************************************************/
-    public StudyDTO()
-    {
-        try
-        {
+    public RankingDAO() {
+        try {
             // -----------------------------------------------------------------------------
-            // 기타 초기화 작업 관리
+            // 초기화 작업 관리
             // -----------------------------------------------------------------------------
-            ExceptionMgr.SetMode(ExceptionMgr.RUN_MODE.DEBUG);
+            
             // -----------------------------------------------------------------------------
-        }
-        catch (Exception Ex)
-        {
-            ExceptionMgr.DisplayException(Ex);		// 예외처리(콘솔)
+        } catch (Exception Ex) {
+            Common.ExceptionMgr.DisplayException(Ex);    // 예외처리(콘솔)
         }
     }
+    
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역함수 관리 - 필수영역(정적함수)
     // —————————————————————————————————————————————————————————————————————————————————————
-
+    
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역함수 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
-    public int getStudyId() {
-        return studyId;
+    /***********************************************************************
+     * getRankings()  : 전체 랭킹 조회
+     * @param type    : 랭킹 타입 (words/points/dangos)
+     * @param limit   : 조회할 랭킹 수
+     * @return List<RankingDTO> : 랭킹 목록
+     ***********************************************************************/
+    public List<RankingDTO> getRankings(String type, int limit) {
+        List<RankingDTO> rankings = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        
+        try {
+            // -----------------------------------------------------------------------------
+            // 랭킹 조회
+            // -----------------------------------------------------------------------------
+            String query = switch (type) {
+                case "words" -> "RANKING.SELECT_WORDS";
+                case "points" -> "RANKING.SELECT_POINTS";
+                case "dangos" -> "RANKING.SELECT_DANGOS";
+                default -> "RANKING.SELECT_POINTS";
+            };
+            
+            conn = db.getConnection();
+            pstmt = db.getPreparedStatement(conn, query);
+            pstmt.setInt(1, limit);
+            rs = pstmt.executeQuery();
+            
+            int rank = 1;
+            while (rs.next()) {
+                RankingDTO ranking = new RankingDTO();
+                ranking.setRank(rank++);
+                ranking.setUserId(rs.getInt("user_id"));
+                ranking.setNickname(rs.getString("nickname"));
+                ranking.setProfileImage(rs.getString("profile_image"));
+                ranking.setScore(getScoreByType(rs, type));
+                ranking.setType(type);
+                rankings.add(ranking);
+            }
+            // -----------------------------------------------------------------------------
+        } catch (Exception Ex) {
+            Common.ExceptionMgr.DisplayException(Ex);    // 예외처리(콘솔)
+        } finally {
+            db.close(rs);
+            db.close(pstmt);
+            db.close(conn);
+        }
+        
+        return rankings;
     }
 
-    public void setStudyId(int studyId) {
-        this.studyId = studyId;
+    /***********************************************************************
+     * getScoreByType()  : 랭킹 타입별 점수 조회
+     * @param rs         : ResultSet 객체
+     * @param type       : 랭킹 ��입 (words/points/dangos)
+     * @return int       : 점수
+     * @throws SQLException
+     ***********************************************************************/
+    private int getScoreByType(ResultSet rs, String type) throws SQLException {
+        return switch (type) {
+            case "words" -> rs.getInt("quiz_right");
+            case "dangos" -> rs.getInt("dangos");
+            default -> rs.getInt("point");
+        };
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getWordsId() {
-        return wordsId;
-    }
-
-    public void setWordsId(int wordsId) {
-        this.wordsId = wordsId;
-    }
-
-    public int getJapaneseId() {
-        return japaneseId;
-    }
-
-    public void setJapaneseId(int japaneseId) {
-        this.japaneseId = japaneseId;
-    }
-
-    public Date getStudyDate() {
-        return studyDate;
-    }
-
-    public void setStudyDate(Date studyDate) {
-        this.studyDate = studyDate;
-    }
-
-    public int getStudyCount() {
-        return studyCount;
-    }
-
-    public void setStudyCount(int studyCount) {
-        this.studyCount = studyCount;
-    }
-
-    public int getStudyLevel() {
-        return studyLevel;
-    }
-
-    public void setStudyLevel(int studyLevel) {
-        this.studyLevel = studyLevel;
-    }
-    // —————————————————————————————————————————————————————————————————————————————————————
+    // ... 나머지 메소드도 동일한 형식으로 구현 ...
 }
 // #################################################################################################
 // <END>
-// #################################################################################################
+// ################################################################################################# 

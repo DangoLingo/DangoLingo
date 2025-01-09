@@ -1,14 +1,12 @@
 // #################################################################################################
-// RankingDAO.java - 랭킹 DAO 모듈
+// StudyDAO.java - 학습 기록 DAO 모듈
 // #################################################################################################
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 외부모듈 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
-package BeansHome;
+package BeansHome.Study;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import DAO.DBOracleMgr;
 
@@ -16,10 +14,10 @@ import DAO.DBOracleMgr;
 // 사용자정의 클래스 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
 /***********************************************************************
- * RankingDAO  : 랭킹 DAO 클래스<br>
+ * StudyDAO    : 학습 기록 DAO 클래스<br>
  * Inheritance : None
  ***********************************************************************/
-public class RankingDAO {
+public class StudyDAO {
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -37,10 +35,10 @@ public class RankingDAO {
     // 생성자 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
-     * RankingDAO() : 생성자
+     * StudyDAO()   : 생성자
      * @param void  : None
      ***********************************************************************/
-    public RankingDAO() {
+    public StudyDAO() {
         try {
             // -----------------------------------------------------------------------------
             // 초기화 작업 관리
@@ -60,69 +58,36 @@ public class RankingDAO {
     // 전역함수 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
-     * getRankings()  : 전체 랭킹 조회
-     * @param type    : 랭킹 타입 (words/points/dangos)
-     * @param limit   : 조회할 랭킹 수
-     * @return List<RankingDTO> : 랭킹 목록
+     * addStudy()    : 학습 기록 추가
+     * @param study  : 학습 기록 DTO 객체
+     * @return boolean : 성공 여부
      ***********************************************************************/
-    public List<RankingDTO> getRankings(String type, int limit) {
-        List<RankingDTO> rankings = new ArrayList<>();
+    public boolean addStudy(StudyDTO study) {
         Connection conn = null;
         PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        boolean success = false;
         
         try {
             // -----------------------------------------------------------------------------
-            // 랭킹 조회
+            // 학습 기록 추가
             // -----------------------------------------------------------------------------
-            String query = switch (type) {
-                case "words" -> "RANKING.SELECT_WORDS";
-                case "points" -> "RANKING.SELECT_POINTS";
-                case "dangos" -> "RANKING.SELECT_DANGOS";
-                default -> "RANKING.SELECT_POINTS";
-            };
-            
             conn = db.getConnection();
-            pstmt = db.getPreparedStatement(conn, query);
-            pstmt.setInt(1, limit);
-            rs = pstmt.executeQuery();
+            pstmt = db.getPreparedStatement(conn, "STUDY.INSERT");
+            pstmt.setInt(1, study.getUserId());
+            pstmt.setDate(2, new java.sql.Date(study.getStudyDate().getTime()));
+            pstmt.setInt(3, study.getStudyCount());
+            pstmt.setInt(4, study.getStudyLevel());
             
-            int rank = 1;
-            while (rs.next()) {
-                RankingDTO ranking = new RankingDTO();
-                ranking.setRank(rank++);
-                ranking.setUserId(rs.getInt("user_id"));
-                ranking.setNickname(rs.getString("nickname"));
-                ranking.setProfileImage(rs.getString("profile_image"));
-                ranking.setScore(getScoreByType(rs, type));
-                ranking.setType(type);
-                rankings.add(ranking);
-            }
+            success = pstmt.executeUpdate() > 0;
             // -----------------------------------------------------------------------------
         } catch (Exception Ex) {
             Common.ExceptionMgr.DisplayException(Ex);    // 예외처리(콘솔)
         } finally {
-            db.close(rs);
             db.close(pstmt);
             db.close(conn);
         }
         
-        return rankings;
-    }
-
-    /***********************************************************************
-     * getScoreByType()  : 랭킹 타입별 점수 조회
-     * @param rs         : ResultSet 객체
-     * @param type       : 랭킹 ��입 (words/points/dangos)
-     * @return int       : 점수
-     * @throws SQLException
-     ***********************************************************************/
-    private int getScoreByType(ResultSet rs, String type) throws SQLException {
-        return switch (type) {
-            case "words" -> rs.getInt("quiz_right");
-            case "dangos" -> rs.getInt("dangos");
-            default -> rs.getInt("point");
-        };
+        return success;
     }
 
     // ... 나머지 메소드도 동일한 형식으로 구현 ...

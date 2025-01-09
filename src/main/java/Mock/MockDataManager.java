@@ -1,10 +1,21 @@
-package mock;
+package Mock;
 
-import BeansHome.UserDTO;
-import BeansHome.StudyDTO;
-import BeansHome.RankingDTO;
+import BeansHome.Ranking.RankingDTO;
+import BeansHome.User.UserDTO;
+import BeansHome.Study.StudyDTO;
+
 import java.util.*;
+import java.util.Calendar;
+import java.sql.Date;
+import java.sql.Timestamp;
 
+// ═════════════════════════════════════════════════════════════════════════════════════════
+// 사용자정의 클래스 영역
+// ═════════════════════════════════════════════════════════════════════════════════════════
+/***********************************************************************
+ * MockDataManager : 목업 데이터 관리 클래스<br>
+ * Inheritance    : None
+ ***********************************************************************/
 public class MockDataManager {
     private static final MockDataManager instance = new MockDataManager();
     private List<UserDTO> mockUsers;
@@ -50,8 +61,8 @@ public class MockDataManager {
             
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_MONTH, -i);
-            user.setStudyDate(cal.getTime());
-            user.setStudyTime(cal.getTime());
+            user.setStudyDate(new Date(cal.getTimeInMillis()));
+            user.setStudyTime(new Timestamp(cal.getTimeInMillis()));
             
             mockUsers.add(user);
         }
@@ -71,7 +82,7 @@ public class MockDataManager {
                 study.setUserId(user.getUserId());
                 
                 cal.add(Calendar.DAY_OF_YEAR, -1);
-                study.setStudyDate(cal.getTime());
+                study.setStudyDate(new Date(cal.getTimeInMillis()));
                 
                 // 랜덤하게 학습 데이터 생성
                 if (Math.random() < 0.7) {  // 70% 확률로 학습함
