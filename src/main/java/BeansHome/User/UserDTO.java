@@ -8,7 +8,6 @@ package BeansHome.User;
 
 import Common.ExceptionMgr;
 import java.sql.Date;
-import java.sql.Timestamp;
 
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역
@@ -44,7 +43,7 @@ public class UserDTO {
     /** studyDate     : 마지막 학습 일자 */
     private Date studyDate;
     /** studyTime     : 총 학습 시간 */
-    private Timestamp studyTime;
+    private int studyTime;
     /** studyDay      : 연속 학습일 */
     private int studyDay;
     /** quizCount     : 퀴즈 문제 수 */
@@ -136,11 +135,11 @@ public class UserDTO {
         this.studyDate = studyDate;
     }
 
-    public Timestamp getStudyTime() {
+    public int getStudyTime() {
         return studyTime;
     }
 
-    public void setStudyTime(Timestamp studyTime) {
+    public void setStudyTime(int studyTime) {
         this.studyTime = studyTime;
     }
 
