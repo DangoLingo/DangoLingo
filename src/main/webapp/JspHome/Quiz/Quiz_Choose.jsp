@@ -172,47 +172,47 @@
 	<main class="main-container">
 		<div class="quiz-box">
 			<form action="${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Play.jsp" method="POST">
-				<%----------------------------------------------------------------------
-				[ 1) 퀴즈 개수 선택 버튼 ]
-				--------------------------------------------------------------------------%>
-				<p class="heading">퀴즈 개수</p>
-				<div class="buttons">
-					<button class="button checkedBtn">10개</button>
-					<button class="button">20개</button>
-					<button class="button">30개</button>
-					<button class="button">40개</button>
-					<button class="button">50개</button>
+				<h2 class="quiz-title">퀴즈 설정</h2>
+				
+				<!-- 1) 퀴즈 개수 선택 -->
+				<div class="quiz-section">
+					<p class="heading">퀴즈 개수</p>
+					<div class="buttons">
+						<button class="button checkedBtn" data-value="10">10개</button>
+						<button class="button" data-value="20">20개</button>
+						<button class="button" data-value="30">30개</button>
+						<button class="button" data-value="40">40개</button>
+						<button class="button" data-value="50">50개</button>
+					</div>
+					<!-- 선택된 값을 서버에 전송하기 위한 hidden input -->
+					<input type="hidden" name="quizCount" id="quizCount" value="10">
 				</div>
-				<%----------------------------------------------------------------------
-				[ 2) 퀴즈 유형 선택 라디오버튼 ]
-				--------------------------------------------------------------------------%>
-				<p class="heading">퀴즈 유형</p>
-				<div>
-					<div class="quizTypes">
-						<input type="radio" name="quizType" value="#" id="radio1"> 
-						<span class="radio-icon"></span>
-						<label for="radio1">한자 / 히라가나</label>
-					</div> 
-					<div class="quizTypes">
-						<input type="radio" name="quizType" value="#" id="radio2"> 
-						<span class="radio-icon"></span>
-						<label for="radio2">한자 / 뜻</label>
-					</div> 
-					<div class="quizTypes">
-						<input type="radio" name="quizType" value="#" id="radio3"> 
-						<span class="radio-icon"></span>
-						<label for="radio3">뜻 / 히라가나</label>
-					</div> 
-					<div class="quizTypes">
-						<input type="radio" name="quizType" value="#" id="radio4"> 
-						<span class="radio-icon"></span>
-						<label for="radio4">뜻 / 한자</label>
-					</div> 
+
+				<!-- 2) 퀴즈 유형 선택 -->
+				<div class="quiz-section">
+					<p class="heading">퀴즈 유형</p>
+					<div class="quiz-types">
+						<div class="quiz-type">
+							<input type="radio" name="quizType" value="kanji-hira" id="radio1" checked> 
+							<label for="radio1">한자 / 히라가나</label>
+						</div>
+						<div class="quiz-type">
+							<input type="radio" name="quizType" value="kanji-mean" id="radio2"> 
+							<label for="radio2">한자 / 뜻</label>
+						</div>
+						<div class="quiz-type">
+							<input type="radio" name="quizType" value="mean-hira" id="radio3"> 
+							<label for="radio3">뜻 / 히라가나</label>
+						</div>
+						<div class="quiz-type">
+							<input type="radio" name="quizType" value="mean-kanji" id="radio4"> 
+							<label for="radio4">뜻 / 한자</label>
+						</div>
+					</div>
 				</div>
-				<%----------------------------------------------------------------------
-				[ 3) 퀴즈 시작하기 submit 버튼 ]
-				--------------------------------------------------------------------------%>
-				<input type="submit" value="시작하기" id="submitBtn">
+
+				<!-- 3) 시작하기 버튼 -->
+				<button type="submit" class="submit-button">시작하기</button>
 			</form>
 		</div>
 	</main>
