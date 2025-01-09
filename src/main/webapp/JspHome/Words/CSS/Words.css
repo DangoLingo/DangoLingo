@@ -1,43 +1,39 @@
 /* -----------------------------------------------------------------
     단어장 목록 페이지 스타일시트
    ----------------------------------------------------------------- */
-body {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: 'Pretendard JP', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+body {
     height: 100%;
+    display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #F6F7F5;
+    background-color: #F8F9FA;
+    padding-top: 60px;
     margin: 0;
 }
 
-main {
+.main-container {
     max-width: 1060px;
     margin: 0 auto;
-    padding: 60px 24px 0 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-}
-
-section {
-    margin-top : 22px;
+    padding: 24px;
+    width: 100%;
 }
 
 /* -----------------------------------------------------------------
     단어장 급수 선택 카드 영역
    ----------------------------------------------------------------- */
 .nav-card {
-    width: 1026px;
-    padding: 32px;
-    background-color: #FFFFFF;
+    background: white;
     border-radius: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    margin-bottom: 24px;
+    padding: 24px;
+    width: 100%;
 }
 
 .nav-card-header {
@@ -142,23 +138,18 @@ section {
     단어장 일자 선택 카드 영역
    ----------------------------------------------------------------- */
 .day-cards {
-    width: 1090px;
-    display: flex;
-    flex-flow: wrap;
-    flex-direction: row;
-    justify-content: space-between;
-    align-content: center;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    width: 100%;
 }
 
 .card {
-    width: 140px;
-    height: 150px;
     background-color: #FFFFFF;
     border-radius: 16px;
     position: relative;
-    z-index: 1;
-    padding: 24px 32px;
-    margin-bottom: 20px;
+    padding: 16px;
+    height: 150px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -170,8 +161,8 @@ section {
 
 .bookmark {
     position: absolute;
-    top: 0px;
-    right: 32px;
+    top: 0;
+    right: 16px;
     width: 26px;
     height: 32px;
     /*background-color: #5C8B6C;*/
@@ -247,3 +238,21 @@ section {
 /* -----------------------------------------------------------------
     END
    ----------------------------------------------------------------- */
+
+@media screen and (max-width: 1024px) {
+    .day-cards {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .day-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .day-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
