@@ -170,7 +170,7 @@
 <body>
 	<%@ include file="../Common/Navbar.jsp"%>
 	<main>
-		<form action="#" method="POST">
+		<form action="${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Play.jsp" method="POST">
 		<%----------------------------------------------------------------------
 		[ 1) 퀴즈 개수 선택 버튼 ]
 		--------------------------------------------------------------------------%>
