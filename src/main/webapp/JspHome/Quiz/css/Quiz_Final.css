@@ -42,3 +42,152 @@ body {
 }
 
 /* 나머지 스타일은 유지 */
+
+/* 퀴즈 결과 박스 */
+.result-box {
+    margin: 32px 0 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+}
+
+/* 도넛 차트 */
+.result-chart {
+    width: 140px;
+    height: 140px;
+}
+
+.chart {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.chart-bar {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(#5C8B6C var(--deg), #F6F7F5 0);
+    transform: rotate(-90deg);
+}
+
+.chart-bar::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.chart-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 28px;
+    font-weight: 700;
+    color: #171719;
+    letter-spacing: -0.3px;
+    z-index: 1;
+}
+
+/* 결과 상세 */
+.result-details {
+    list-style: none;
+    padding: 0;
+}
+
+.result-details li {
+    margin-bottom: 20px;
+    font-size: 17px;
+    display: flex;
+    justify-content: space-between;
+    width: 220px;
+    color: #171719;
+    letter-spacing: -0.3px;
+}
+
+.result-details li:last-child {
+    margin-bottom: 0;
+}
+
+.result-details .value {
+    font-weight: 700;
+}
+
+/* 오답 목록 */
+.wrong-box {
+    margin: 24px 0 48px;
+    border-radius: 8px;
+    background-color: #F6F7F5;
+}
+
+.wrong {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #E5E5EA;
+}
+
+.wrong:last-child {
+    border-bottom: none;
+}
+
+.wrong span {
+    font-size: 17px;
+    color: #171719;
+    letter-spacing: -0.3px;
+}
+
+.wrong .meaning {
+    color: #8E8E93;
+}
+
+/* 버튼 */
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.buttons button {
+    width: 180px;
+    height: 50px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: -0.3px;
+}
+
+.buttons .retry {
+    background-color: #5C8B6C;
+    color: white;
+    border: none;
+}
+
+.buttons .exit {
+    background-color: white;
+    color: #5C8B6C;
+    border: 2px solid #5C8B6C;
+}
+
+.buttons button:hover {
+    opacity: 0.9;
+}
+
+/* 헤딩 스타일 */
+.heading {
+    font-size: 20px;
+    font-weight: 700;
+    color: #171719;
+    margin-bottom: 0;
+    letter-spacing: -0.3px;
+}
