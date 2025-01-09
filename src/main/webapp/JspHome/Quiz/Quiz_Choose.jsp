@@ -227,22 +227,57 @@
 	--------------------------------------------------------------------------%>
 	<script type="text/javascript">
 		// -----------------------------------------------------------------
-		// [ 퀴즈 개수 버튼 선택 시 배경색 초록색으로 ]
+		// [브라우저 갱신 완료 시 호출 할 이벤트 핸들러 연결 - 필수]
 		// -----------------------------------------------------------------
-		document.querySelectorAll('button').forEach(function(button) {
-			  button.addEventListener('click', function() {
+		// window.onload = function () { DocumentInit('페이지가 모두 로드되었습니다!'); }
+		// -----------------------------------------------------------------
+		// [브라우저 갱신 완료 및 초기화 구현 함수 - 필수]
+		// -----------------------------------------------------------------
+		// 브라우저 갱신 완료 까지 기다리는 함수 - 필수
+		// 일반적인 방식 : setTimeout(()=>alert('페이지가 모두 로드되었습니다!'), 50);
+		function DocumentInit(Msg)
+		{
+			requestAnimationFrame(function() {
+				requestAnimationFrame(function() {
+					alert(Msg);
+				});
+			});
+        }
+		
+		// -----------------------------------------------------------------
+		// [사용자 함수 및 로직 구현]
+		// -----------------------------------------------------------------
+
+		// 퀴즈 개수 버튼 선택 시 이벤트
+		document.querySelectorAll('.buttons .button').forEach(function(button) {
+			button.addEventListener('click', function(event) {
 				// button 기본 동작 (submit되려고 하는 점) 방지
 				event.preventDefault();
-			    // 기존에 checkedBtn 클래스를 가진 버튼에서 클래스 제거
-			    document.querySelectorAll('.checkedBtn').forEach(function(checkedButton) {
-			      checkedButton.classList.remove('checkedBtn');
-			    });
-			    // 클릭된 버튼에 checkedBtn 클래스 추가
-			    button.classList.add('checkedBtn');
-			  });
+				// 기존에 checkedBtn 클래스를 가진 버튼에서 클래스 제거
+				document.querySelectorAll('.checkedBtn').forEach(function(checkedButton) {
+					checkedButton.classList.remove('checkedBtn');
+				});
+				// 클릭된 버튼에 checkedBtn 클래스 추가
+				button.classList.add('checkedBtn');
+				// hidden input에 선택된 값 설정
+				document.getElementById('quizCount').value = button.getAttribute('data-value');
+			});
 		});
+
+		// submit 버튼 클릭 시 이벤트
+		document.querySelector('form').addEventListener('submit', function(event) {
+			event.preventDefault();
+			const quizCount = document.getElementById('quizCount').value;
+			const quizType = document.querySelector('input[name="quizType"]:checked').value;
+			
+			// Quiz_Play.jsp로 이동하면서 선택된 값들을 전달
+			window.location.href = '${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Play.jsp' +
+				'?quizCount=' + quizCount +
+				'&quizType=' + quizType;
+		});
+
 		// -----------------------------------------------------------------
-		// [ 라디오 버튼 선택 이벤트 ]
+		// [라디오 버튼 선택 이벤트 ]
 		// -----------------------------------------------------------------
 		document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
 			  radio.addEventListener('change', function() {

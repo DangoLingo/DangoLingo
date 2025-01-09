@@ -116,6 +116,14 @@ String Date2 = Sdf.format(CurDate);
 Sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss 입니다.");
 String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 // ---------------------------------------------------------------------
+
+// 퀴즈 설정 파라미터 받기
+String quizCount = request.getParameter("quizCount");
+String quizType = request.getParameter("quizType");
+
+// 기본값 설정
+if(quizCount == null) quizCount = "10";
+if(quizType == null) quizType = "kanji-hira";
 %>
 <%--------------------------------------------------------------------------
 [Beans/DTO 선언 및 속성 지정 영역]
@@ -171,7 +179,7 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
         <main class="main-container">
             <div class="quiz-box">
                 <div class="progress">
-                    <span>13/50</span> 
+                    <span>1/<%= quizCount %></span> 
                     <span class="time-container"> 
                         <span id="timePassed">30분 12초</span> 
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" 
