@@ -175,7 +175,7 @@ public class ServletDetail extends HttpServlet
 			// -----------------------------------------------------------------------------
 			// [HTML Page - FORM 디자인 영역]
 			// -----------------------------------------------------------------------------
-			out.println("<form name=\"form1\" action=\"JspHome/Basic/Basic.jsp\" method=\"post\">");
+			out.println("<form name=\"form1\" action=\"JspHome/Basic/Ranking.jsp\" method=\"post\">");
 			// -----------------------------------------------------------------	
 			// 타이틀
 			// -----------------------------------------------------------------
@@ -235,7 +235,7 @@ public class ServletDetail extends HttpServlet
 			out.println("	<li>");
 			out.println("		<p class=\"Subject\">[페이지 이동]</p>");
 			out.println("		<ul>");
-			out.println("			<li class=\"Content\">Submit사용(POST) : <input class=\"Submit\" type=\"submit\" value=\"이전 기본 페이지로 이동하기 (Basic.jsp)\"></li>");
+			out.println("			<li class=\"Content\">Submit사용(POST) : <input class=\"Submit\" type=\"submit\" value=\"이전 기본 페이지로 이동하기 (Ranking.jsp)\"></li>");
 			out.println("			<li class=\"Content\">하이퍼링크사용(GET) : <a href=\"JspHome/Index.jsp\">INDEX 페이지로 돌아가기 (Index.jsp)</a></li>");
 			out.println("		</ul>");
 			out.println("	</li>");
@@ -244,7 +244,7 @@ public class ServletDetail extends HttpServlet
 			// -----------------------------------------------------------------	
 			// Servlet 페이지에서 바로 이동(바이패스)
 			// -----------------------------------------------------------------
-			// String sUrl = "Basic.jsp";
+			// String sUrl = "Ranking.jsp";
 			// -----------------------------------------------------------------	
 			// 바이패스 방법2	: RequestDispatcher을 사용 한 페이지 이동
 			//				: 이 방법은 기다리지 않고 바로 이동하기 때문에 현재 화면이 표시되지 않음
