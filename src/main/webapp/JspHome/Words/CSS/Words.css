@@ -15,7 +15,6 @@ body {
     min-height: 100vh;
     background-color: #F8F9FA;
     padding-top: 60px;
-    margin: 0;
 }
 
 .main-container {
@@ -23,125 +22,31 @@ body {
     margin: 0 auto;
     padding: 24px;
     width: 100%;
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-/* -----------------------------------------------------------------
-    단어장 급수 선택 카드 영역
-   ----------------------------------------------------------------- */
+/* 네비게이션 카드 */
 .nav-card {
     background: white;
     border-radius: 16px;
-    margin-bottom: 24px;
     padding: 24px;
     width: 100%;
-}
-
-.nav-card-header {
     display: flex;
-    width: 100%;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
+    margin-bottom: 0;
 }
 
-.nav-card-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-right: 12px;
-}
-
-.nav-card-title {
-    font-family: 'Pretendard JP', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: #171719;
-}
-
-.nav-dropdown * { box-sizing: border-box; }
-
-.nav-dropdown {
-    position: relative;
-    width: 50px;
-    height: 35px;
-    border-radius: 4px;
-    background: url('https://www.iconbolt.com/iconsets/remix-icon-line/arrow-down-s.svg') 100% center no-repeat;
-    background-size: 20px;
-    padding-right: 10px;
-    cursor: pointer;
-}
-
-.nav-dropdown .label {
-    font-family: 'Pretendard JP', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    width: inherit;
-    height: inherit;
-    border: 0 none;
-    outline: 0 none;
-    background: transparent;
-    cursor: pointer;
-}
-
-.nav-dropdown .option-list {
-    z-index: 2;
-    position: absolute;
-    top: 16px;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    color: #171719;
-    border: 2px solid #324931;
-    list-style-type: none;
-    padding: 0;
-    border-radius: 6px;
-    overflow: hidden;
-    max-height: 0;
-    transition: .3s ease-in;
-}
-
-.nav-dropdown.active .option-list {
-    max-height: 500px;
-}
-
-.nav-dropdown .option-item {
-    font-family: 'Pretendard JP', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    border-bottom: 1px dashed #324931;
-    padding: 5px 15px 5px;
-    transition: .1s;
-}
-
-.nav-dropdown .option-item:hover {
-    background:#5C8B6C;
-    color: #fff;
-}
-
-.nav-dropdown .option-item:last-child {
-    border-bottom: 0 none;
-}
-
-.nav-card-right {
-    font-family: 'Pretendard JP', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    color: #324931;
-}
-
-.nav-card-date {
-    font-size: 16px;
-}
-
-/* -----------------------------------------------------------------
-    단어장 일자 선택 카드 영역
-   ----------------------------------------------------------------- */
+/* 단어장 그리드 */
 .day-cards {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 16px;
     width: 100%;
+    margin-bottom: 24px;
 }
 
 .card {
@@ -155,90 +60,7 @@ body {
     justify-content: space-between;
 }
 
-.card:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.bookmark {
-    position: absolute;
-    top: 0;
-    right: 16px;
-    width: 26px;
-    height: 32px;
-    /*background-color: #5C8B6C;*/
-    background-image: linear-gradient(to top, #5C8B6C 0%, #324931 51%, #5C8B6C 100%);
-    background-size: auto 200%;
-    background-color: #5C8B6C;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 70%, 0% 100%);
-}
-
-.card-title {
-    color: #171719;
-    font-size: 20px;
-    font-weight: 600;
-    margin: 5px 0;
-}
-
-.card-subtitle {
-    color: #171719;
-    font-size: 14px;
-    font-weight: 400;
-    margin: 5px 0;
-}
-
-.progress-text {
-    color: #324931;
-    font-size: 12px;
-    text-align: right;
-    margin: 10px 0 0 0;
-}
-
-.progress-bar {
-    appearance: none;
-    width: 100%;
-    height: 8px;
-    overflow: hidden;
-    margin: 5px 0;
-}
-
-.progress-bar::-webkit-progress-bar {
-    border-radius: 8px;
-    background: #D9D9D9;
-}
-
-.progress-bar::-webkit-progress-value {
-    border-radius: 8px;
-    background: #324931;
-}
-
-.button-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.button {
-    width: 60px;
-    height: 30px;
-    /*background-color: #5C8B6C;*/
-    background-image: linear-gradient(to right, #5C8B6C 0%, #324931 51%, #5C8B6C 100%);
-    background-size: 200% auto;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.5s;
-}
-
-.button:hover {
-    background-position: right center;
-}
-
-/* -----------------------------------------------------------------
-    END
-   ----------------------------------------------------------------- */
-
+/* 반응형 디자인 */
 @media screen and (max-width: 1024px) {
     .day-cards {
         grid-template-columns: repeat(4, 1fr);
@@ -254,5 +76,10 @@ body {
 @media screen and (max-width: 480px) {
     .day-cards {
         grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .main-container {
+        padding: 16px;
+        gap: 16px;
     }
 }
