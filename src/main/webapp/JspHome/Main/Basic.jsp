@@ -96,7 +96,7 @@
                     <header class="profile-header">
                         <h2>안녕하세요, <%= currentUser.getNickname() %>님</h2>
                         <p><%= currentUser.getIntro() %></p>
-                        <a href="${pageContext.request.contextPath}/JspHome/Words/Basic.jsp" class="study-button">학습하기</a>
+                        <a href="${pageContext.request.contextPath}/JspHome/Words/Words.jsp" class="study-button">학습하기</a>
                     </header>
                 </article>
                 
