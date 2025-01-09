@@ -255,8 +255,7 @@ body {
 .button {
     width: 70px;
     height: 34px;
-    background-image: linear-gradient(to right, #5C8B6C 0%, #324931 51%, #5C8B6C 100%);
-    background-size: 200% auto;
+    background-color: #5C8B6C;
     color: #FFFFFF;
     border: none;
     border-radius: 17px;
@@ -264,7 +263,7 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(50, 73, 49, 0.1);
+    box-shadow: 0 2px 4px rgba(92, 139, 108, 0.1);
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -272,10 +271,9 @@ body {
 }
 
 .button:hover {
-    background-position: right center;
+    background-color: #527E5F;
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(50, 73, 49, 0.2);
-    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(92, 139, 108, 0.2);
 }
 
 /* 반응형 디자인 */
@@ -365,4 +363,33 @@ body {
         width: 100%;
         font-size: 13px;
     }
+}
+
+.nav-card-right button {
+    background-color: #5C8B6C;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 8px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.word-card-right button {
+    background-color: #5C8B6C;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 8px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-card-right button:hover,
+.word-card-right button:hover {
+    background-color: #527E5F;
 }

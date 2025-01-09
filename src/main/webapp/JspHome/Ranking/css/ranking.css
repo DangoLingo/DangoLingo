@@ -58,7 +58,7 @@ body {
 }
 
 .tab.active {
-    background-color: #4a9c5d;
+    background-color: #5C8B6C;
     color: white;
 }
 
@@ -134,11 +134,11 @@ body {
     border-radius: 12px;
     font-size: 16px;
     font-weight: 600;
-    color: #4a9c5d;
+    color: #5C8B6C;
 }
 
 .top-rank.first .score {
-    background-color: #4a9c5d;
+    background-color: #5C8B6C;
     color: white;
 }
 
@@ -154,7 +154,7 @@ body {
 .my-rank {
     margin-bottom: 24px;
     padding: 20px;
-    background: linear-gradient(to right, rgba(74, 156, 93, 0.05), white);
+    background: linear-gradient(to right, rgba(92, 139, 108, 0.05), white);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -170,7 +170,7 @@ body {
 .my-rank .rank-number {
     font-size: 28px;
     font-weight: 700;
-    color: #4a9c5d;
+    color: #5C8B6C;
 }
 
 .my-rank .rank-total {
@@ -190,7 +190,7 @@ body {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 2px solid #4a9c5d;
+    border: 2px solid #5C8B6C;
 }
 
 .my-rank .nickname {
@@ -201,7 +201,7 @@ body {
 .my-rank .score {
     font-size: 18px;
     font-weight: 600;
-    color: #4a9c5d;
+    color: #5C8B6C;
     margin-left: auto;
 }
 
@@ -263,7 +263,7 @@ body {
 .rank-row .score {
     font-size: 16px;
     font-weight: 600;
-    color: #4a9c5d;
+    color: #5C8B6C;
     margin-left: auto;
 }
 

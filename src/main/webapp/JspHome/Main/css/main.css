@@ -132,7 +132,7 @@ body {
 }
 
 .study-button {
-    background-color: #4a9c5d;
+    background-color: #5C8B6C;
     color: white;
     padding: 12px 24px;
     border: none;
@@ -145,7 +145,7 @@ body {
 }
 
 .study-button:hover {
-    background-color: #45a049;
+    background-color: #527E5F;
 }
 
 .statistics {
@@ -173,7 +173,7 @@ body {
 .stat-number {
     font-size: 20px;
     font-weight: 600;
-    color: #212529;
+    color: #5C8B6C;
     text-align: right;
 }
 
@@ -493,4 +493,10 @@ body {
     .stat-number {
         font-size: 18px;
     }
+}
+
+.my-rank .rank-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #5C8B6C;
 } 
