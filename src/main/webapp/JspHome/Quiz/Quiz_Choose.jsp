@@ -169,50 +169,52 @@
 %>
 <body>
 	<%@ include file="../Common/Navbar.jsp"%>
-	<main>
-		<form action="${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Play.jsp" method="POST">
-		<%----------------------------------------------------------------------
-		[ 1) 퀴즈 개수 선택 버튼 ]
-		--------------------------------------------------------------------------%>
-			<p class="heading">퀴즈 개수</p>
-			<div class="buttons">
-				<button class="button checkedBtn">10개</button>
-				<button class="button">20개</button>
-				<button class="button">30개</button>
-				<button class="button">40개</button>
-				<button class="button">50개</button>
-			</div>
-		<%----------------------------------------------------------------------
-		[ 2) 퀴즈 유형 선택 라디오버튼 ]
-		--------------------------------------------------------------------------%>
-			<p class="heading">퀴즈 유형</p>
-			<div>
-				<div class="quizTypes">
-					<input type="radio" name="quizType" value="#" id="radio1"> 
-					<span class="radio-icon"></span>
-					<label for="radio1">한자 / 히라가나</label>
-				</div> 
-				<div class="quizTypes">
-					<input type="radio" name="quizType" value="#" id="radio2"> 
-					<span class="radio-icon"></span>
-					<label for="radio2">한자 / 뜻</label>
-				</div> 
-				<div class="quizTypes">
-					<input type="radio" name="quizType" value="#" id="radio3"> 
-					<span class="radio-icon"></span>
-					<label for="radio3">뜻 / 히라가나</label>
-				</div> 
-				<div class="quizTypes">
-					<input type="radio" name="quizType" value="#" id="radio4"> 
-					<span class="radio-icon"></span>
-					<label for="radio4">뜻 / 한자</label>
-				</div> 
-			</div>
-		<%----------------------------------------------------------------------
-		[ 3) 퀴즈 시작하기 submit 버튼 ]
-		--------------------------------------------------------------------------%>
-			<input type="submit" value="시작하기" id="submitBtn">
-		</form>	
+	<main class="main-container">
+		<div class="quiz-box">
+			<form action="${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Play.jsp" method="POST">
+				<%----------------------------------------------------------------------
+				[ 1) 퀴즈 개수 선택 버튼 ]
+				--------------------------------------------------------------------------%>
+				<p class="heading">퀴즈 개수</p>
+				<div class="buttons">
+					<button class="button checkedBtn">10개</button>
+					<button class="button">20개</button>
+					<button class="button">30개</button>
+					<button class="button">40개</button>
+					<button class="button">50개</button>
+				</div>
+				<%----------------------------------------------------------------------
+				[ 2) 퀴즈 유형 선택 라디오버튼 ]
+				--------------------------------------------------------------------------%>
+				<p class="heading">퀴즈 유형</p>
+				<div>
+					<div class="quizTypes">
+						<input type="radio" name="quizType" value="#" id="radio1"> 
+						<span class="radio-icon"></span>
+						<label for="radio1">한자 / 히라가나</label>
+					</div> 
+					<div class="quizTypes">
+						<input type="radio" name="quizType" value="#" id="radio2"> 
+						<span class="radio-icon"></span>
+						<label for="radio2">한자 / 뜻</label>
+					</div> 
+					<div class="quizTypes">
+						<input type="radio" name="quizType" value="#" id="radio3"> 
+						<span class="radio-icon"></span>
+						<label for="radio3">뜻 / 히라가나</label>
+					</div> 
+					<div class="quizTypes">
+						<input type="radio" name="quizType" value="#" id="radio4"> 
+						<span class="radio-icon"></span>
+						<label for="radio4">뜻 / 한자</label>
+					</div> 
+				</div>
+				<%----------------------------------------------------------------------
+				[ 3) 퀴즈 시작하기 submit 버튼 ]
+				--------------------------------------------------------------------------%>
+				<input type="submit" value="시작하기" id="submitBtn">
+			</form>
+		</div>
 	</main>
 	 <%@ include file="../Common/Footer.jsp"%>
 	

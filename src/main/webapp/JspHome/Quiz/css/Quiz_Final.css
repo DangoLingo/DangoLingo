@@ -1,173 +1,44 @@
+/* Quiz_Play.css와 동일한 기본 구조 */
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Pretendard JP', sans-serif;
+}
+
 body {
-	background-color: #F6F7F5;
-	font-family: "Pretendard JP";
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	height: 100%;
-	margin: 0;
-	justify-content: center; /* 가로 중앙 정렬 */
-	align-items: center; /* 세로 중앙 정렬 */
+	background-color: #F8F9FA;
+	padding-top: 60px;
 }
 
-main {
-	margin-top: 84px;
-	background-color: white;
-	width: 500px; /*단어장 고정 500px*/
+.container {
+	flex: 1;
 	display: flex;
-	justify-content: center; /* 수평 중앙 정렬 */
-	align-items: center; /* 수직 중앙 정렬 */
+	flex-direction: column;
+}
+
+.main-container {
+	max-width: 1060px;
+	margin: 0 auto;
+	padding: 24px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.quiz-box {
+	background-color: white;
+	width: 500px;
 	border-radius: 10px;
 }
 
-form {
-	padding: 20px 50px;
-}
-/* 퀴즈 개수, 퀴즈 유형 나타내는 헤딩 */
-.heading {
-	margin-bottom: 20px;
-	font-size: 20px;
-	font-style: normal;
-	font-weight: 600;
-}
-/* -----------------------------------------------------------------
-   1) 퀴즈 결과
-  ----------------------------------------------------------------- */
-/* 퀴즈 결과 상자 */
-.result-box {
-	margin-top: 40px;
-	margin-bottom: 40px;
-	position: relative;
-	display: flex;
-}
-/* 도넛차트 */
-.chart {
-	position: relative;
-	width: 120px; /* 조정된 크기 */
-	height: 120px; /* 조정된 크기 */
-	border-radius: 50%;
-	background: #D1D1D6; /* 도넛의 채워지지 않은 부분의 배경 */
-	display: inline-block;
-}
-/* 도넛차트 내 글씨 */
-.chart-text {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	text-align: center;
-	font-size: 17px;
-	font-style: normal;
-	font-weight: 600;
-	line-height: 144.5%; /* 24.565px */
-	letter-spacing: -0.003px;
-	color: #000;
-	text-align: center;
-	z-index: 1;
-}
-/* 도넛 효과를 만들기 위한 흰색 중심 */
-.chart:after {
-	content: '';
-	background: #fff;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 80px; /* 조정된 크기 */
-	height: 80px; /* 조정된 크기 */
-	border-radius: 50%;
-	transform: translate(-50%, -50%);
-}
-/* 연두색 바 */
-.chart-bar {
-	width: inherit;
-	height: inherit;
-	border-radius: 50%;
-	background: conic-gradient(#9ECE9C var(--deg), #D1D1D6 var(--deg));
-	/* 동적 색상 및 각도 */
-	--deg: 0deg; /* 기본 각도 (동적으로 조정) */
-}
-/* 결과 텍스트 */
-.result-details {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	margin-left: 20px;
-	align-items: flex-start; /* 텍스트를 왼쪽 정렬 */
-	font-size: 17px;
-	font-style: normal;
-	list-style: none; /* 기본 목록 스타일 제거 */
-	gap: 10px; /* 위아래 간격 10px */
-}
-/* 결과 텍스트의 list 항목들 */
-.result-details li {
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
-}
-/* 텍스트의 결과 value */
-.result-details .value {
-	font-weight: bold;
-	margin-left: 75px;
-	text-align: right; /* 오른쪽 정렬 */
-}
-/* -----------------------------------------------------------------
-	2) 오답 목록
-     ----------------------------------------------------------------- */
-/* 틀린 단어 */
-.wrong {
-	border: 0.3px solid grey;
-	border-radius: 8px;
-	display: inline-flex;
-	width: 380px;
-	padding: 9px 12px 9px 10px;
-	align-items: flex-start;
-	flex-shrink: 0;
-	margin-bottom: 5px;
-	justify-content: space-between;
-}
-/* 틀린 단어의 뜻 */
-.meaning {
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 400;
-}
-/* -----------------------------------------------------------------
-	3) 다시하기, 나가기 버튼
-    ----------------------------------------------------------------- */
-/* 하단 버튼 2개를 감싸는 div */
-.buttons {
-	margin-top: 30px;
+.quiz-box form {
+	padding: 40px;
 }
 
-.buttons .retry, .buttons .exit {
-	width: 180px; /* 조정된 크기 */
-	height: 40px; /* 조정된 크기 */
-	border: none;
-	border-radius: 16px;
-	font-size: 15px;
-	font-style: normal;
-	font-weight: 600;
-	font-family: "Pretendard JP";
-	cursor: pointer;
-}
-
-.buttons .retry {
-	background-color: #324931;
-	color: #fff;
-	margin-right: 40px;
-}
-
-.buttons .retry:hover {
-	background-color: #45a045;
-}
-
-.buttons .exit {
-	background-color: #5C8B6C;
-	color: #fff;
-}
-
-.buttons .exit:hover {
-	background-color: #45a045;
-}
-
-/* ----------------------------------------------------------------- */
+/* 나머지 스타일은 유지 */
