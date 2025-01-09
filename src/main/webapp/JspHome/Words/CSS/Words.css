@@ -22,7 +22,6 @@ body {
     margin: 0 auto;
     padding: 24px;
     width: 100%;
-    min-height: calc(100vh - 60px);
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -32,12 +31,10 @@ body {
 .nav-card {
     background: white;
     border-radius: 16px;
-    padding: 24px;
+    padding: 32px 40px;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .nav-card-header {
@@ -49,15 +46,16 @@ body {
 
 .nav-card-left {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-right: 12px;
+    align-items: baseline;
+    gap: 12px;
 }
 
 .nav-card-title {
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 800;
     color: #171719;
+    letter-spacing: -0.5px;
+    line-height: 1;
 }
 
 /* 드롭다운 스타일 */
@@ -67,18 +65,26 @@ body {
 
 .nav-dropdown {
     position: relative;
-    width: 50px;
-    height: 35px;
-    border-radius: 4px;
-    background: url('https://www.iconbolt.com/iconsets/remix-icon-line/arrow-down-s.svg') 100% center no-repeat;
-    background-size: 20px;
-    padding-right: 10px;
+    width: 90px;
+    height: 40px;
+    border-radius: 10px;
+    background: #F8F9FA url('https://www.iconbolt.com/iconsets/remix-icon-line/arrow-down-s.svg') calc(100% - 12px) center no-repeat;
+    background-size: 18px;
+    padding: 0 36px 0 16px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    margin-top: -2px;
+}
+
+.nav-dropdown:hover {
+    background-color: #ECEEF0;
+    border-color: #E0E3E7;
 }
 
 .nav-dropdown .label {
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 800;
     display: flex;
     align-items: center;
     width: inherit;
@@ -87,40 +93,50 @@ body {
     outline: 0 none;
     background: transparent;
     cursor: pointer;
+    color: #324931;
+    padding-top: 0;
+    line-height: 1;
 }
 
 .nav-dropdown .option-list {
     z-index: 2;
     position: absolute;
-    top: 16px;
-    left: 0;
-    width: 100%;
+    top: 52px;
+    left: -10%;
+    width: 120%;
     background: #fff;
     color: #171719;
     border: 2px solid #324931;
     list-style-type: none;
-    padding: 0;
-    border-radius: 6px;
+    padding: 6px 0;
+    border-radius: 10px;
     overflow: hidden;
     max-height: 0;
-    transition: .3s ease-in;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    transform: translateY(-10px);
 }
 
 .nav-dropdown.active .option-list {
-    max-height: 500px;
+    max-height: 300px;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .nav-dropdown .option-item {
-    font-size: 20px;
-    font-weight: 700;
-    border-bottom: 1px dashed #324931;
-    padding: 5px 15px 5px;
-    transition: .1s;
+    font-size: 22px;
+    font-weight: 600;
+    border-bottom: 1px solid #F0F0F0;
+    padding: 10px 20px;
+    transition: all 0.2s ease;
+    color: #324931;
 }
 
 .nav-dropdown .option-item:hover {
     background: #5C8B6C;
     color: #fff;
+    padding-left: 28px;
 }
 
 .nav-dropdown .option-item:last-child {
@@ -128,13 +144,33 @@ body {
 }
 
 .nav-card-right {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
-    color: #324931;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .nav-card-date {
-    font-size: 16px;
+    font-size: 15px;
+    position: relative;
+    padding: 8px 16px 8px 36px;
+    background: #F8F9FA;
+    border-radius: 8px;
+    color: #324931;
+}
+
+.nav-card-date::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23324931" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>') center/contain no-repeat;
+    opacity: 0.8;
 }
 
 /* 단어장 그리드 */
