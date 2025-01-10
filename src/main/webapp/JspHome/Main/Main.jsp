@@ -69,31 +69,46 @@
                 <article class="hero-content">
                     <h1 class="main-title">달콤한 일본어 학습,<br>당고링고와 함께</h1>
                     <p class="sub-text">재미있게 배우는 일본어,<br>지금 시작해보세요</p>
-                    <button class="start-button">무료로 시작하기</button>
+                    <button class="start-button">시작하기</button>
                 </article>
                 <figure class="hero-image">
-                    <object data="${pageContext.request.contextPath}/JspHome/Main/images/dango.svg" type="image/svg+xml" class="dango-image">
-                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango.svg" alt="당고 캐릭터" class="dango-image">
-                    </object>
+                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango.svg" alt="당고 캐릭터" class="dango-image">
                 </figure>
             </section>
 
-            <section class="features">
-                <div class="features-grid">
-                    <article class="feature-item">
-                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/customize-icon.svg" alt="커스터마이즈 아이콘" class="feature-icon">
-                        <h3>나만의 당고</h3>
-                        <p>학습하면서 모은 포인트로<br>귀여운 당고를 꾸며보세요</p>
+            <section class="features-section">
+                <h2 class="section-title">당고링고만의 특별한 학습</h2>
+                <p class="section-description">게임처럼 재미있게, 효과적으로 일본어를 배워보세요</p>
+                
+                <div class="features-container">
+                    <article class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="${pageContext.request.contextPath}/JspHome/Main/images/customize-icon.svg" alt="커스터마이즈 아이콘" class="feature-icon">
+                        </div>
+                        <div class="feature-content">
+                            <h3>나만의 당고</h3>
+                            <p>학습하면서 모은 포인트로<br>귀여운 당고를 꾸며보세요</p>
+                        </div>
                     </article>
-                    <article class="feature-item">
-                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/study-icon.svg" alt="학습 아이콘" class="feature-icon">
-                        <h3>스마트 학습</h3>
-                        <p>게임처럼 재미있게<br>일본어 단어를 마스터하세요</p>
+                    
+                    <article class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="${pageContext.request.contextPath}/JspHome/Main/images/study-icon.svg" alt="학습 아이콘" class="feature-icon">
+                        </div>
+                        <div class="feature-content">
+                            <h3>스마트 학습</h3>
+                            <p>게임처럼 재미있게<br>일본어 단어를 마스터하세요</p>
+                        </div>
                     </article>
-                    <article class="feature-item">
-                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/ranking-icon.svg" alt="랭킹 아이콘" class="feature-icon">
-                        <h3>함께 성장</h3>
-                        <p>친구들과 함께<br>즐겁게 경쟁하며 배워요</p>
+                    
+                    <article class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <img src="${pageContext.request.contextPath}/JspHome/Main/images/ranking-icon.svg" alt="랭킹 아이콘" class="feature-icon">
+                        </div>
+                        <div class="feature-content">
+                            <h3>함께 성장</h3>
+                            <p>친구들과 함께<br>즐겁게 경쟁하며 배워요</p>
+                        </div>
                     </article>
                 </div>
             </section>

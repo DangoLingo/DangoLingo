@@ -1,3 +1,4 @@
+/* 기본 스타일 */
 * {
     margin: 0;
     padding: 0;
@@ -23,14 +24,15 @@ body.logged-in {
     max-width: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
+/* 히어로 섹션 */
 .hero-section {
     background: linear-gradient(150deg, #4a9c5d 0%, #2d6e3b 100%);
-    min-height: 100vh;
+    min-height: 90vh;
     margin: 0;
-    padding: 80px 24px;
+    padding: 120px 24px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -38,29 +40,25 @@ body.logged-in {
     position: relative;
     text-align: center;
     color: white;
-    overflow: hidden;
 }
 
 .hero-content {
-    max-width: 800px;
-    position: relative;
-    z-index: 2;
-    padding: 0;
+    max-width: 720px;
+    margin-bottom: 60px;
 }
 
 .main-title {
-    font-size: 64px;
+    font-size: 56px;
     font-weight: 800;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     line-height: 1.2;
-    color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.02em;
 }
 
 .sub-text {
-    font-size: 24px;
+    font-size: 22px;
     line-height: 1.6;
-    margin-bottom: 48px;
+    margin-bottom: 40px;
     color: rgba(255, 255, 255, 0.9);
     font-weight: 400;
 }
@@ -68,10 +66,10 @@ body.logged-in {
 .start-button {
     background-color: white;
     color: #4a9c5d;
-    padding: 20px 48px;
+    padding: 18px 44px;
     border: none;
-    border-radius: 40px;
-    font-size: 20px;
+    border-radius: 32px;
+    font-size: 18px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -103,293 +101,121 @@ body.logged-in {
     100% { transform: translateY(0px); }
 }
 
-.features {
-    background: white;
-    padding: 80px 24px;
-    max-width: 1060px;
-    margin: 0 auto;
+/* Features 섹션 */
+.features-section {
+    padding: 100px 24px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%);
+    text-align: center;
 }
 
-.features-grid {
+.section-title {
+    font-size: 40px;
+    font-weight: 700;
+    color: #212529;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+}
+
+.section-description {
+    font-size: 18px;
+    color: #495057;
+    margin-bottom: 80px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.features-container {
+    max-width: 1140px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 40px;
+    padding: 0 40px;
 }
 
-.feature-item {
-    text-align: center;
-    padding: 40px 24px;
-    border-radius: 16px;
-    background: #F8F9FA;
-    transition: transform 0.3s ease;
+.feature-card {
+    background: white;
+    border-radius: 28px;
+    padding: 48px 32px;
+    transition: all 0.3s ease;
+    border: 1px solid #E9ECEF;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 }
 
-.feature-item:hover {
-    transform: translateY(-10px);
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: #4a9c5d20;
+}
+
+.feature-icon-wrapper {
+    background: #F1F8F3;
+    width: 120px;
+    height: 120px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
 }
 
 .feature-icon {
-    width: 72px;
-    height: 72px;
-    margin-bottom: 24px;
+    width: 64px;
+    height: 64px;
 }
 
-.feature-item h3 {
-    font-size: 22px;
+.feature-content h3 {
+    font-size: 24px;
     font-weight: 700;
     color: #212529;
     margin-bottom: 16px;
 }
 
-.feature-item p {
+.feature-content p {
     font-size: 16px;
     line-height: 1.6;
     color: #495057;
-    max-width: 240px;
-    margin: 0 auto;
 }
 
-.dashboard {
-    padding: 0;
-    max-width: 1060px;
-    margin: 0 auto;
+/* 반응형 디자인 */
+@media screen and (max-width: 1200px) {
+    .features-container {
+        padding: 0 20px;
+        gap: 30px;
+    }
 }
 
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    background-color: #fff;
-    padding: 3rem;
-    border-radius: 1rem;
-    margin-bottom: 24px;
-}
-
-.profile-header h2 {
-    font-size: 32px;
-    margin-bottom: 24px;
-    font-weight: 700;
-    color: #212529;
-}
-
-.profile-header p {
-    font-size: 16px;
-    color: #868E96;
-    line-height: 1.6;
-    margin-bottom: 24px;
-}
-
-.study-button {
-    background-color: #5C8B6C;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 24px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.study-button:hover {
-    background-color: #527E5F;
-}
-
-.statistics {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    margin-bottom: 24px;
-}
-
-.stat-item {
-    background-color: #fff;
-    padding: 1.75rem;
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-}
-
-.stat-item h3 {
-    font-size: 14px;
-    color: #868E96;
-    margin-bottom: 0.75rem;
-    font-weight: 500;
-}
-
-.stat-number {
-    font-size: 20px;
-    font-weight: 600;
-    color: #5C8B6C;
-    text-align: right;
-}
-
-.streak-tracker {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 1rem;
-    position: relative;
-}
-
-.streak-tracker h3 {
-    font-size: 20px;
-    color: #212529;
-    margin-bottom: 12px;
-    font-weight: 600;
-}
-
-.streak-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin: 0 -2rem;
-    padding: 0 2rem;
-    position: relative;
-    padding-top: 32px;
-}
-
-.streak-chart {
-    width: 100%;
-    min-height: 160px;
-    display: grid;
-    grid-template-columns: repeat(53, 1fr);
-    gap: 3px;
-    position: relative;
-    padding: 1rem 0 1rem 2.5rem;
-}
-
-.streak-days {
-    position: absolute;
-    left: 0;
-    top: 1rem;
-    display: grid;
-    grid-template-rows: repeat(7, 1fr);
-    gap: 3px;
-    font-size: 12px;
-    color: #868E96;
-    height: calc(100% - 2rem);
-    align-items: center;
-}
-
-.streak-days span {
-    padding-right: 1rem;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    height: 13px;
-}
-
-.streak-grid {
-    display: grid;
-    grid-template-rows: repeat(7, 1fr);
-    gap: 3px;
-    position: relative;
-    align-items: center;
-}
-
-.streak-cell {
-    width: 13px;
-    height: 13px;
-    background-color: #ebedf0;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: transform 0.1s ease;
-    position: relative;
-}
-
-.streak-cell::before {
-    content: attr(data-date);
-    position: absolute;
-    top: -24px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 4px 8px;
-    background-color: #212529;
-    color: white;
-    font-size: 11px;
-    border-radius: 4px;
-    white-space: nowrap;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-    z-index: 2000;
-}
-
-.streak-cell:hover {
-    transform: scale(1.2);
-    z-index: 100;
-}
-
-.streak-cell:hover::before {
-    visibility: visible;
-    opacity: 1;
-}
-
-.streak-cell.level-0 { background-color: #ebedf0; }
-.streak-cell.level-1 { background-color: #9be9a8; }
-.streak-cell.level-2 { background-color: #40c463; }
-.streak-cell.level-3 { background-color: #2ea043; }
-.streak-cell.level-4 { background-color: #216e39; }
-
-.streak-legend,
-.legend-item,
-.legend-color {
-    display: none;
-}
-
-.profile-image-container {
-    width: 180px;
-    height: 180px;
-    background-color: #F8F9FA;
-    border-radius: 50%;
-    padding: 0;
-    border: 1px solid #DEE2E6;
-    flex-shrink: 0;
-}
-
-.profile-image-container img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
+@media screen and (max-width: 992px) {
+    .features-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media screen and (max-width: 768px) {
-    .main-container {
-        padding: 16px;
-        gap: 32px;
-    }
-
     .hero-section {
-        flex-direction: column;
-        padding: 40px 16px;
-        gap: 40px;
+        min-height: auto;
+        padding: 80px 20px;
     }
 
     .hero-content {
-        padding: 0;
         order: 2;
     }
 
     .main-title {
         font-size: 40px;
-        margin-bottom: 24px;
     }
 
     .sub-text {
-        font-size: 20px;
-        margin-bottom: 36px;
+        font-size: 18px;
+        margin-bottom: 32px;
     }
 
     .start-button {
         padding: 16px 36px;
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .dango-image {
@@ -397,204 +223,68 @@ body.logged-in {
         height: 280px;
     }
 
-    .features {
-        padding: 40px 16px;
+    .features-section {
+        padding: 60px 20px;
     }
 
-    .features-grid {
+    .section-title {
+        font-size: 32px;
+    }
+
+    .section-description {
+        font-size: 16px;
+        margin-bottom: 40px;
+    }
+
+    .features-container {
         grid-template-columns: 1fr;
         gap: 24px;
+        padding: 0;
     }
 
-    .feature-item {
-        padding: 32px 20px;
+    .feature-card {
+        padding: 40px 24px;
+    }
+
+    .feature-icon-wrapper {
+        width: 100px;
+        height: 100px;
+        border-radius: 24px;
+        margin-bottom: 32px;
     }
 
     .feature-icon {
-        width: 56px;
-        height: 56px;
-        margin-bottom: 20px;
-    }
-
-    .user-profile {
-        flex-direction: column;
-        text-align: center;
-        padding: 2rem;
-        gap: 1.5rem;
-    }
-
-    .profile-image-container {
-        width: 120px;
-        height: 120px;
-    }
-
-    .profile-header h2 {
-        font-size: 24px;
-        margin-bottom: 16px;
-    }
-
-    .profile-header p {
-        font-size: 14px;
-        margin-bottom: 16px;
-    }
-
-    .statistics {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 16px;
-        gap: 16px;
-    }
-
-    .stat-item {
-        padding: 16px;
-    }
-
-    .stat-item h3 {
-        font-size: 12px;
-        margin-bottom: 0.5rem;
-    }
-
-    .stat-number {
-        font-size: 18px;
-    }
-
-    .streak-tracker {
-        padding: 1.25rem;
-    }
-
-    .streak-container {
-        margin: 0 -1.25rem;
-        padding: 0 1.25rem;
-        padding-top: 28px;
-    }
-
-    .streak-chart {
-        min-width: 700px;
-        padding: 0.75rem 0 0.75rem 2rem;
-    }
-
-    .streak-days span {
-        font-size: 10px;
-        padding-right: 0.75rem;
-        height: 12px;
-    }
-
-    .streak-cell {
-        width: 12px;
-        height: 12px;
-    }
-
-    .streak-cell::before {
-        top: -20px;
-        font-size: 10px;
-        padding: 3px 6px;
-    }
-
-    .streak-cell:hover {
-        transform: scale(1.1);
+        width: 52px;
+        height: 52px;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .main-container {
-        padding: 16px;
+    .hero-section {
+        padding: 60px 16px;
     }
 
-    .profile-header h2 {
-        font-size: 20px;
+    .main-title {
+        font-size: 32px;
     }
 
-    .statistics {
-        grid-template-columns: 1fr;
-    }
-
-    .auth-buttons {
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .auth-button {
-        width: 100%;
-    }
-
-    .streak-tracker {
-        padding: 1rem;
-    }
-
-    .streak-container {
-        margin: 0 -1rem;
-        padding: 0 1rem;
-    }
-
-    .streak-tracker h3 {
+    .sub-text {
         font-size: 16px;
-        margin-bottom: 16px;
     }
 
-    .streak-chart {
-        min-width: 600px;
-        padding: 0.5rem 0 0.5rem 1.5rem;
+    .feature-card {
+        padding: 32px 20px;
     }
 
-    .streak-cell {
-        width: 10px;
-        height: 10px;
+    .feature-icon-wrapper {
+        width: 88px;
+        height: 88px;
+        border-radius: 22px;
+        margin-bottom: 28px;
     }
 
-    .streak-days span {
-        font-size: 9px;
-        padding-right: 0.5rem;
-        height: 10px;
-    }
-}
-
-.stat-item .rank-total {
-    font-size: 0.8em;
-    color: #666;
-    margin-left: 4px;
-}
-
-@media screen and (max-width: 768px) {
-    .stat-item {
-        padding: 1.25rem;
-    }
-
-    .stat-item h3 {
-        font-size: 12px;
-        margin-bottom: 0.5rem;
-    }
-
-    .stat-number {
-        font-size: 18px;
-    }
-}
-
-.my-rank .rank-number {
-    font-size: 28px;
-    font-weight: 700;
-    color: #5C8B6C;
-}
-
-@media screen and (max-width: 768px) {
-    .navbar {
-        padding: 8px 16px;
-    }
-
-    .nav-links {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        gap: 16px;
-        padding-bottom: 4px;
-    }
-
-    .nav-links::-webkit-scrollbar {
-        display: none;
-    }
-
-    .nav-links a {
-        white-space: nowrap;
-        padding: 8px 12px;
-        font-size: 14px;
+    .feature-icon {
+        width: 48px;
+        height: 48px;
     }
 } 
