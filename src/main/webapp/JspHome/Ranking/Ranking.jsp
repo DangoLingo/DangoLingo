@@ -1,26 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="Mock.MockDataManager" %>
+<%@ page import="BeansHome.User.UserDAO" %>
 <%@ page import="BeansHome.User.UserDTO" %>
-<%@ page import="BeansHome.Study.StudyDTO" %>
+<%@ page import="BeansHome.Ranking.RankingDAO" %>
 <%@ page import="BeansHome.Ranking.RankingDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 
 <% 
     request.setCharacterEncoding("UTF-8");
     
-    // 목업 데이터 매니저
-    MockDataManager mockManager = MockDataManager.getInstance();
-    UserDTO currentUser = mockManager.getCurrentUser();
+    // DAO 객체 생성
+    UserDAO userDAO = new UserDAO();
+    RankingDAO rankingDAO = new RankingDAO();
+    
+    // 임시로 userId=1인 사용자 정보 가져오기 (나중에 세션에서 가져와야 함)
+    UserDTO currentUser = userDAO.getUserById(1);
     
     // 랭킹 타입 (기본값: points)
     String rankingType = request.getParameter("type");
     if (rankingType == null) rankingType = "points";
     
     // 랭킹 목록 조회 (상위 10명)
-    List<UserDTO> rankings = mockManager.getRankingList(rankingType, 10);
+    List<RankingDTO> rankings = rankingDAO.getRankings(rankingType, 10);
+    
+    // 현재 사용자의 랭킹 정보 조회
+    RankingDTO userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), rankingType);
+
+    // 목업 데이터 매니저 주석 처리
+    // MockDataManager mockManager = MockDataManager.getInstance();
+    // UserDTO currentUser = mockManager.getCurrentUser();
+    // List<UserDTO> rankings = mockManager.getRankingList(rankingType, 10);
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -47,7 +56,7 @@
 
         <section class="top-rankers">
             <% for (int i = 0; i < Math.min(3, rankings.size()); i++) { 
-                UserDTO user = rankings.get(i);
+                RankingDTO user = rankings.get(i);
                 String rankClass = i == 0 ? "first" : i == 1 ? "second" : "third";
             %>
                 <div class="top-rank <%= rankClass %>">
@@ -63,7 +72,7 @@
                     <div class="user-name"><%= user.getNickname() %></div>
                     <div class="user-intro"><%= user.getIntro() %></div>
                     <div class="score">
-                        <%= getScoreByType(user, rankingType) %>
+                        <%= user.getScore() %>
                         <%= getScoreUnit(rankingType) %>
                     </div>
                 </div>
@@ -73,8 +82,8 @@
         <section class="ranking-list">
             <div class="my-rank">
                 <div class="rank-info">
-                    <span class="rank-number"><%= mockManager.getUserRank(currentUser.getUserId(), rankingType) %></span>
-                    <span class="rank-total">/ <%= mockManager.getTotalUsers() %></span>
+                    <span class="rank-number"><%= userRanking.getRank() %></span>
+                    <span class="rank-total">/ <%= rankings.size() %></span>
                 </div>
                 <div class="user-info">
                     <img src="${pageContext.request.contextPath}/JspHome/Main/images/<%= currentUser.getProfileImage() %>" 
@@ -82,14 +91,14 @@
                     <span class="nickname"><%= currentUser.getNickname() %></span>
                 </div>
                 <div class="score">
-                    <%= getScoreByType(currentUser, rankingType) %>
+                    <%= userRanking.getScore() %>
                     <%= getScoreUnit(rankingType) %>
                 </div>
             </div>
 
             <div class="ranking-table">
                 <% for (int i = 0; i < rankings.size(); i++) { 
-                    UserDTO user = rankings.get(i);
+                    RankingDTO user = rankings.get(i);
                 %>
                     <div class="rank-row <%= user.getUserId() == currentUser.getUserId() ? "current-user" : "" %>">
                         <div class="rank-number"><%= i + 1 %></div>
@@ -102,7 +111,7 @@
                             </div>
                         </div>
                         <div class="score">
-                            <%= getScoreByType(user, rankingType) %>
+                            <%= user.getScore() %>
                             <%= getScoreUnit(rankingType) %>
                         </div>
                     </div>

@@ -1,11 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="Mock.MockDataManager" %>
+<%@ page import="BeansHome.User.UserDAO" %>
 <%@ page import="BeansHome.User.UserDTO" %>
+<%@ page import="BeansHome.Study.StudyDAO" %>
 <%@ page import="BeansHome.Study.StudyDTO" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <% 
     request.setCharacterEncoding("UTF-8");
@@ -13,14 +11,21 @@
     // ---------------------------------------------------------------------
     // [JSP 지역 변수 선언 : 세션 관련 변수]
     // ---------------------------------------------------------------------
-    // 목업 데이터 매니저에서 현재 사용자 정보 가져오기
-    MockDataManager mockManager = MockDataManager.getInstance();
-    UserDTO currentUser = mockManager.getCurrentUser();
+    // 실제 데이터베이스에서 현재 사용자 정보 가져오기
+    UserDAO userDAO = new UserDAO();
+    StudyDAO studyDAO = new StudyDAO();
+    
+    // 임시로 userId=1인 사용자 정보 가져오기 (나중에 세션에서 가져와야 함)
+    UserDTO currentUser = userDAO.getUserById(1);
     
     // 세션에 사용자 정보 설정
     session.setAttribute("userNickname", currentUser.getNickname());
     String userNickname = currentUser.getNickname();
     boolean isLoggedIn = true;
+
+    // 목업 데이터 매니저 주석 처리
+    // MockDataManager mockManager = MockDataManager.getInstance();
+    // UserDTO currentUser = mockManager.getCurrentUser();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -129,7 +134,7 @@
                             </div>
                             <% 
                             // 현재 사용자의 스트릭 데이터 조회
-                            List<StudyDTO> streaks = mockManager.getStudyStreak(currentUser.getUserId());
+                            List<StudyDTO> streaks = studyDAO.getStudyStreak(currentUser.getUserId());
                             
                             // 첫 번째 날짜의 요일 확인
                             Calendar cal = Calendar.getInstance();
