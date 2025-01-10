@@ -73,7 +73,9 @@ public class UserDAO {
                 user.setIntro(rs.getString("intro"));
                 user.setProfileImage(rs.getString("profile_image"));
                 user.setStudyDate(rs.getDate("study_date"));
-                user.setStudyTime(rs.getTimestamp("study_time"));
+                // Timestamp를 int로 변환 (초 단위로)
+                Timestamp ts = rs.getTimestamp("study_time");
+                user.setStudyTime(ts != null ? (int)(ts.getTime() / 1000) : 0);
                 user.setStudyDay(rs.getInt("study_day"));
                 user.setQuizCount(rs.getInt("quiz_count"));
                 user.setQuizRight(rs.getInt("quiz_right"));

@@ -13,23 +13,15 @@
     UserDAO userDAO = new UserDAO();
     RankingDAO rankingDAO = new RankingDAO();
     
-    // 임시로 userId=1인 사용자 정보 가져오기 (나중에 세션에서 가져와야 함)
-    UserDTO currentUser = userDAO.getUserById(1);
+    // 현재 사용자 정보 조회
+    UserDTO currentUser = userDAO.getUserById(1); // 나중에 세션에서 가져오도록 수정
     
-    // 랭킹 타입 (기본값: points)
     String rankingType = request.getParameter("type");
     if (rankingType == null) rankingType = "points";
     
-    // 랭킹 목록 조회 (상위 10명)
+    // 랭킹 목록과 현재 사용자의 랭킹 정보 조회
     List<RankingDTO> rankings = rankingDAO.getRankings(rankingType, 10);
-    
-    // 현재 사용자의 랭킹 정보 조회
     RankingDTO userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), rankingType);
-
-    // 목업 데이터 매니저 주석 처리
-    // MockDataManager mockManager = MockDataManager.getInstance();
-    // UserDTO currentUser = mockManager.getCurrentUser();
-    // List<UserDTO> rankings = mockManager.getRankingList(rankingType, 10);
 %>
 <!DOCTYPE html>
 <html lang="ko">

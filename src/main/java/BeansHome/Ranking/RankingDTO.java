@@ -23,6 +23,7 @@ public class RankingDTO {
     private int userId;         // 사용자 ID
     private String nickname;    // 닉네임
     private String profileImage;// 프로필 이미지
+    private String intro;       // 소개글
     private int score;         // 점수 (포인트/학습일수/퀴즈정답)
     private String type;       // 랭킹 타입 (words/points/dangos)
     
@@ -35,13 +36,9 @@ public class RankingDTO {
      ***********************************************************************/
     public RankingDTO() {
         try {
-            // -----------------------------------------------------------------------------
-            // 기타 초기화 작업 관리
-            // -----------------------------------------------------------------------------
             ExceptionMgr.SetMode(ExceptionMgr.RUN_MODE.DEBUG);
-            // -----------------------------------------------------------------------------
         } catch (Exception Ex) {
-            ExceptionMgr.DisplayException(Ex);    // 예외처리(콘솔)
+            ExceptionMgr.DisplayException(Ex);
         }
     }
     
@@ -59,6 +56,9 @@ public class RankingDTO {
     
     public String getProfileImage() { return profileImage; }
     public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
+    
+    public String getIntro() { return intro; }
+    public void setIntro(String intro) { this.intro = intro; }
     
     public int getScore() { return score; }
     public void setScore(int score) { this.score = score; }

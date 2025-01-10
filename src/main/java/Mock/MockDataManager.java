@@ -56,13 +56,18 @@ public class MockDataManager {
             user.setStudyDay(30 - i);
             user.setQuizCount(100 + (i * 10));
             user.setQuizRight(80 + (i * 8));
-            user.setPoint(2500 - (i * 100));
-            user.setDangos(50 - (i * 3));
+            user.setPoint(1000 + (i * 100));
+            user.setDangos(50 + (i * 5));
             
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_MONTH, -i);
+            
+            // studyTime을 초 단위로 설정 (현재 시간 - i시간)
+            cal.add(Calendar.HOUR, -i);
+            user.setStudyTime((int)(cal.getTimeInMillis() / 1000));
+            
+            // 오늘 날짜로 설정
             user.setStudyDate(new Date(cal.getTimeInMillis()));
-            user.setStudyTime(new Timestamp(cal.getTimeInMillis()));
             
             mockUsers.add(user);
         }
@@ -149,6 +154,7 @@ public class MockDataManager {
             ranking.setUserId(user.getUserId());
             ranking.setNickname(user.getNickname());
             ranking.setProfileImage(user.getProfileImage());
+            ranking.setIntro(user.getIntro());
             ranking.setScore(getScoreByType(user, type));
             ranking.setType(type);
             rankings.add(ranking);

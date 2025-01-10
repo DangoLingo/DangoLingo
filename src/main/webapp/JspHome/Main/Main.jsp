@@ -3,6 +3,8 @@
 <%@ page import="BeansHome.User.UserDTO" %>
 <%@ page import="BeansHome.Study.StudyDAO" %>
 <%@ page import="BeansHome.Study.StudyDTO" %>
+<%@ page import="BeansHome.Ranking.RankingDAO" %>
+<%@ page import="BeansHome.Ranking.RankingDTO" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <% 
@@ -14,9 +16,16 @@
     // 실제 데이터베이스에서 현재 사용자 정보 가져오기
     UserDAO userDAO = new UserDAO();
     StudyDAO studyDAO = new StudyDAO();
+    RankingDAO rankingDAO = new RankingDAO();
     
-    // 임시로 userId=1인 사용자 정보 가져오기 (나중에 세션에서 가져와야 함)
-    UserDTO currentUser = userDAO.getUserById(1);
+    // 현재 사용자 정보 조회
+    UserDTO currentUser = userDAO.getUserById(1); // 나중에 세션에서 가져오도록 수정
+    
+    // 현재 사용자의 랭킹 정보 조회
+    RankingDTO userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), "points");
+    
+    // 스트릭 데이터 조회
+    List<StudyDTO> streaks = studyDAO.getStudyStreak(currentUser.getUserId());
     
     // 세션에 사용자 정보 설정
     session.setAttribute("userNickname", currentUser.getNickname());
