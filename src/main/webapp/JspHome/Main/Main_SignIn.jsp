@@ -27,12 +27,13 @@
    <link rel="stylesheet" href="CSS/Basic.css?version=1.1"/>
    <style type="text/css">
    
+  /* 공통 스타일 */
    body 
    {   
       margin: 0;
       font-family: 'Pretendard JP', sans-serif;
       background-color: #F6F7F5;
-   }
+    }
 
    .container 
    {
@@ -43,9 +44,11 @@
          
    }
 
+   
+   /* ========================== 네비게이션 바 스타일 ========================== */
 
    /* -----------------------------------------------------------------
-      로그인 Page 스타일시트
+      HTML Page 스타일시트
    ----------------------------------------------------------------- */
            
       main {
@@ -56,66 +59,89 @@
         }
 
         .card {
-            width: 400px;
+            width: 500px;
+            height: 400px;
             background-color:white;
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 16px;           
             text-align: center;
+            
             
         }
 
         .card h1 {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
-            margin-bottom: 24px;
+            margin-top: 50px;
+            margin-bottom: 40px;         
+            display:grid;
             text-align: left;
-            padding-left: 16px;
+            width: 350px;
+            padding-left: 50px
+			
+            
         }
 
         .card input {
-            width: calc(100% - 32px);
-            height: 48px;
+            width: 380px;
+			height: 48px;
             padding-left: 16px;
             margin-bottom: 16px;
             border-radius: 16px;
             border: 1px solid rgba(112, 115, 124, 0.22);
+            font-family: "Pretendard JP";
         }
 
         .card .links {
             display: flex;
             justify-content: center;
-            font-size: 14px;
-            align-items: center;
+            font-size: 15px;
+            text-align:middle;
             position: relative;
-            margin-bottom: 16px;
+            margin-bottom: 4px;
+            width: 400px;
+            margin: 0 auto;
+           
         }
         
         .card .links .left {
-           margin-right: 15%; 
+           margin-right: 69px; 
            text-decoration: none; 
+           margin: 4px;
+           width:91.3px;
+           font-family: "Pretendard JP";
         }
         
         .card .links .left:link {color: #324931; }
         .card .links .left:visited {color: #324931; }
         
-        .card .links .center {text-align: center;}
+        .card .links .center {
+        	text-align: center;
+        	width:91.3px;
+        	margin: 4px;
+        	font-family: "Pretendard JP";
+        	}
         
         .card .links .right {
-           margin-left: 13%; 
+           margin-left: 57px; 
            text-decoration: none; 
+           font-family: "Pretendard JP";
+           margin: 4px ;
+           width:91.3px;
         }
         
          .card .links .right:link {color: #324931; }
          .card .links .right:visited {color: #324931; }
 
         .card button {
-            width: calc(100% - 13px);
-            height: 48px;
+            width: 400px;
+			height: 48px;
             background-color: #5C8B6C;
             color: white;
             border-radius: 16px;
             border: none;
+            text-align: center;
             cursor: pointer;
+            margin-top: 20px;
            
         }
         
@@ -129,6 +155,8 @@
       }
       
       <%@ include file="../Common/css/footer.css" %>
+      
+
       
       /* -----------------------------------------------------------------
          HTML Page 스타일시트
@@ -289,19 +317,18 @@
       ----------------------------------------------------------------------%>
       <main>      
            <div class="card"> 
-           <h1>당고링고</h1>
+           <h1>로그인</h1>
                <input type="email" placeholder="이메일">         
                <input type="password" placeholder="비밀번호">
                <!-- 회원가입/비밀번호 찾기 링크 -->
             <div class="links">
-                     <a class="left" href="./Main_SignUp.jsp">회원가입</a>
-                     <a class="center" >|</a>
-                   <a class="right" href="#">비밀번호 찾기</a>
+                     <a class="left" href="../Main/Main_SignUp.jsp">회원가입</a>
+                     <a class="center" > |</a>
+                     <a class="right" href="#">비밀번호 찾기</a>
             </div>
             <button>로그인</button>
          </div>
       </main>
-</div>
       <%------------------------------------------------------------------
          footer
       ----------------------------------------------------------------------%>
@@ -310,5 +337,71 @@
    <%----------------------------------------------------------------------
    [HTML Page - END]
    --------------------------------------------------------------------------%>
+   <%----------------------------------------------------------------------
+   [HTML Page - 자바스크립트 구현 영역 (하단)]
+   [외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
+   --------------------------------------------------------------------------%>
+   <script type="text/javascript">
+      // -----------------------------------------------------------------
+      // [사용자 함수 및 로직 구현]
+      // -----------------------------------------------------------------
+      
+      // -----------------------------------------------------------------
+   </script>
+   <%------------------------------------------------------------------
+   [JSP 페이지에서 바로 이동(바이패스)]
+   ----------------------------------------------------------------------%>
+   <%------------------------------------------------------------------
+   바이패스 방법1   : JSP forward 액션을 사용 한 페이지 이동
+            :-------------------------------------------------------
+            : page   - 이동 할 새로운 페이지 주소
+            : name   - page 쪽에 전달 할 파라미터 명칭
+            : value   - page 쪽에 전달 할 파라미터 데이터
+            :      - page 쪽에서 request.getParameter("name1")로 읽음
+            :-------------------------------------------------------
+            : 이 방법은 기다리지 않고 바로 이동하기 때문에 현재 화면이 표시되지 않음
+            : 브라우저 Url 주소는 현재 페이지로 유지 됨
+   --------------------------------------------------------------------
+   <jsp:forward page="Hello.jsp">
+      <jsp:param name="name1" value='value1'/>
+      <jsp:param name="name2" value='value2'/>
+   </jsp:forward>
+   --%>
+   <%
+      // -----------------------------------------------------------------
+      //   바이패스 방법2   : RequestDispatcher을 사용 한 페이지 이동
+      //            :---------------------------------------------------
+      //            : sUrl   - 이동 할 새로운 페이지 주소
+      //            :      - sUrl 페이지 주소에 GET 파라미터 전달 가능
+      //            :      - sUrl 페이지가 갱신됨 즉,
+      //            :      - sUrl 페이지 주소에 GET 파라미터 유무에 상관없이
+      //            :      - sUrl 페이지 쪽에서 request.getParameter() 사용가능
+      //            :-------------------------------------------------------
+      //            : 이 방법은 기다리지 않고 바로 이동하기 때문에 현재 화면이 표시되지 않음
+      //            : 브라우저 Url 주소는 현재 페이지로 유지 됨
+      // -----------------------------------------------------------------
+      // String sUrl = "Hello.jsp?name1=value1&name2=value2";
+      //
+      // RequestDispatcher dispatcher = request.getRequestDispatcher(sUrl);
+      // dispatcher.forward(request, response);
+      // -----------------------------------------------------------------
+      //   바이패스 방법3   : response.sendRedirect을 사용 한 페이지 이동
+      //            :---------------------------------------------------
+      //            : sUrl   - 이동 할 새로운 페이지 주소
+      //            :      - sUrl 페이지에 GET 파라미터만 전달 가능
+      //            :      - sUrl 페이지 갱신 없음 즉,
+      //            :      - sUrl 페이지 주소에 GET 파라미터 있는 경우만
+      //            :      - sUrl 페이지 쪽에서 request.getParameter() 사용가능
+      //            :-------------------------------------------------------
+      //            : 이 방법은 기다리지 않고 바로 이동하기 때문에 현재 화면이 표시되지 않음
+      //            : 브라우저의 Url 주소는 sUrl 페이지로 변경 됨
+      // -----------------------------------------------------------------
+      //String sUrl = "Hello.jsp?name1=value1&name2=value2";
+      //
+      //response.sendRedirect(sUrl);
+      // -----------------------------------------------------------------
+   %>
+   </div>
+   
 </body>
 </html>

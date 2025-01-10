@@ -59,44 +59,49 @@
         }
 
         .card {
-            width: 400px;
+            width: 500px;
+            height:498px;
             background-color:white;
             border-radius: 16px;
-            padding: 24px;
+            
             text-align: center;
             
         }
 
         .card h1 {
-             font-size: 24px;
+             font-size: 28px;
+             font-family: "Pretendard JP";
             font-weight: bold;
             margin-bottom: 24px;
             text-align: left;
             padding-left: 16px;
+            margin:40px;
            
         }
         
 
         .card input {
            
-            width: calc(100% - 32px);
+            width: 380px;
             height: 48px;
             padding-left: 16px;
             margin-bottom: 16px;
             border-radius: 16px;
             border: 1px solid rgba(112, 115, 124, 0.22);
+            font-family: "Pretendard JP";
         }
 
 
         .card button {
 
-            width: calc(100% - 13px);
+            width: 400px;
             height: 48px;
             background-color: #5C8B6C;
             color: white;
             border-radius: 16px;
             border: none;
             cursor: pointer;
+            margin-top:29.5px;
              
            }
 
@@ -271,7 +276,7 @@
       ----------------------------------------------------------------------%>
       <main>
            <div class="card">
-              <h1>당고링고</h1>
+              <h1>회원가입</h1>
                <input type="email" placeholder="이메일">      
                <input type="text" placeholder="닉네임">      
                <input type="password" id="password1" placeholder="비밀번호">
