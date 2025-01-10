@@ -60,50 +60,54 @@
 
         .card {
             width: 500px;
-            height:498px;
-            background-color:white;
+            height: 550px;
+            background-color: white;
             border-radius: 16px;
-            
             text-align: center;
-            
+            box-sizing: border-box;
+            padding: 0 50px;
         }
 
         .card h1 {
-             font-size: 28px;
-             font-family: "Pretendard JP";
+            font-size: 28px;
+            font-family: "LaundryGothicOTF";
             font-weight: bold;
-            margin-bottom: 24px;
+            margin-top: 50px;
+            margin-bottom: 40px;
             text-align: left;
-            padding-left: 16px;
-            margin:40px;
-           
+            width: 100%;
+            padding-left: 0;
+            color: #000000;
         }
         
 
         .card input {
-           
-            width: 380px;
+            width: 100%;
             height: 48px;
-            padding-left: 16px;
+            padding: 0 16px;
             margin-bottom: 16px;
             border-radius: 16px;
             border: 1px solid rgba(112, 115, 124, 0.22);
             font-family: "Pretendard JP";
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            background-color: white;
         }
 
 
         .card button {
-
-            width: 400px;
+            width: 100%;
             height: 48px;
             background-color: #5C8B6C;
             color: white;
             border-radius: 16px;
             border: none;
             cursor: pointer;
-            margin-top:29.5px;
-             
-           }
+            margin-top: 0;
+            font-family: "Pretendard JP";
+            font-size: 16px;
+        }
 
       .card button:hover {
             background-position: right center;
@@ -114,12 +118,66 @@
              outline: none;
        }
       
-      <%@ include file="../Common/css/footer.css" %>
-      
       /* -----------------------------------------------------------------
          HTML Page 스타일시트
          ----------------------------------------------------------------- */   
         /* ----------------------------------------------------------------- */
+
+        /* 로그인 링크 스타일 추가 */
+        .card .login-link {
+            display: block;
+            text-decoration: none;
+            color: #324931;
+            font-size: 14px;
+            font-family: "Pretendard JP";
+            margin: 24px 0;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+
+        .card .login-link:hover {
+            opacity: 1;
+        }
+
+        /* 버튼 마진 조정 */
+        .card button {
+            width: 100%;
+            height: 48px;
+            background-color: #5C8B6C;
+            color: white;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 0;
+            font-family: "Pretendard JP";
+            font-size: 16px;
+        }
+
+        /* 모바일 반응형 스타일 */
+        @media screen and (max-width: 768px) {
+            .card {
+                width: 90%;
+                height: auto;
+                padding: 20px 30px;
+                margin: 0 10px;
+            }
+
+            .card h1 {
+                font-size: 24px;
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+
+            .card input {
+                margin-bottom: 12px;
+                font-size: 14px;
+            }
+
+            .card .login-link {
+                margin: 20px 0;
+                font-size: 13px;
+            }
+        }
    </style>
    <%----------------------------------------------------------------------
    [HTML Page - 자바스크립트 구현 영역 (상단)]
@@ -276,19 +334,17 @@
       ----------------------------------------------------------------------%>
       <main>
            <div class="card">
-              <h1>회원가입</h1>
+              <h1><a href="../Main/Main.jsp" style="text-decoration: none; color: inherit;">당고링고</a></h1>
                <input type="email" placeholder="이메일">      
                <input type="text" placeholder="닉네임">      
                <input type="password" id="password1" placeholder="비밀번호">
                <input type="Password" id="password2" placeholder="비밀번호 확인">   
                
-            <button onclick="location.href='../Main/Main_SignIn.jsp'" >회원가입</button>
+               <a href="../Main/Main_SignIn.jsp" class="login-link">이미 계정이 있으신가요? 로그인하기</a>
+               
+            <button onclick="location.href='../Main/Main.jsp'" >회원가입</button>
          </div> 
       </main>
-      <%------------------------------------------------------------------
-         footer
-      ----------------------------------------------------------------------%>
-      <%@ include file="../Common/Footer.jsp" %>
 
    <%----------------------------------------------------------------------
    [HTML Page - END]

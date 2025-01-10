@@ -69,7 +69,7 @@
                 <article class="hero-content">
                     <h1 class="main-title">달콤한 일본어 학습,<br>당고링고와 함께</h1>
                     <p class="sub-text">재미있게 배우는 일본어,<br>지금 시작해보세요</p>
-                    <button class="start-button">시작하기</button>
+                    <button class="start-button" onclick="location.href='../Main/Main_SignIn.jsp'">시작하기</button>
                 </article>
                 <figure class="hero-image">
                     <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango.svg" alt="당고 캐릭터" class="dango-image">

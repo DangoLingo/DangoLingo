@@ -61,11 +61,11 @@
         .card {
             width: 500px;
             height: 400px;
-            background-color:white;
+            background-color: white;
             border-radius: 16px;           
             text-align: center;
-            
-            
+            box-sizing: border-box;
+            padding: 0 50px;
         }
 
         .card h1 {
@@ -73,68 +73,71 @@
             font-weight: bold;
             margin-top: 50px;
             margin-bottom: 40px;         
-            display:grid;
             text-align: left;
-            width: 350px;
-            padding-left: 50px
-			
-            
+            width: 100%;
+            padding-left: 0;
+            font-family: "LaundryGothicOTF";
+            color: #000000;
         }
 
         .card input {
-            width: 380px;
-			height: 48px;
-            padding-left: 16px;
+            width: 100%;
+            height: 48px;
+            padding: 0 16px;
             margin-bottom: 16px;
             border-radius: 16px;
             border: 1px solid rgba(112, 115, 124, 0.22);
             font-family: "Pretendard JP";
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            background-color: white;
+        }
+
+        .card input:focus {
+            border: 2px solid #324931;
+            outline: none;
+            box-shadow: 0 0 0 1px rgba(50, 73, 49, 0.1);
+            background-color: rgba(50, 73, 49, 0.02);
         }
 
         .card .links {
             display: flex;
             justify-content: center;
-            font-size: 15px;
-            text-align:middle;
-            position: relative;
-            margin-bottom: 4px;
-            width: 400px;
+            align-items: center;
+            width: 100%;
             margin: 0 auto;
-           
+            font-size: 14px;
+            font-family: "Pretendard JP";
+            gap: 0;
+            letter-spacing: -0.3px;
         }
         
-        .card .links .left {
-           margin-right: 69px; 
-           text-decoration: none; 
-           margin: 4px;
-           width:91.3px;
-           font-family: "Pretendard JP";
+        .card .links a {
+            text-decoration: none;
+            color: #324931;
+            width: 110px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 24px;
+            font-weight: 400;
         }
-        
-        .card .links .left:link {color: #324931; }
-        .card .links .left:visited {color: #324931; }
-        
-        .card .links .center {
-        	text-align: center;
-        	width:91.3px;
-        	margin: 4px;
-        	font-family: "Pretendard JP";
-        	}
-        
-        .card .links .right {
-           margin-left: 57px; 
-           text-decoration: none; 
-           font-family: "Pretendard JP";
-           margin: 4px ;
-           width:91.3px;
+
+        .card .links .divider {
+            color: rgba(50, 73, 49, 0.4);
+            font-family: "Pretendard JP";
+            font-size: 12px;
+            transform: scaleY(0.8);
+            padding: 0 40px;
         }
-        
-         .card .links .right:link {color: #324931; }
-         .card .links .right:visited {color: #324931; }
+
+        /* 불필요한 visited 상태 제거 - 기본 색상으로 통일 */
 
         .card button {
-            width: 400px;
-			height: 48px;
+            width: 100%;
+            height: 48px;
             background-color: #5C8B6C;
             color: white;
             border-radius: 16px;
@@ -142,7 +145,8 @@
             text-align: center;
             cursor: pointer;
             margin-top: 20px;
-           
+            font-family: "Pretendard JP";
+            font-size: 16px;
         }
         
         .card button:hover {
@@ -154,13 +158,44 @@
              outline: none;
       }
       
-      <%@ include file="../Common/css/footer.css" %>
-      
+        /* 모바일 반응형 스타일 */
+        @media screen and (max-width: 768px) {
+            .card {
+                width: 90%;
+                height: auto;
+                padding: 20px 30px;
+                margin: 0 10px;
+            }
 
-      
-      /* -----------------------------------------------------------------
-         HTML Page 스타일시트
-         ----------------------------------------------------------------- */   
+            .card h1 {
+                font-size: 24px;
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+
+            .card input {
+                width: 100%;
+                margin-bottom: 12px;
+                font-size: 14px;
+            }
+
+            .card .links {
+                width: 100%;
+            }
+            
+            .card .links a {
+                width: 90px;
+            }
+            
+            .card .links .divider {
+                font-size: 11px;
+                padding: 0 32px;
+            }
+        }
+        
+        /* -----------------------------------------------------------------
+           HTML Page 스타일시트
+           ----------------------------------------------------------------- */   
         /* ----------------------------------------------------------------- */
    </style>
    <%----------------------------------------------------------------------
@@ -317,26 +352,21 @@
       ----------------------------------------------------------------------%>
       <main>      
            <div class="card"> 
-           <h1>로그인</h1>
+           <h1><a href="../Main/Main.jsp" style="text-decoration: none; color: inherit;">당고링고</a></h1>
                <input type="email" placeholder="이메일">         
                <input type="password" placeholder="비밀번호">
                <!-- 회원가입/비밀번호 찾기 링크 -->
             <div class="links">
-                     <a class="left" href="../Main/Main_SignUp.jsp">회원가입</a>
-                     <a class="center" > |</a>
-                     <a class="right" href="#">비밀번호 찾기</a>
+                <a href="../Main/Main_SignUp.jsp">회원가입</a>
+                <span class="divider">|</span>
+                <a href="#">비밀번호 찾기</a>
             </div>
             <button>로그인</button>
          </div>
       </main>
       <%------------------------------------------------------------------
-         footer
+         [HTML Page - END]
       ----------------------------------------------------------------------%>
-      <%@ include file="../Common/Footer.jsp" %>
-
-   <%----------------------------------------------------------------------
-   [HTML Page - END]
-   --------------------------------------------------------------------------%>
    <%----------------------------------------------------------------------
    [HTML Page - 자바스크립트 구현 영역 (하단)]
    [외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
