@@ -1,22 +1,24 @@
 // #################################################################################################
-// UserDTO.java - 유저 DTO 모듈
+// StreakDTO.java - 친구 관계 DTO 모듈
 // #################################################################################################
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 외부모듈 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
-package BeansHome.User;
+package BeansHome.Streak;
 
 import Common.ExceptionMgr;
+
 import java.sql.Date;
 
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
 /***********************************************************************
- * UserDTO			: 유저 DTO 클래스<br>
- * Inheritance		: None
+ * StreakDTO		: 스트릭 DTO 클래스<br>
+ * Inheritance	    : None
  ***********************************************************************/
-public class UserDTO {
+public class StreakDTO
+{
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -28,52 +30,33 @@ public class UserDTO {
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역변수 관리 - 필수영역(인스턴스변수)
     // —————————————————————————————————————————————————————————————————————————————————————
-    /** userId        : 유저 번호 */
+    /** userId       : 유저 번호 (팔로워) */
     private int userId;
-    /** email         : 이메일 */
-    private String email;
-    /** password      : 비밀번호 */
-    private String password;
-    /** name          : 이름 */
-    private String name;
-    /** nickname      : 닉네임 */
-    private String nickname;
-    /**  intro         : 소개글 */
-    private String intro;
-    /** studyDate     : 마지막 학습 일자 */
-    private Date studyDate;
-    /** studyTime     : 총 학습 시간 */
-    private int studyTime;
-    /** studyDay      : 연속 학습일 */
-    private int studyDay;
-    /** quizCount     : 퀴즈 문제 수 */
-    private int quizCount;
-    /** quizRight     : 퀴즈 정답 횟수 */
-    private int quizRight;
-    /** point         : 포인트 */
+    /** streakDate    : 날짜 */
+    private Date streakDate;
+    /** point         : 획득 포인트 */
     private int point;
-    /** profileImage  : 프로필 이미지 */
-    private String profileImage;
-    /** dangos        : 당고 개수 */
-    private int dangos;
 
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
-
     /***********************************************************************
-     * UserDTO()		: 기본 생성자
-     * @param void		: None
+     * StreakDTO()       :  기본 생성자
+     * @param void      : None
      ***********************************************************************/
-    public UserDTO() {
-        try {
+    public StreakDTO()
+    {
+        try
+        {
             // -----------------------------------------------------------------------------
             // 기타 초기화 작업 관리
             // -----------------------------------------------------------------------------
             ExceptionMgr.SetMode(ExceptionMgr.RUN_MODE.DEBUG);
             // -----------------------------------------------------------------------------
-        } catch (Exception Ex) {
-            ExceptionMgr.DisplayException(Ex);        // 예외처리(콘솔)
+        }
+        catch (Exception Ex)
+        {
+            ExceptionMgr.DisplayException(Ex);		// 예외처리(콘솔)
         }
     }
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -91,84 +74,12 @@ public class UserDTO {
         this.userId = userId;
     }
 
-    public String getEmail() {
-        return email;
+    public Date getStreakDate() {
+        return streakDate;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getIntro() {
-        return intro;
-    }
-
-    public void setIntro(String intro) {
-        this.intro = intro;
-    }
-
-    public Date getStudyDate() {
-        return studyDate;
-    }
-
-    public void setStudyDate(Date studyDate) {
-        this.studyDate = studyDate;
-    }
-
-    public int getStudyTime() {
-        return studyTime;
-    }
-
-    public void setStudyTime(int studyTime) {
-        this.studyTime = studyTime;
-    }
-
-    public int getStudyDay() {
-        return studyDay;
-    }
-
-    public void setStudyDay(int studyDay) {
-        this.studyDay = studyDay;
-    }
-
-    public int getQuizCount() {
-        return quizCount;
-    }
-
-    public void setQuizCount(int quizCount) {
-        this.quizCount = quizCount;
-    }
-
-    public int getQuizRight() {
-        return quizRight;
-    }
-
-    public void setQuizRight(int quizRight) {
-        this.quizRight = quizRight;
+    public void setStreakDate(Date streakDate) {
+        this.streakDate = streakDate;
     }
 
     public int getPoint() {
@@ -177,22 +88,6 @@ public class UserDTO {
 
     public void setPoint(int point) {
         this.point = point;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
-
-    public int getDangos() {
-        return dangos;
-    }
-
-    public void setDangos(int dangos) {
-        this.dangos = dangos;
     }
     // —————————————————————————————————————————————————————————————————————————————————————
 }
