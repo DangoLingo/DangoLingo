@@ -10,31 +10,27 @@
 <% 
     request.setCharacterEncoding("UTF-8");
     
-    // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 세션 관련 변수]
-    // ---------------------------------------------------------------------
-    // 실제 데이터베이스에서 현재 사용자 정보 가져오기
+    // 세션에서 로그인 상태 확인
+    String userNickname = (String) session.getAttribute("userNickname");
+    boolean isLoggedIn = userNickname != null;
+    
+    // 로그인된 경우에만 사용자 정보 조회
     UserDAO userDAO = new UserDAO();
     StudyDAO studyDAO = new StudyDAO();
     RankingDAO rankingDAO = new RankingDAO();
+    UserDTO currentUser = null;
+    RankingDTO userRanking = null;
     
-    // 현재 사용자 정보 조회
-    UserDTO currentUser = userDAO.getUserById(1); // 나중에 세션에서 가져오도록 수정
-    
-    // 현재 사용자의 랭킹 정보 조회
-    RankingDTO userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), "points");
-    
-    // 스트릭 데이터 조회
-    List<StudyDTO> streaks = studyDAO.getStudyStreak(currentUser.getUserId());
-    
-    // 세션에 사용자 정보 설정
-    session.setAttribute("userNickname", currentUser.getNickname());
-    String userNickname = currentUser.getNickname();
-    boolean isLoggedIn = true;
-
-    // 목업 데이터 매니저 주석 처리
-    // MockDataManager mockManager = MockDataManager.getInstance();
-    // UserDTO currentUser = mockManager.getCurrentUser();
+    if (isLoggedIn) {
+        // 현재 사용자 정보 조회
+        currentUser = userDAO.getUserById((Integer) session.getAttribute("userId"));
+        
+        // 현재 사용자의 랭킹 정보 조회
+        userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), "points");
+        
+        // 스트릭 데이터 조회
+        List<StudyDTO> streaks = studyDAO.getStudyStreak(currentUser.getUserId());
+    }
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -51,12 +47,14 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-jp.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/main.css">
 </head>
-<body>
+<body class="<%= isLoggedIn ? "logged-in" : "" %>">
     <%----------------------------------------------------------------------
     [HTML Page - 헤더 영역]
     --------------------------------------------------------------------------%>
     <header>
-        <jsp:include page="../Common/Navbar.jsp" />
+        <% if (isLoggedIn) { %>
+            <jsp:include page="../Common/Navbar.jsp" />
+        <% } %>
     </header>
 
     <%----------------------------------------------------------------------
@@ -124,7 +122,7 @@
                     </article>
                     <article class="stat-item">
                         <h3>포인트 랭킹</h3>
-                        <p class="stat-number"><%= mockManager.getUserRank(currentUser.getUserId(), "point") %>위</p>
+                        <p class="stat-number"><%= userRanking != null ? userRanking.getRank() : "-" %>위</p>
                     </article>
                 </section>
                 

@@ -11,8 +11,12 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background-color: #F8F9FA;
-    padding-top: 60px;
+    padding-top: 0;
     margin: 0;
+}
+
+body.logged-in {
+    padding-top: 60px;
 }
 
 .main-container {
@@ -20,6 +24,7 @@ body {
     margin: 0 auto;
     padding: 24px;
     width: 100%;
+    margin-bottom: 48px;
 }
 
 .hero-section {
@@ -309,38 +314,37 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-    /* 소개 페이지 모바일 스타일 */
-    .hero-section {
-        flex-direction: column-reverse;
+    .main-container {
         padding: 16px;
+        gap: 32px;
+    }
+
+    .hero-section {
+        flex-direction: column;
         text-align: center;
+        padding: 32px 16px;
     }
 
     .hero-content {
-        padding: 16px;
+        order: 1;
     }
 
-    .main-title {
-        font-size: 24px;
-        margin-bottom: 16px;
-    }
-
-    .sub-text {
-        font-size: 14px;
-        margin-bottom: 16px;
-    }
-
-    .dango-image {
-        width: 160px;
-        padding: 16px;
+    .hero-image {
+        order: 2;
+        max-width: 80%;
+        margin: 0 auto;
     }
 
     .features {
         grid-template-columns: 1fr;
-        gap: 16px;
+        padding: 0;
     }
 
-    /* 로그인 후 메인 페이지 모바일 스타일 */
+    .feature-item {
+        text-align: center;
+        padding: 24px 16px;
+    }
+
     .user-profile {
         flex-direction: column;
         text-align: center;
@@ -365,11 +369,12 @@ body {
 
     .statistics {
         grid-template-columns: repeat(2, 1fr);
+        padding: 16px;
         gap: 16px;
     }
 
     .stat-item {
-        padding: 1.25rem;
+        padding: 16px;
     }
 
     .stat-item h3 {
@@ -381,7 +386,6 @@ body {
         font-size: 18px;
     }
 
-    /* 스트릭 차트 모바일 조정 */
     .streak-tracker {
         padding: 1.25rem;
     }
@@ -408,7 +412,6 @@ body {
         height: 12px;
     }
 
-    /* 스트릭 툴팁 조정 */
     .streak-cell::before {
         top: -20px;
         font-size: 10px;
@@ -420,7 +423,6 @@ body {
     }
 }
 
-/* 더 작은 화면을 위한 추가 조정 */
 @media screen and (max-width: 480px) {
     .main-container {
         padding: 16px;
@@ -431,7 +433,7 @@ body {
     }
 
     .statistics {
-        grid-template-columns: 1fr;  /* 모바일에서는 한 줄로 */
+        grid-template-columns: 1fr;
     }
 
     .auth-buttons {
@@ -440,7 +442,7 @@ body {
     }
 
     .auth-button {
-        width: 100%;  /* 버튼 전체 너비로 */
+        width: 100%;
     }
 
     .streak-tracker {
@@ -499,4 +501,29 @@ body {
     font-size: 28px;
     font-weight: 700;
     color: #5C8B6C;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 8px 16px;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 16px;
+        padding-bottom: 4px;
+    }
+
+    .nav-links::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-links a {
+        white-space: nowrap;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
 } 
