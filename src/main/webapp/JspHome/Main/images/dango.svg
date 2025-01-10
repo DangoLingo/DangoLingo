@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 대나무 막대 -->
+    <path d="M200 380C200 380 200 100 200 60" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    <path d="M200 340 L215 355" stroke="#A0522D" stroke-width="8" stroke-linecap="round"/>
+    <path d="M200 320 L185 335" stroke="#A0522D" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- 하단 당고 (말차색) -->
+    <circle cx="200" cy="300" r="45" fill="#88B04B"/>
+    <circle cx="195" cy="290" r="10" fill="#9EC45F" fill-opacity="0.7"/>
+    
+    <!-- 중간 당고 (사쿠라색) -->
+    <circle cx="200" cy="200" r="45" fill="#FFB7C5"/>
+    <circle cx="195" cy="190" r="10" fill="#FFC5D0" fill-opacity="0.7"/>
+    
+    <!-- 상단 당고 (하얀색) -->
+    <circle cx="200" cy="100" r="45" fill="#FFFFFF" stroke="#EEEEEE" stroke-width="2"/>
+    <circle cx="195" cy="90" r="10" fill="#F0F0F0" fill-opacity="0.7"/>
+    
+    <!-- 얼굴 -->
+    <path d="M185 95 Q190 90 195 95" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+    <path d="M205 95 Q210 90 215 95" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- 볼 -->
+    <circle cx="180" cy="105" r="8" fill="#FFB7C5" fill-opacity="0.5"/>
+    <circle cx="220" cy="105" r="8" fill="#FFB7C5" fill-opacity="0.5"/>
+    
+    <!-- 입 -->
+    <path d="M195 110 Q200 115 205 110" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- 장식용 벚꽃 -->
+    <path d="M250 80 Q255 75 260 80 Q265 85 260 90 Q255 95 250 90 Q245 85 250 80" fill="#FFB7C5"/>
+    <circle cx="255" cy="85" r="2" fill="#FF9AAF"/>
+    
+    <path d="M150 150 Q155 145 160 150 Q165 155 160 160 Q155 165 150 160 Q145 155 150 150" fill="#FFB7C5"/>
+    <circle cx="155" cy="155" r="2" fill="#FF9AAF"/>
+</svg> 

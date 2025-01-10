@@ -67,28 +67,35 @@
             -------------------------------------------------------------------%>
             <section class="hero-section">
                 <article class="hero-content">
-                    <h1 class="main-title">달콤한 일본어 학습 파트너,<br>당고링고</h1>
-                    <p class="sub-text">일본어 학습을 통해<br>나만의 당고를 만들어보세요.</p>
-                    <button class="start-button">시작하기</button>
+                    <h1 class="main-title">달콤한 일본어 학습,<br>당고링고와 함께</h1>
+                    <p class="sub-text">재미있게 배우는 일본어,<br>지금 시작해보세요</p>
+                    <button class="start-button">무료로 시작하기</button>
                 </article>
                 <figure class="hero-image">
-                    <img src="images/dango-logo.png" alt="당고 캐릭터" class="dango-image">
+                    <object data="${pageContext.request.contextPath}/JspHome/Main/images/dango.svg" type="image/svg+xml" class="dango-image">
+                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango.svg" alt="당고 캐릭터" class="dango-image">
+                    </object>
                 </figure>
             </section>
 
             <section class="features">
-                <article class="feature-item">
-                    <h3>당고 꾸미기</h3>
-                    <p>포인트를 모아<br>당고를 꾸며 보세요.</p>
-                </article>
-                <article class="feature-item">
-                    <h3>단어 학습</h3>
-                    <p>퀴즈를 풀면서<br>일본어 단어를 외워 보세요.</p>
-                </article>
-                <article class="feature-item">
-                    <h3>랭킹 시스템</h3>
-                    <p>친구들과 함께<br>경쟁해 보세요.</p>
-                </article>
+                <div class="features-grid">
+                    <article class="feature-item">
+                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/customize-icon.svg" alt="커스터마이즈 아이콘" class="feature-icon">
+                        <h3>나만의 당고</h3>
+                        <p>학습하면서 모은 포인트로<br>귀여운 당고를 꾸며보세요</p>
+                    </article>
+                    <article class="feature-item">
+                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/study-icon.svg" alt="학습 아이콘" class="feature-icon">
+                        <h3>스마트 학습</h3>
+                        <p>게임처럼 재미있게<br>일본어 단어를 마스터하세요</p>
+                    </article>
+                    <article class="feature-item">
+                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/ranking-icon.svg" alt="랭킹 아이콘" class="feature-icon">
+                        <h3>함께 성장</h3>
+                        <p>친구들과 함께<br>즐겁게 경쟁하며 배워요</p>
+                    </article>
+                </div>
             </section>
         <% } else { %>
             <%------------------------------------------------------------------
@@ -195,7 +202,9 @@
     [HTML Page - 푸터 영역]
     --------------------------------------------------------------------------%>
     <footer>
-        <jsp:include page="../Common/Footer.jsp" />
+        <% if (isLoggedIn) { %>
+            <jsp:include page="../Common/Footer.jsp" />
+        <% } %>
     </footer>
 </body>
 </html>

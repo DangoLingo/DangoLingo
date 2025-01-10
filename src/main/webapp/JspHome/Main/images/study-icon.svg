@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 배경 원 -->
+    <circle cx="40" cy="40" r="36" fill="#F1F8F3"/>
+    
+    <!-- 메인 아이콘 -->
+    <g transform="translate(20, 20)">
+        <!-- 연필 -->
+        <path d="M34 6L38 10L36 12L32 8L34 6Z" fill="#4A9C5D"/>
+        <path d="M30 10L34 14L16 32H12V28L30 10Z" fill="#4A9C5D"/>
+        
+        <!-- 체크 표시가 있는 노트 -->
+        <path d="M24 36H8C6.9 36 6 35.1 6 34V6C6 4.9 6.9 4 8 4H20L24 8V36Z" fill="#4A9C5D"/>
+        <path d="M12 20L15 23L20 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="12" y="26" width="6" height="2" fill="white"/>
+    </g>
+</svg> 
