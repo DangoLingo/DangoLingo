@@ -204,26 +204,60 @@ body {
 
 /* 반응형 디자인 */
 @media screen and (max-width: 576px) {
-	.quiz-box {
-		width: 100%;
-		margin: 0 16px;
+	.main-container {
+		padding: 20px 16px;
 	}
 
+	.quiz-box {
+		width: 100%;
+		padding: 24px;
+		margin: 0;
+	}
+
+	/* 결과 박스 모바일 레이아웃 */
 	.result-box {
 		flex-direction: column;
 		align-items: center;
-		gap: 24px;
+		gap: 32px;
+		padding: 0;
 	}
 
+	/* 결과 상세 정보 모바일 스타일 */
 	.result-details {
 		width: 100%;
+		margin-left: 0;
 	}
 
 	.result-details li {
-		width: 100%;
+		font-size: 15px;
+	}
+
+	/* 오답 목록 모바일 스타일 */
+	.wrong-box {
+		margin: 20px 0 32px;
+	}
+
+	.wrong {
+		padding: 14px;
+	}
+
+	.wrong span {
+		font-size: 15px;
+	}
+
+	/* 버튼 모바일 스타일 */
+	.buttons {
+		gap: 12px;
 	}
 
 	.buttons button {
-		width: auto;
+		height: 46px;
+		font-size: 14px;
+	}
+
+	/* 헤딩 모바일 스타일 */
+	.heading {
+		font-size: 18px;
+		margin-bottom: 4px;
 	}
 }
