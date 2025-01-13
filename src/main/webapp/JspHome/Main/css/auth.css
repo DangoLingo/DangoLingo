@@ -22,7 +22,7 @@ main {
 .card {
     width: 500px;
     background-color: white;
-    border-radius: 16px;           
+    border-radius: 16px;
     text-align: center;
     box-sizing: border-box;
     padding: 0 50px;
@@ -33,14 +33,16 @@ main {
 }
 
 .signup-card {
-    height: 550px;
+    height: 600px;
+    padding: 0 50px 50px;
+    margin-bottom: 40px;
 }
 
 .card h1 {
     font-size: 28px;
     font-weight: bold;
     margin-top: 50px;
-    margin-bottom: 40px;         
+    margin-bottom: 40px;
     text-align: left;
     width: 100%;
     padding-left: 0;
@@ -110,7 +112,7 @@ main {
     border: none;
     text-align: center;
     cursor: pointer;
-    margin-top: 20px;
+    margin: 20px 0 30px;
     font-family: "Pretendard JP";
     font-size: 16px;
 }
@@ -183,7 +185,14 @@ main {
         font-size: 11px;
         padding: 0 32px;
     }
-} 
+
+    .signup-card {
+        height: auto;
+        min-height: 580px;
+        padding: 20px 30px 40px;
+        margin: 20px 10px 40px;
+    }
+}
 
 /* 로그인 링크 스타일 */
 .login-link {
