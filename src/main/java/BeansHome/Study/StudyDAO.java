@@ -56,9 +56,6 @@ public class StudyDAO {
         ResultSet rs = null;
 
         try {
-            // -----------------------------------------------------------------------------
-            // 학습 스트릭 조회
-            // -----------------------------------------------------------------------------
             conn = db.getConnection();
             pstmt = db.getPreparedStatement(conn, "STUDY.SELECT_STREAK");
             pstmt.setInt(1, userId);
@@ -66,14 +63,10 @@ public class StudyDAO {
 
             while (rs.next()) {
                 StudyDTO study = new StudyDTO();
-                study.setStudyId(rs.getInt("study_id"));
-                study.setUserId(rs.getInt("user_id"));
-                study.setStudyDate(rs.getDate("study_date"));
-                study.setStudyCount(rs.getInt("study_count"));
-                study.setStudyLevel(rs.getInt("study_level"));
+                study.setStudyDate(rs.getDate("STUDY_DATE"));
+                study.setStudyCount(rs.getInt("STUDY_COUNT"));
                 streaks.add(study);
             }
-            // -----------------------------------------------------------------------------
         } catch (Exception Ex) {
             ExceptionMgr.DisplayException(Ex);
             throw Ex;

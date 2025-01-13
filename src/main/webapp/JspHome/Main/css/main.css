@@ -12,279 +12,320 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background-color: #F8F9FA;
-    padding-top: 0;
-    margin: 0;
-}
-
-body.logged-in {
     padding-top: 60px;
+    margin: 0;
 }
 
 .main-container {
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
-
-/* 히어로 섹션 */
-.hero-section {
-    background: linear-gradient(150deg, #4a9c5d 0%, #2d6e3b 100%);
-    min-height: 90vh;
-    margin: 0;
-    padding: 120px 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    text-align: center;
-    color: white;
-}
-
-.hero-content {
-    max-width: 720px;
-    margin-bottom: 60px;
-}
-
-.main-title {
-    font-size: 56px;
-    font-weight: 800;
-    margin-bottom: 24px;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-}
-
-.sub-text {
-    font-size: 22px;
-    line-height: 1.6;
-    margin-bottom: 40px;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 400;
-}
-
-.start-button {
-    background-color: white;
-    color: #4a9c5d;
-    padding: 18px 44px;
-    border: none;
-    border-radius: 32px;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-.start-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    background-color: #f8f9fa;
-}
-
-.hero-image {
-    margin-top: 60px;
-    position: relative;
-    z-index: 2;
-}
-
-.dango-image {
-    width: 400px;
-    height: auto;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
-    animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0px); }
-}
-
-/* Features 섹션 */
-.features-section {
-    padding: 100px 24px;
-    background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%);
-    text-align: center;
-}
-
-.section-title {
-    font-size: 40px;
-    font-weight: 700;
-    color: #212529;
-    letter-spacing: -0.02em;
-    margin-bottom: 20px;
-}
-
-.section-description {
-    font-size: 18px;
-    color: #495057;
-    margin-bottom: 80px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.features-container {
-    max-width: 1140px;
+    max-width: 1060px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-    padding: 0 40px;
+    padding: 24px;
+    width: 100%;
 }
 
-.feature-card {
-    background: white;
-    border-radius: 28px;
-    padding: 48px 32px;
-    transition: all 0.3s ease;
-    border: 1px solid #E9ECEF;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* 대시보드 스타일 */
+.dashboard {
+    padding: 0;
+    max-width: 1060px;
+    margin: 0 auto;
 }
 
-.feature-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-    border-color: #4a9c5d20;
-}
-
-.feature-icon-wrapper {
-    background: #F1F8F3;
-    width: 120px;
-    height: 120px;
-    border-radius: 30px;
+/* 사용자 프로필 섹션 */
+.user-profile {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 40px;
+    gap: 3rem;
+    background-color: #fff;
+    padding: 3rem;
+    border-radius: 1rem;
+    margin-bottom: 24px;
 }
 
-.feature-icon {
-    width: 64px;
-    height: 64px;
+.profile-image-container {
+    width: 180px;
+    height: 180px;
+    background-color: #F8F9FA;
+    border-radius: 50%;
+    padding: 0;
+    border: 1px solid #DEE2E6;
+    flex-shrink: 0;
 }
 
-.feature-content h3 {
-    font-size: 24px;
+.profile-image-container img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-header h2 {
+    font-size: 32px;
+    margin-bottom: 24px;
     font-weight: 700;
     color: #212529;
-    margin-bottom: 16px;
 }
 
-.feature-content p {
+.profile-header p {
     font-size: 16px;
+    color: #868E96;
     line-height: 1.6;
-    color: #495057;
+    margin-bottom: 24px;
+}
+
+/* 학습 버튼 */
+.study-button {
+    background-color: #5C8B6C;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.study-button:hover {
+    background-color: #527E5F;
+}
+
+/* 통계 섹션 */
+.statistics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.stat-item {
+    background-color: #fff;
+    padding: 1.75rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-item h3 {
+    font-size: 14px;
+    color: #868E96;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+}
+
+.stat-number {
+    font-size: 20px;
+    font-weight: 600;
+    color: #5C8B6C;
+    text-align: right;
+}
+
+/* 스트릭 트래커 */
+.streak-tracker {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    position: relative;
+}
+
+.streak-tracker h3 {
+    font-size: 20px;
+    color: #212529;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.streak-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -2rem;
+    padding: 0 2rem;
+    position: relative;
+    padding-top: 32px;
+}
+
+.streak-chart {
+    width: 100%;
+    min-height: 160px;
+    display: grid;
+    grid-template-columns: repeat(53, 1fr);
+    gap: 3px;
+    position: relative;
+    padding: 1rem 0 1rem 2.5rem;
+}
+
+.streak-days {
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    gap: 3px;
+    font-size: 12px;
+    color: #868E96;
+    height: calc(100% - 2rem);
+    align-items: center;
+}
+
+.streak-days span {
+    padding-right: 1rem;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    height: 13px;
+}
+
+.streak-grid {
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    gap: 3px;
+    position: relative;
+    align-items: center;
+}
+
+.streak-cell {
+    width: 13px;
+    height: 13px;
+    background-color: #ebedf0;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    position: relative;
+}
+
+.streak-cell::before {
+    content: attr(data-date);
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background-color: #212529;
+    color: white;
+    font-size: 11px;
+    border-radius: 4px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    z-index: 2000;
+}
+
+.streak-cell:hover {
+    transform: scale(1.2);
+    z-index: 100;
+}
+
+.streak-cell:hover::before {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 스트릭 레벨 색상 */
+.streak-cell.level-0 { background-color: #ebedf0; }
+.streak-cell.level-1 { background-color: #9be9a8; }
+.streak-cell.level-2 { background-color: #40c463; }
+.streak-cell.level-3 { background-color: #2ea043; }
+.streak-cell.level-4 { background-color: #216e39; }
+
+/* 랭킹 관련 스타일 */
+.stat-item .rank-total {
+    font-size: 0.8em;
+    color: #666;
+    margin-left: 4px;
+}
+
+.my-rank .rank-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #5C8B6C;
 }
 
 /* 반응형 디자인 */
-@media screen and (max-width: 1200px) {
-    .features-container {
-        padding: 0 20px;
-        gap: 30px;
-    }
-}
-
-@media screen and (max-width: 992px) {
-    .features-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
 @media screen and (max-width: 768px) {
-    .hero-section {
-        min-height: auto;
-        padding: 80px 20px;
+    .user-profile {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+        gap: 1.5rem;
     }
 
-    .hero-content {
-        order: 2;
+    .profile-image-container {
+        width: 120px;
+        height: 120px;
     }
 
-    .main-title {
-        font-size: 40px;
+    .profile-header h2 {
+        font-size: 24px;
+        margin-bottom: 16px;
     }
 
-    .sub-text {
+    .profile-header p {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .statistics {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .stat-item {
+        padding: 1.25rem;
+    }
+
+    .stat-item h3 {
+        font-size: 12px;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-number {
         font-size: 18px;
-        margin-bottom: 32px;
-    }
-
-    .start-button {
-        padding: 16px 36px;
-        font-size: 16px;
-    }
-
-    .dango-image {
-        width: 280px;
-        height: 280px;
-    }
-
-    .features-section {
-        padding: 60px 20px;
-    }
-
-    .section-title {
-        font-size: 32px;
-    }
-
-    .section-description {
-        font-size: 16px;
-        margin-bottom: 40px;
-    }
-
-    .features-container {
-        grid-template-columns: 1fr;
-        gap: 24px;
-        padding: 0;
-    }
-
-    .feature-card {
-        padding: 40px 24px;
-    }
-
-    .feature-icon-wrapper {
-        width: 100px;
-        height: 100px;
-        border-radius: 24px;
-        margin-bottom: 32px;
-    }
-
-    .feature-icon {
-        width: 52px;
-        height: 52px;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .hero-section {
-        padding: 60px 16px;
+    .main-container {
+        padding: 16px;
     }
 
-    .main-title {
-        font-size: 32px;
+    .profile-header h2 {
+        font-size: 20px;
     }
 
-    .sub-text {
+    .statistics {
+        grid-template-columns: 1fr;
+    }
+
+    .streak-tracker {
+        padding: 1rem;
+    }
+
+    .streak-container {
+        margin: 0 -1rem;
+        padding: 0 1rem;
+    }
+
+    .streak-tracker h3 {
         font-size: 16px;
+        margin-bottom: 16px;
     }
 
-    .feature-card {
-        padding: 32px 20px;
+    .streak-chart {
+        min-width: 600px;
+        padding: 0.5rem 0 0.5rem 1.5rem;
     }
 
-    .feature-icon-wrapper {
-        width: 88px;
-        height: 88px;
-        border-radius: 22px;
-        margin-bottom: 28px;
+    .streak-cell {
+        width: 10px;
+        height: 10px;
     }
 
-    .feature-icon {
-        width: 48px;
-        height: 48px;
+    .streak-days span {
+        font-size: 9px;
+        padding-right: 0.5rem;
+        height: 10px;
     }
 } 

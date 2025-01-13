@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.io.StringWriter;
 import java.io.PrintWriter;
 import oracle.jdbc.OracleTypes;
+import java.sql.Types;
 
 //═════════════════════════════════════════════════════════════════════════════════════════
 //사용자정의 클래스 영역
@@ -220,134 +221,69 @@ public class UserDAO {
     ***********************************************************************/
     public boolean register(UserDTO user) throws Exception {
         Connection conn = null;
-        PreparedStatement pstmt = null;
+        CallableStatement cstmt = null;
         boolean success = false;
 
         try {
-            logger.info("=== Starting Registration Process ===");
-            logger.info("User details:");
-            logger.info("Email: " + user.getEmail());
-            logger.info("Name: " + user.getName());
-            logger.info("Nickname: " + user.getNickname());
-            logger.info("Password length: " + user.getPassword().length());
-
-            logger.info("Getting database connection...");
-            conn = db.getConnection();
-            logger.info("Database connection obtained");
-
-            // 트랜잭션 설정 확인
-            logger.info("Transaction settings - AutoCommit: " + conn.getAutoCommit());
-            
-            // 이메일 중복 체크
-            logger.info("=== Checking Email Duplication ===");
-            String checkEmailSql = "SELECT USER_ID FROM TB_USER WHERE EMAIL = ?";
-            logger.info("Email check SQL: " + checkEmailSql);
-            logger.info("Email parameter: " + user.getEmail());
-            
-            pstmt = conn.prepareStatement(checkEmailSql);
-            pstmt.setString(1, user.getEmail());
-            
-            logger.info("Executing email check query...");
-            ResultSet rs = pstmt.executeQuery();
-            boolean emailExists = rs.next();
-            logger.info("Email exists: " + emailExists);
-            
-            if (emailExists) {
-                logger.warning("Email already exists: " + user.getEmail());
-                return false;
-            }
-            rs.close();
-            pstmt.close();
-
-            // 시퀀스 체크
-            logger.info("=== Checking Sequence ===");
-            try {
-                Statement stmt = conn.createStatement();
-                logger.info("Checking USER_SEQ existence...");
-                ResultSet seqRs = stmt.executeQuery("SELECT sequence_name FROM user_sequences WHERE sequence_name = 'USER_SEQ'");
-                boolean seqExists = seqRs.next();
-                logger.info("USER_SEQ exists: " + seqExists);
+            // -----------------------------------------------------------------------------
+            // 회원가입 처리
+            // -----------------------------------------------------------------------------
+            if (user != null) {
+                logger.info("\n=== Registration Process Start ===");
+                logger.info("User details:");
+                logger.info("Email: [" + user.getEmail() + "]");
+                logger.info("Name: [" + user.getName() + "]");
+                logger.info("Nickname: [" + user.getNickname() + "]");
+                logger.info("Password length: [" + user.getPassword().length() + "]");
                 
-                if (!seqExists) {
-                    logger.info("Creating USER_SEQ sequence...");
-                    stmt.execute("CREATE SEQUENCE USER_SEQ START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE");
-                    logger.info("USER_SEQ created successfully");
-                }
-                stmt.close();
-            } catch (SQLException seqEx) {
-                logger.severe("Error handling sequence: " + seqEx.getMessage());
-                throw seqEx;
-            }
-
-            // 회원 등록
-            logger.info("=== Inserting New User ===");
-            String insertSql = "INSERT INTO TB_USER (USER_ID, EMAIL, PASSWORD, NAME, NICKNAME, INTRO) VALUES (USER_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
-            logger.info("Insert SQL: " + insertSql);
-            
-            pstmt = conn.prepareStatement(insertSql);
-
-            // 파라미터 바인딩 전 값 확인
-            logger.info("Parameter values:");
-            logger.info("1. Email: [" + user.getEmail() + "]");
-            logger.info("2. Password: [length=" + user.getPassword().length() + "]");
-            logger.info("3. Name: [" + user.getName() + "]");
-            logger.info("4. Nickname: [" + user.getNickname() + "]");
-            logger.info("5. Intro: []");
-
-            // 파라미터 바인딩
-            pstmt.setString(1, user.getEmail());
-            pstmt.setString(2, user.getPassword());
-            pstmt.setString(3, user.getName());
-            pstmt.setString(4, user.getNickname());
-            pstmt.setString(5, "");
-
-            try {
-                logger.info("Executing insert query...");
-                int rowsAffected = pstmt.executeUpdate();
-                logger.info("Insert query executed. Rows affected: " + rowsAffected);
-                
-                if (rowsAffected > 0) {
-                    logger.info("Insert successful, committing transaction");
-                    conn.commit();
-                    logger.info("Transaction committed");
-                    success = true;
-                } else {
-                    logger.warning("No rows affected by insert");
-                    conn.rollback();
-                    logger.info("Transaction rolled back");
-                }
-            } catch (SQLException e) {
-                logger.severe("SQL Error during insert:");
-                logger.severe("Error code: " + e.getErrorCode());
-                logger.severe("SQL State: " + e.getSQLState());
-                logger.severe("Message: " + e.getMessage());
-                throw e;
-            }
-            
-        } catch (Exception e) {
-            logger.severe("=== Error During Registration ===");
-            logger.severe("Error type: " + e.getClass().getName());
-            logger.severe("Error message: " + e.getMessage());
-            logger.severe("Stack trace:");
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            logger.severe(sw.toString());
-            
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                    logger.info("Transaction rolled back after error");
-                } catch (SQLException ex) {
-                    logger.severe("Error during rollback: " + ex.getMessage());
+                conn = db.getConnection();
+                if (conn != null) {
+                    // 회원가입 프로시저 호출 - Oracle 방식으로 변경
+                    String registerSql = "BEGIN SP_USER_REGISTER(?, ?, ?, ?, ?); END;";
+                    logger.info("\n=== SQL Query ===");
+                    logger.info("Procedure: SP_USER_REGISTER");
+                    
+                    cstmt = conn.prepareCall(registerSql);
+                    
+                    // IN 파라미터 설정
+                    cstmt.setString(1, user.getEmail());
+                    cstmt.setString(2, user.getPassword());
+                    cstmt.setString(3, user.getName());
+                    cstmt.setString(4, user.getNickname());
+                    
+                    // OUT 파라미터 설정
+                    cstmt.registerOutParameter(5, Types.INTEGER);
+                    
+                    logger.info("\n=== Executing Procedure ===");
+                    cstmt.execute();
+                    
+                    // 결과 확인
+                    int result = cstmt.getInt(5);
+                    logger.info("Procedure result: " + result);
+                    
+                    switch (result) {
+                        case 1:  // 성공
+                            success = true;
+                            logger.info("Registration successful");
+                            break;
+                        case 0:  // 이메일 중복
+                            logger.warning("Email already exists");
+                            break;
+                        case -1: // 기타 오류
+                            logger.severe("Registration failed");
+                            break;
+                    }
                 }
             }
-            throw e;
+            // -----------------------------------------------------------------------------
+        } catch (Exception Ex) {
+            logger.severe("Error during registration: " + Ex.getMessage());
+            ExceptionMgr.DisplayException(Ex);
+            throw Ex;
         } finally {
-            logger.info("=== Cleanup ===");
-            db.close(pstmt, conn);
-            logger.info("Resources closed");
+            db.close(cstmt, conn);
         }
-
+        
         return success;
     }
 }
