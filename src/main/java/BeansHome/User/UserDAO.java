@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.StringWriter;
 import java.io.PrintWriter;
+import oracle.jdbc.OracleTypes;
 
 //═════════════════════════════════════════════════════════════════════════════════════════
 //사용자정의 클래스 영역
@@ -151,91 +152,64 @@ public class UserDAO {
     public UserDTO login(String email, String password) throws Exception {
         UserDTO user = null;
         Connection conn = null;
-        PreparedStatement pstmt = null;
+        CallableStatement cstmt = null;
         ResultSet rs = null;
 
         try {
-            logger.info("\n=== Login Process Start ===");
-            logger.info("Attempting login for email: [" + email + "]");
-            
-            conn = db.getConnection();
-            String loginSql = "SELECT * FROM TB_USER WHERE EMAIL = ?";
-            logger.info("\n=== SQL Query ===");
-            logger.info("Query: " + loginSql);
-            logger.info("Parameters:");
-            logger.info("1. Email = [" + email + "]");
-            
-            pstmt = conn.prepareStatement(loginSql);
-            pstmt.setString(1, email);
-            
-            logger.info("\n=== Executing Query ===");
-            rs = pstmt.executeQuery();
-            
-            if (rs.next()) {
-                logger.info("\n=== User Found ===");
-                logger.info("User ID: " + rs.getInt("USER_ID"));
-                logger.info("Email: " + rs.getString("EMAIL"));
-                logger.info("Nickname: " + rs.getString("NICKNAME"));
+            // -----------------------------------------------------------------------------
+            // 로그인 처리
+            // -----------------------------------------------------------------------------
+            if (email != null && password != null) {
+                logger.info("\n=== Login Process Start ===");
+                logger.info("Attempting login for email: [" + email + "]");
                 
-                String storedPassword = rs.getString("PASSWORD");
-                logger.info("Stored password length: " + (storedPassword != null ? storedPassword.length() : "null"));
-                logger.info("Input password length: " + (password != null ? password.length() : "null"));
-                
-                // 비밀번호 검증 (실제 환경에서는 암호화된 비밀번호를 비교해야 함)
-                if (password.equals(storedPassword)) {
-                    logger.info("Password match successful");
-                    user = new UserDTO();
-                    user.setUserId(rs.getInt("USER_ID"));
-                    user.setEmail(rs.getString("EMAIL"));
-                    user.setNickname(rs.getString("NICKNAME"));
-                    user.setName(rs.getString("NAME"));
+                conn = db.getConnection();
+                if (conn != null) {
+                    // 로그인 프로시저 호출
+                    String loginSql = "BEGIN SP_USER_LOGIN(?, ?, ?); END;";
+                    logger.info("\n=== SQL Query ===");
+                    logger.info("Procedure: SP_USER_LOGIN");
                     
-                    logger.info("\n=== Login Successful ===");
-                    logger.info("User details:");
-                    logger.info("- User ID: " + user.getUserId());
-                    logger.info("- Email: " + user.getEmail());
-                    logger.info("- Nickname: " + user.getNickname());
-                } else {
-                    logger.warning("\n=== Password Mismatch ===");
-                    logger.warning("Stored password: [" + storedPassword + "]");
-                    logger.warning("Input password: [" + password + "]");
+                    cstmt = conn.prepareCall(loginSql);
+                    cstmt.setString(1, email);
+                    cstmt.setString(2, password);
+                    cstmt.registerOutParameter(3, OracleTypes.CURSOR);
+                    
+                    logger.info("\n=== Executing Procedure ===");
+                    cstmt.execute();
+                    
+                    rs = (ResultSet)cstmt.getObject(3);
+                    
+                    if (rs.next()) {
+                        String storedPassword = rs.getString("PASSWORD");
+                        
+                        if (password.equals(storedPassword)) {
+                            user = new UserDTO();
+                            user.setUserId(rs.getInt("USER_ID"));
+                            user.setEmail(rs.getString("EMAIL"));
+                            user.setName(rs.getString("NAME"));
+                            user.setNickname(rs.getString("NICKNAME"));
+                            user.setIntro(rs.getString("INTRO"));
+                            user.setStudyDate(rs.getDate("STUDY_DATE"));
+                            user.setStudyTime(rs.getInt("STUDY_TIME"));
+                            user.setStudyDay(rs.getInt("STUDY_DAY"));
+                            user.setQuizCount(rs.getInt("QUIZ_COUNT"));
+                            user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
+                            user.setPoint(rs.getInt("POINT"));
+                            
+                            logger.info("Login successful for user: " + user.getEmail());
+                        }
+                    }
                 }
-            } else {
-                logger.warning("\n=== User Not Found ===");
-                logger.warning("No user found with email: " + email);
-                
-                // 디버깅을 위해 테이블의 모든 이메일 주소 조회
-                Statement stmt = conn.createStatement();
-                ResultSet debugRs = stmt.executeQuery("SELECT EMAIL FROM TB_USER");
-                logger.info("\n=== Existing Emails in Database ===");
-                while (debugRs.next()) {
-                    logger.info("- " + debugRs.getString("EMAIL"));
-                }
-                debugRs.close();
-                stmt.close();
             }
-        } catch (SQLException e) {
-            logger.severe("\n=== SQL Error ===");
-            logger.severe("Error type: " + e.getClass().getName());
-            logger.severe("Error code: " + e.getErrorCode());
-            logger.severe("SQL State: " + e.getSQLState());
-            logger.severe("Message: " + e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            logger.severe("\n=== Unexpected Error ===");
-            logger.severe("Error type: " + e.getClass().getName());
-            logger.severe("Message: " + e.getMessage());
-            logger.severe("Stack trace:");
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            logger.severe(sw.toString());
-            throw e;
+            // -----------------------------------------------------------------------------
+        } catch (Exception Ex) {
+            ExceptionMgr.DisplayException(Ex);
+            throw Ex;
         } finally {
-            logger.info("\n=== Cleanup ===");
-            db.close(rs, pstmt, conn);
-            logger.info("Resources closed");
+            db.close(rs, cstmt, conn);
         }
-
+        
         return user;
     }
 
