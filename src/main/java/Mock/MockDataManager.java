@@ -7,7 +7,6 @@ import BeansHome.Study.StudyDTO;
 import java.util.*;
 import java.util.Calendar;
 import java.sql.Date;
-import java.sql.Timestamp;
 
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역

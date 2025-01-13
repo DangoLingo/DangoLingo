@@ -7,12 +7,20 @@
 <%@ page import="BeansHome.Ranking.RankingDTO" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.logging.Logger" %>
+<%@ page import="java.util.logging.Level" %>
 <% 
+    // 로거 설정
+    Logger logger = Logger.getLogger("Main.jsp");
+    
     request.setCharacterEncoding("UTF-8");
     
     // 세션에서 로그인 상태 확인
     String userNickname = (String) session.getAttribute("userNickname");
     boolean isLoggedIn = userNickname != null;
+    
+    logger.info("Session check - userNickname: " + userNickname);
+    logger.info("isLoggedIn: " + isLoggedIn);
     
     // 로그인된 경우에만 사용자 정보 조회
     UserDAO userDAO = new UserDAO();
@@ -22,14 +30,22 @@
     RankingDTO userRanking = null;
     
     if (isLoggedIn) {
-        // 현재 사용자 정보 조회
-        currentUser = userDAO.getUserById((Integer) session.getAttribute("userId"));
-        
-        // 현재 사용자의 랭킹 정보 조회
-        userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), "points");
-        
-        // 스트릭 데이터 조회
-        List<StudyDTO> streaks = studyDAO.getStudyStreak(currentUser.getUserId());
+        try {
+            Integer userId = (Integer) session.getAttribute("userId");
+            logger.info("Attempting to get user info for userId: " + userId);
+            
+            // 현재 사용자 정보 조회
+            currentUser = userDAO.getUserById(userId);
+            logger.info("Retrieved user info: " + (currentUser != null ? currentUser.getNickname() : "null"));
+            
+            // 현재 사용자의 랭킹 정보 조회
+            userRanking = rankingDAO.getUserRanking(userId, "points");
+            logger.info("Retrieved ranking info: " + (userRanking != null ? userRanking.getRank() : "null"));
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error retrieving user information", e);
+            e.printStackTrace();
+        }
     }
 %>
 <!DOCTYPE html>
