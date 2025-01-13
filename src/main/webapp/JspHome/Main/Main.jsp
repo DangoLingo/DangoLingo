@@ -256,16 +256,13 @@
     <!-- JavaScript 추가 -->
     <script>
     function handleLogout() {
+        console.log('로그아웃 버튼 클릭됨');
         if (confirm('로그아웃 하시겠습니까?')) {
-            // AJAX를 사용하여 로그아웃 처리
-            fetch('Logout.jsp')
-                .then(response => {
-                    // 페이지 새로고침
-                    window.location.reload();
-                })
-                .catch(error => {
-                    console.error('로그아웃 중 오류 발생:', error);
-                });
+            console.log('로그아웃 확인');
+            window.location.href = 'Main.jsp?action=logout';
+            console.log('로그아웃 페이지로 이동');
+        } else {
+            console.log('로그아웃 취소');
         }
     }
     </script>

@@ -31,7 +31,7 @@
             <% } else { %>
                 <div class="profile-menu">
                     <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango-profile-1.png" alt="프로필" class="profile-image">
-                    <button class="auth-button">로그아웃</button>
+                    <button class="auth-button" onclick="handleLogout()">로그아웃</button>
                 </div>
             <% } %>
         </div>
@@ -43,4 +43,15 @@
         document.getElementById('navMenu').classList.toggle('show');
         this.classList.toggle('active');
     });
+
+    function handleLogout() {
+        console.log('로그아웃 버튼 클릭됨');
+        if (confirm('로그아웃 하시겠습니까?')) {
+            console.log('로그아웃 확인');
+            window.location.href = '${pageContext.request.contextPath}/JspHome/Main/Main.jsp?action=logout';
+            console.log('로그아웃 페이지로 이동');
+        } else {
+            console.log('로그아웃 취소');
+        }
+    }
 </script> 
