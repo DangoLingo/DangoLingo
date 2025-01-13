@@ -15,6 +15,14 @@
     
     request.setCharacterEncoding("UTF-8");
     
+    // 로그아웃 처리
+    String action = request.getParameter("action");
+    if ("logout".equals(action)) {
+        session.invalidate();
+        response.sendRedirect("Main.jsp");
+        return;
+    }
+    
     // 세션에서 로그인 상태 확인
     String userNickname = (String) session.getAttribute("userNickname");
     boolean isLoggedIn = userNickname != null;
@@ -237,5 +245,22 @@
             <jsp:include page="../Common/Footer.jsp" />
         <% } %>
     </footer>
+
+    <!-- JavaScript 추가 -->
+    <script>
+    function handleLogout() {
+        if (confirm('로그아웃 하시겠습니까?')) {
+            // AJAX를 사용하여 로그아웃 처리
+            fetch('Logout.jsp')
+                .then(response => {
+                    // 페이지 새로고침
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('로그아웃 중 오류 발생:', error);
+                });
+        }
+    }
+    </script>
 </body>
 </html>
