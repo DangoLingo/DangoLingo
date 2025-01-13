@@ -33,9 +33,11 @@ main {
 }
 
 .signup-card {
-    height: 600px;
-    padding: 0 50px 50px;
+    height: auto;
+    min-height: 600px;
+    padding: 40px 50px;
     margin-bottom: 40px;
+    position: relative;
 }
 
 .card h1 {
@@ -124,10 +126,10 @@ main {
 .error-message {
     color: #e03131;
     font-size: 14px;
-    margin: 16px 0;
+    margin: 8px 0;
     text-align: center;
     background-color: #fff5f5;
-    padding: 12px;
+    padding: 8px 12px;
     border-radius: 8px;
     border: 1px solid #ffc9c9;
 }
@@ -228,4 +230,13 @@ main {
 
 .invalid {
     color: #e03131;
+}
+
+/* 하단 버튼 영역 고정 */
+.signup-card .login-link {
+    margin: 16px 0 8px;
+}
+
+.signup-card button[type="submit"] {
+    margin: 8px 0 16px;
 } 
