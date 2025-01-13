@@ -70,6 +70,13 @@
     --------------------------------------------------------------------------%>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-jp.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/main.css">
+    <!-- 소개 페이지 스타일 -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/intro/hero.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/intro/features.css">
+    <!-- 대시보드 스타일 -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/dashboard/profile.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/dashboard/statistics.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/dashboard/streak.css">
 </head>
 <body class="<%= isLoggedIn ? "logged-in" : "" %>">
     <%----------------------------------------------------------------------
