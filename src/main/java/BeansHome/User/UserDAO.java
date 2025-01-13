@@ -132,6 +132,92 @@ public class UserDAO {
 
         return success;
     }
+
+    /***********************************************************************
+    * login()         : 로그인 처리
+    * @param email    : 사용자 이메일
+    * @param password : 사용자 비밀번호
+    * @return UserDTO : 로그인 성공시 사용자 정보, 실패시 null
+    ***********************************************************************/
+    public UserDTO login(String email, String password) throws Exception {
+        UserDTO user = null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = db.getConnection();
+            pstmt = db.getPreparedStatement(conn, "USER.SELECT_BY_EMAIL");
+            pstmt.setString(1, email);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                // 비밀번호 검증 (실제 환경에서는 암호화된 비밀번호를 비교해야 함)
+                if (password.equals(rs.getString("password"))) {
+                    user = new UserDTO();
+                    user.setUserId(rs.getInt("user_id"));
+                    user.setEmail(rs.getString("email"));
+                    user.setNickname(rs.getString("nickname"));
+                    user.setProfileImage(rs.getString("profile_image"));
+                    // 기타 필요한 정보 설정...
+                }
+            }
+        } catch (Exception Ex) {
+            ExceptionMgr.DisplayException(Ex);
+            throw Ex;
+        } finally {
+            db.close(rs, pstmt, conn);
+        }
+
+        return user;
+    }
+
+    /***********************************************************************
+    * register()      : 회원가입 처리
+    * @param user     : 등록할 사용자 정보
+    * @return boolean : 등록 성공 여부
+    ***********************************************************************/
+    public boolean register(UserDTO user) throws Exception {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean success = false;
+
+        try {
+            conn = db.getConnection();
+            
+            // 이메일 중복 체크
+            pstmt = db.getPreparedStatement(conn, "USER.SELECT_BY_EMAIL");
+            pstmt.setString(1, user.getEmail());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return false; // 이미 존재하는 이메일
+            }
+            rs.close();
+            pstmt.close();
+
+            // 회원 등록
+            pstmt = db.getPreparedStatement(conn, "USER.INSERT");
+            pstmt.setString(1, user.getEmail());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setString(3, user.getName());
+            pstmt.setString(4, user.getNickname());
+            pstmt.setString(5, user.getIntro());
+            pstmt.setString(6, "default_profile.png"); // 기본 프로필 이미지
+
+            success = pstmt.executeUpdate() > 0;
+            if (success) {
+                conn.commit();
+            }
+        } catch (Exception Ex) {
+            if (conn != null) conn.rollback();
+            ExceptionMgr.DisplayException(Ex);
+            throw Ex;
+        } finally {
+            db.close(pstmt, conn);
+        }
+
+        return success;
+    }
 }
 //#################################################################################################
 //<END>
