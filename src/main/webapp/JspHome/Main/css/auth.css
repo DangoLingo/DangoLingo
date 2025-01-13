@@ -29,7 +29,9 @@ main {
 }
 
 .login-card {
-    height: 400px;
+    height: auto;
+    min-height: 400px;
+    padding: 40px 50px;
 }
 
 .signup-card {
@@ -126,7 +128,7 @@ main {
 .error-message {
     color: #e03131;
     font-size: 14px;
-    margin: 8px 0;
+    margin: 8px 0 16px;
     text-align: center;
     background-color: #fff5f5;
     padding: 8px 12px;
@@ -137,7 +139,7 @@ main {
 .success-message {
     color: #4CAF50;
     font-size: 14px;
-    margin: 10px 0;
+    margin: 8px 0 16px;
     text-align: center;
 }
 
@@ -196,6 +198,11 @@ main {
         min-height: 580px;
         padding: 20px 30px 40px;
         margin: 20px 10px 40px;
+    }
+
+    .login-card {
+        min-height: 380px;
+        padding: 20px 30px;
     }
 }
 
