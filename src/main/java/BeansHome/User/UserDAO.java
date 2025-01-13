@@ -225,65 +225,54 @@ public class UserDAO {
         boolean success = false;
 
         try {
-            // -----------------------------------------------------------------------------
-            // 회원가입 처리
-            // -----------------------------------------------------------------------------
-            if (user != null) {
-                logger.info("\n=== Registration Process Start ===");
-                logger.info("User details:");
-                logger.info("Email: [" + user.getEmail() + "]");
-                logger.info("Name: [" + user.getName() + "]");
-                logger.info("Nickname: [" + user.getNickname() + "]");
-                logger.info("Password length: [" + user.getPassword().length() + "]");
-                
-                conn = db.getConnection();
-                if (conn != null) {
-                    // 회원가입 프로시저 호출 - Oracle 방식으로 변경
-                    String registerSql = "BEGIN SP_USER_REGISTER(?, ?, ?, ?, ?); END;";
-                    logger.info("\n=== SQL Query ===");
-                    logger.info("Procedure: SP_USER_REGISTER");
-                    
-                    cstmt = conn.prepareCall(registerSql);
-                    
-                    // IN 파라미터 설정
-                    cstmt.setString(1, user.getEmail());
-                    cstmt.setString(2, user.getPassword());
-                    cstmt.setString(3, user.getName());
-                    cstmt.setString(4, user.getNickname());
-                    
-                    // OUT 파라미터 설정
-                    cstmt.registerOutParameter(5, Types.INTEGER);
-                    
-                    logger.info("\n=== Executing Procedure ===");
-                    cstmt.execute();
-                    
-                    // 결과 확인
-                    int result = cstmt.getInt(5);
-                    logger.info("Procedure result: " + result);
-                    
-                    switch (result) {
-                        case 1:  // 성공
-                            success = true;
-                            logger.info("Registration successful");
-                            break;
-                        case 0:  // 이메일 중복
-                            logger.warning("Email already exists");
-                            break;
-                        case -1: // 기타 오류
-                            logger.severe("Registration failed");
-                            break;
-                    }
-                }
+            // 필수 파라미터 검증
+            if (user == null || 
+                user.getEmail() == null || 
+                user.getPassword() == null || 
+                user.getName() == null || 
+                user.getNickname() == null) {
+                logger.severe("Required parameters are missing");
+                return false;
             }
-            // -----------------------------------------------------------------------------
-        } catch (Exception Ex) {
-            logger.severe("Error during registration: " + Ex.getMessage());
-            ExceptionMgr.DisplayException(Ex);
-            throw Ex;
+
+            conn = db.getConnection();
+            String sql = "{call SP_USER_REGISTER(?, ?, ?, ?, ?)}";
+            cstmt = conn.prepareCall(sql);
+
+            // 파라미터 설정
+            cstmt.setString(1, user.getEmail());
+            cstmt.setString(2, user.getPassword());
+            cstmt.setString(3, user.getName());
+            cstmt.setString(4, user.getNickname());
+            cstmt.registerOutParameter(5, Types.INTEGER);
+
+            // 프로시저 실행
+            cstmt.execute();
+            int result = cstmt.getInt(5);
+
+            switch (result) {
+                case 1:
+                    success = true;
+                    logger.info("Registration successful for: " + user.getEmail());
+                    break;
+                case 0:
+                    logger.warning("Email already exists: " + user.getEmail());
+                    break;
+                case -1:
+                    logger.warning("Nickname already exists: " + user.getNickname());
+                    break;
+                default:
+                    logger.severe("Unknown result code: " + result);
+                    break;
+            }
+
+        } catch (SQLException e) {
+            logger.severe("SQL Error: " + e.getMessage());
+            throw e;
         } finally {
             db.close(cstmt, conn);
         }
-        
+
         return success;
     }
 }

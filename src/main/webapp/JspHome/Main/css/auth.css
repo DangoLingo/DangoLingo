@@ -65,10 +65,9 @@ main {
 }
 
 .card input:focus {
-    border: 2px solid #324931;
+    border: 2px solid #5C8B6C;
     outline: none;
-    box-shadow: 0 0 0 1px rgba(50, 73, 49, 0.1);
-    background-color: rgba(50, 73, 49, 0.02);
+    box-shadow: 0 0 0 2px rgba(92, 139, 108, 0.1);
 }
 
 .card .links {
@@ -123,10 +122,14 @@ main {
 
 /* 에러/성공 메시지 스타일 */
 .error-message {
-    color: #ff4444;
+    color: #e03131;
     font-size: 14px;
-    margin: 10px 0;
+    margin: 16px 0;
     text-align: center;
+    background-color: #fff5f5;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ffc9c9;
 }
 
 .success-message {
@@ -208,4 +211,21 @@ main {
 
 .login-link:hover {
     opacity: 1;
+}
+
+/* 비밀번호 유효성 표시 */
+.password-validation {
+    font-size: 12px;
+    margin-top: -12px;
+    margin-bottom: 12px;
+    text-align: left;
+    padding-left: 16px;
+}
+
+.valid {
+    color: #40c057;
+}
+
+.invalid {
+    color: #e03131;
 } 
