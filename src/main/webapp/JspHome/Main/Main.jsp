@@ -160,16 +160,6 @@
                         <h2><%= currentUser.getNickname() %></h2>
                         <p class="user-intro"><%= currentUser.getIntro() != null ? currentUser.getIntro() : "소개글이 없습니다." %></p>
                     </header>
-                    <div class="user-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">포인트</span>
-                            <span class="stat-value"><%= currentUser.getPoint() %></span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">학습일</span>
-                            <span class="stat-value"><%= currentUser.getStudyDay() %></span>
-                        </div>
-                    </div>
                 </article>
                 
                 <section class="statistics">
