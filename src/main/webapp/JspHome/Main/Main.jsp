@@ -26,13 +26,7 @@
     // 세션 체크
     UserDTO currentUser = (UserDTO) session.getAttribute("user");
     
-    // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
-    if (currentUser == null) {
-        response.sendRedirect("Main_SignIn.jsp");
-        return;
-    }
-    
-    logger.info("Session check - userNickname: " + currentUser.getNickname());
+    logger.info("Session check - userNickname: " + (currentUser != null ? currentUser.getNickname() : "Not logged in"));
     logger.info("isLoggedIn: " + (currentUser != null));
     
     // 로그인된 경우에만 사용자 정보 조회
