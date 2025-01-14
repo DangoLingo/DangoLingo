@@ -8,14 +8,19 @@
 <div class="header">
     <div class="header-content">
         <div class="header-left">
-            <a href="${pageContext.request.contextPath}/JspHome/Main/Basic.jsp" class="logo-link">
+            <button class="hamburger" id="hamburgerBtn" aria-label="메뉴 열기">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a href="${pageContext.request.contextPath}/JspHome/Main/Main.jsp" class="logo-link">
                 <div class="logo">당고링고</div>
             </a>
             <% if (isLoggedIn) { %>
-                <nav class="nav-menu">
+                <nav class="nav-menu" id="navMenu">
                     <a href="${pageContext.request.contextPath}/JspHome/Dango/Basic.jsp" class="nav-item">당고</a>
-                    <a href="${pageContext.request.contextPath}/JspHome/Words/Basic.jsp" class="nav-item">단어장</a>
-                    <a href="${pageContext.request.contextPath}/JspHome/Ranking/Basic.jsp" class="nav-item">랭킹</a>
+                    <a href="${pageContext.request.contextPath}/JspHome/Words/Words.jsp" class="nav-item">단어장</a>
+                    <a href="${pageContext.request.contextPath}/JspHome/Ranking/Ranking.jsp" class="nav-item">랭킹</a>
                 </nav>
             <% } %>
         </div>
@@ -25,10 +30,28 @@
                 <button class="auth-button">회원가입</button>
             <% } else { %>
                 <div class="profile-menu">
-                    <img src="../Main/images/dango-profile.png" alt="프로필" class="profile-image">
-                    <button class="auth-button">로그아웃</button>
+                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango-profile-1.png" alt="프로필" class="profile-image">
+                    <button class="auth-button" onclick="handleLogout()">로그아웃</button>
                 </div>
             <% } %>
         </div>
     </div>
-</div> 
+</div>
+
+<script>
+    document.getElementById('hamburgerBtn').addEventListener('click', function() {
+        document.getElementById('navMenu').classList.toggle('show');
+        this.classList.toggle('active');
+    });
+
+    function handleLogout() {
+        console.log('로그아웃 버튼 클릭됨');
+        if (confirm('로그아웃 하시겠습니까?')) {
+            console.log('로그아웃 확인');
+            window.location.href = '${pageContext.request.contextPath}/JspHome/Main/Main.jsp?action=logout';
+            console.log('로그아웃 페이지로 이동');
+        } else {
+            console.log('로그아웃 취소');
+        }
+    }
+</script> 

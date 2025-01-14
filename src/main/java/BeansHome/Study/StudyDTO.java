@@ -41,6 +41,8 @@ public class StudyDTO
     private Date studyDate;
     /** studyCount   : 총 학습 단어 개수 */
     private int studyCount;
+    /** studyLevel   : 학습 레벨 (0-4) */
+    private int studyLevel;
 
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
@@ -117,6 +119,14 @@ public class StudyDTO
 
     public void setStudyCount(int studyCount) {
         this.studyCount = studyCount;
+    }
+
+    public int getStudyLevel() {
+        return studyLevel;
+    }
+
+    public void setStudyLevel(int studyLevel) {
+        this.studyLevel = studyLevel;
     }
     // —————————————————————————————————————————————————————————————————————————————————————
 }

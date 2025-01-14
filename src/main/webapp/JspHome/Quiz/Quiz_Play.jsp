@@ -116,6 +116,14 @@ String Date2 = Sdf.format(CurDate);
 Sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss 입니다.");
 String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 // ---------------------------------------------------------------------
+
+// 퀴즈 설정 파라미터 받기
+String quizCount = request.getParameter("quizCount");
+String quizType = request.getParameter("quizType");
+
+// 기본값 설정
+if(quizCount == null) quizCount = "10";
+if(quizType == null) quizType = "kanji-hira";
 %>
 <%--------------------------------------------------------------------------
 [Beans/DTO 선언 및 속성 지정 영역]
@@ -166,106 +174,36 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 
 %>
 <body>
-		 <%@ include file="../Common/Navbar.jsp"%>
-	<main>
-		<%----------------------------------------------------------------------
-		[ 1) 상단 진행 상황 ]
-		--------------------------------------------------------------------------%>
-		<div class="progress">
-			<span>13/50</span> 
-			<span class="time-container"> 
-				<span id="timePassed">30분 12초</span> 
-				<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-	   			    <circle cx="20" cy="20" r="20" fill="#324931" />
-	   			    <svg xmlns="http://www.w3.org/2000/svg" x="8" y="8" width="24" height="24" viewBox="0 0 24 24" fill="none">
-		     		    <g clip-path="url(#clip0_405_1299)">
-		        			<path d="M10.09 15.59L11.5 17L16.5 12L11.5 7L10.09 8.41L12.67 11H3V13H12.67L10.09 15.59ZM19 3H5C3.89 3 3 3.9 3 5V9H5V5H19V19H5V15H3V19C3 20.1 3.89 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z" fill="white" />
-		     			</g>
-	    			</svg>
- 			     </svg>
-			</span>
-		</div>
-		<%----------------------------------------------------------------------
-		[ 2) 문제 제시 ]
-		--------------------------------------------------------------------------%>
-		<div class="word-display">食べる</div>
-		<%----------------------------------------------------------------------
-		[ 3) 단어 선택 버튼 ]
-		--------------------------------------------------------------------------%>
-		<div class="buttons">
-			<button class="button">잠자다</button>
-			<button class="button">먹다</button>
-			<button class="button">달리다</button>
-			<button class="button">훔치다</button>
-		</div>
-	</main>
-		 <%@ include file="../Common/Footer.jsp"%>
-	<%----------------------------------------------------------------------
-	[HTML Page - END]
-	--------------------------------------------------------------------------%>
-	<%----------------------------------------------------------------------
-	[HTML Page - 자바스크립트 구현 영역 (하단)]
-	[외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
-	--------------------------------------------------------------------------%>
-	<script type="text/javascript">
-		// -----------------------------------------------------------------
-		// [사용자 함수 및 로직 구현]
-		// -----------------------------------------------------------------
-
-		// -----------------------------------------------------------------
-	</script>
-	<%------------------------------------------------------------------
-	[JSP 페이지에서 바로 이동(바이패스)]
-	----------------------------------------------------------------------%>
-	<%------------------------------------------------------------------
-	바이패스 방법1	: JSP forward 액션을 사용 한 페이지 이동
-				:-------------------------------------------------------
-				: page	- 이동 할 새로운 페이지 주소
-				: name	- page 쪽에 전달 할 파라미터 명칭
-				: value	- page 쪽에 전달 할 파라미터 데이터
-				:		- page 쪽에서 request.getParameter("name1")로 읽음
-				:-------------------------------------------------------
-				: 이 방법은 기다리지 않고 바로 이동하기 때문에 현재 화면이 표시되지 않음
-				: 브라우저 Url 주소는 현재 페이지로 유지 됨
-	--------------------------------------------------------------------
-	<jsp:forward page="Hello.jsp">
-		<jsp:param name="name1" value='value1'/>
-		<jsp:param name="name2" value='value2'/>
-	</jsp:forward>
-	--%>
-	<%
-	// -----------------------------------------------------------------
-	//	바이패스 방법2	: RequestDispatcher을 사용 한 페이지 이동
-	//				:---------------------------------------------------
-	//				: sUrl	- 이동 할 새로운 페이지 주소
-	//				:		- sUrl 페이지 주소에 GET 파라미터 전달 가능
-	//				:		- sUrl 페이지가 갱신됨 즉,
-	//				:		- sUrl 페이지 주소에 GET 파라미터 유무에 상관없이
-	//				:		- sUrl 페이지 쪽에서 request.getParameter() 사용가능
-	//				:-------------------------------------------------------
-	//				: 이 방법은 기다리지 않고 바로 이동하기 때문에 현재 화면이 표시되지 않음
-	//				: 브라우저 Url 주소는 현재 페이지로 유지 됨
-	// -----------------------------------------------------------------
-	// String sUrl = "Hello.jsp?name1=value1&name2=value2";
-	//
-	// RequestDispatcher dispatcher = request.getRequestDispatcher(sUrl);
-	// dispatcher.forward(request, response);
-	// -----------------------------------------------------------------
-	//	바이패스 방법3	: response.sendRedirect을 사용 한 페이지 이동
-	//				:---------------------------------------------------
-	//				: sUrl	- 이동 할 새로운 페이지 주소
-	//				:		- sUrl 페이지에 GET 파라미터만 전달 가능
-	//				:		- sUrl 페이지 갱신 없음 즉,
-	//				:		- sUrl 페이지 주소에 GET 파라미터 있는 경우만
-	//				:		- sUrl 페이지 쪽에서 request.getParameter() 사용가능
-	//				:-------------------------------------------------------
-	//				: 이 방법은 기다리지 않고 바로 이동하기 때문에 현재 화면이 표시되지 않음
-	//				: 브라우저의 Url 주소는 sUrl 페이지로 변경 됨
-	// -----------------------------------------------------------------
-	//String sUrl = "Hello.jsp?name1=value1&name2=value2";
-	//
-	//response.sendRedirect(sUrl);
-	// -----------------------------------------------------------------
-	%>
+    <%@ include file="../Common/Navbar.jsp"%>
+    <div class="container">
+        <main class="main-container">
+            <div class="quiz-box">
+                <div class="progress">
+                    <span>1/<%= quizCount %></span> 
+                    <span class="time-container"> 
+                        <span id="timePassed">30분 12초</span> 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" 
+                             onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Final.jsp'" 
+                             style="cursor: pointer;">
+                            <circle cx="20" cy="20" r="20" fill="#324931" />
+                            <svg xmlns="http://www.w3.org/2000/svg" x="8" y="8" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <g clip-path="url(#clip0_405_1299)">
+                                    <path d="M10.09 15.59L11.5 17L16.5 12L11.5 7L10.09 8.41L12.67 11H3V13H12.67L10.09 15.59ZM19 3H5C3.89 3 3 3.9 3 5V9H5V5H19V19H5V15H3V19C3 20.1 3.89 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z" fill="white" />
+                                </g>
+                            </svg>
+                        </svg>
+                    </span>
+                </div>
+                <div class="word-display">食べる</div>
+                <div class="buttons">
+                    <button class="button">잠자다</button>
+                    <button class="button">먹다</button>
+                    <button class="button">달리다</button>
+                    <button class="button">훔치다</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <%@ include file="../Common/Footer.jsp"%>
 </body>
 </html>
