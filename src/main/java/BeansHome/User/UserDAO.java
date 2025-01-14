@@ -29,7 +29,7 @@ public class UserDAO {
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
-    private static final DBOracleMgr db = DBOracleMgr.getInstance();
+    private static final DBOracleMgr db = new DBOracleMgr();
     private static final Logger logger = Logger.getLogger(UserDAO.class.getName());
     
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -58,46 +58,38 @@ public class UserDAO {
     ***********************************************************************/
     public UserDTO getUserById(int userId) throws Exception {
         UserDTO user = null;
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
+        String sql = "SELECT * FROM TB_USER WHERE USER_ID = ?";
+        Object[] params = new Object[]{userId};
+        
         try {
             logger.info("Attempting to get user by ID: " + userId);
-            conn = db.getConnection();
-            String sql = "SELECT * FROM TB_USER WHERE USER_ID = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, userId);
-            
-            logger.info("Executing SQL query: " + sql);
-            rs = pstmt.executeQuery();
-            
-            if (rs.next()) {
-                user = new UserDTO();
-                user.setUserId(rs.getInt("USER_ID"));
-                user.setEmail(rs.getString("EMAIL"));
-                user.setName(rs.getString("NAME"));
-                user.setNickname(rs.getString("NICKNAME"));
-                user.setIntro(rs.getString("INTRO"));
-                user.setStudyDate(rs.getDate("STUDY_DATE"));
-                // Timestamp를 int로 변환 (초 단위로)
-                Timestamp ts = rs.getTimestamp("STUDY_TIME");
-                user.setStudyTime(ts != null ? (int)(ts.getTime() / 1000) : 0);
-                user.setStudyDay(rs.getInt("STUDY_DAY"));
-                user.setQuizCount(rs.getInt("QUIZ_COUNT"));
-                user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
-                user.setPoint(rs.getInt("POINT"));
-                logger.info("User found: " + user.getNickname());
-            } else {
-                logger.warning("No user found with ID: " + userId);
+            if (db.RunQuery(sql, params, 0, true)) { // 0은 OUT parameter가 없음을 의미, true는 SELECT 쿼리임을 의미
+                ResultSet rs = db.Rs;
+                if (rs.next()) {
+                    user = new UserDTO();
+                    user.setUserId(rs.getInt("USER_ID"));
+                    user.setEmail(rs.getString("EMAIL"));
+                    user.setName(rs.getString("NAME"));
+                    user.setNickname(rs.getString("NICKNAME"));
+                    user.setIntro(rs.getString("INTRO"));
+                    user.setStudyDate(rs.getDate("STUDY_DATE"));
+                    // Timestamp를 int로 변환 (초 단위로)
+                    Timestamp ts = rs.getTimestamp("STUDY_TIME");
+                    user.setStudyTime(ts != null ? (int)(ts.getTime() / 1000) : 0);
+                    user.setStudyDay(rs.getInt("STUDY_DAY"));
+                    user.setQuizCount(rs.getInt("QUIZ_COUNT"));
+                    user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
+                    user.setPoint(rs.getInt("POINT"));
+                    logger.info("User found: " + user.getNickname());
+                } else {
+                    logger.warning("No user found with ID: " + userId);
+                }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(Level.SEVERE, "Error getting user by ID: " + userId, e);
-            e.printStackTrace();
-        } finally {
-            db.close(rs, pstmt, conn);
+            throw e;
         }
-
+        
         return user;
     }
 
@@ -108,40 +100,21 @@ public class UserDAO {
     * @throws Exception
     ***********************************************************************/
     public boolean updateUserStats(UserDTO user) throws Exception {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean success = false;
-
+        String sql = "UPDATE TB_USER SET STUDY_DAY = ?, QUIZ_COUNT = ?, QUIZ_RIGHT = ?, POINT = ? WHERE USER_ID = ?";
+        Object[] params = new Object[]{
+            user.getStudyDay(),
+            user.getQuizCount(),
+            user.getQuizRight(),
+            user.getPoint(),
+            user.getUserId()
+        };
+        
         try {
-            // -----------------------------------------------------------------------------
-            // 사용자 통계 정보 업데이트
-            // -----------------------------------------------------------------------------
-            conn = db.getConnection();
-            String updateSql = "UPDATE TB_USER SET " +
-                              "STUDY_DAY = ?, QUIZ_COUNT = ?, QUIZ_RIGHT = ?, POINT = ? " +
-                              "WHERE USER_ID = ?";
-            pstmt = conn.prepareStatement(updateSql);
-            
-            pstmt.setInt(1, user.getStudyDay());
-            pstmt.setInt(2, user.getQuizCount());
-            pstmt.setInt(3, user.getQuizRight());
-            pstmt.setInt(4, user.getPoint());
-            pstmt.setInt(5, user.getUserId());
-
-            success = pstmt.executeUpdate() > 0;
-            if (success) {
-                conn.commit();
-            }
-            // -----------------------------------------------------------------------------
-        } catch (Exception Ex) {
-            if (conn != null) conn.rollback();
-            ExceptionMgr.DisplayException(Ex);
-            throw Ex;
-        } finally {
-            db.close(pstmt, conn);
+            return db.RunQuery(sql, params, 0, false); // false는 UPDATE 쿼리임을 의미
+        } catch (Exception e) {
+            logger.severe("Error updating user stats: " + e.getMessage());
+            throw e;
         }
-
-        return success;
     }
 
     /***********************************************************************
@@ -152,63 +125,35 @@ public class UserDAO {
     ***********************************************************************/
     public UserDTO login(String email, String password) throws Exception {
         UserDTO user = null;
-        Connection conn = null;
-        CallableStatement cstmt = null;
-        ResultSet rs = null;
-
+        String sql = "BEGIN SP_USER_LOGIN(?, ?, ?); END;";
+        Object[] params = new Object[]{email, password};
+        
         try {
-            // -----------------------------------------------------------------------------
-            // 로그인 처리
-            // -----------------------------------------------------------------------------
-            if (email != null && password != null) {
-                logger.info("\n=== Login Process Start ===");
-                logger.info("Attempting login for email: [" + email + "]");
-                
-                conn = db.getConnection();
-                if (conn != null) {
-                    // 로그인 프로시저 호출
-                    String loginSql = "BEGIN SP_USER_LOGIN(?, ?, ?); END;";
-                    logger.info("\n=== SQL Query ===");
-                    logger.info("Procedure: SP_USER_LOGIN");
-                    
-                    cstmt = conn.prepareCall(loginSql);
-                    cstmt.setString(1, email);
-                    cstmt.setString(2, password);
-                    cstmt.registerOutParameter(3, OracleTypes.CURSOR);
-                    
-                    logger.info("\n=== Executing Procedure ===");
-                    cstmt.execute();
-                    
-                    rs = (ResultSet)cstmt.getObject(3);
-                    
-                    if (rs.next()) {
-                        String storedPassword = rs.getString("PASSWORD");
+            if (db.RunQuery(sql, params, 3, true)) { // 3은 세 번째 파라미터가 OUT cursor임을 의미
+                ResultSet rs = db.Rs;
+                if (rs.next()) {
+                    String storedPassword = rs.getString("PASSWORD");
+                    if (password.equals(storedPassword)) {
+                        user = new UserDTO();
+                        user.setUserId(rs.getInt("USER_ID"));
+                        user.setEmail(rs.getString("EMAIL"));
+                        user.setName(rs.getString("NAME"));
+                        user.setNickname(rs.getString("NICKNAME"));
+                        user.setIntro(rs.getString("INTRO"));
+                        user.setStudyDate(rs.getDate("STUDY_DATE"));
+                        user.setStudyTime(rs.getInt("STUDY_TIME"));
+                        user.setStudyDay(rs.getInt("STUDY_DAY"));
+                        user.setQuizCount(rs.getInt("QUIZ_COUNT"));
+                        user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
+                        user.setPoint(rs.getInt("POINT"));
                         
-                        if (password.equals(storedPassword)) {
-                            user = new UserDTO();
-                            user.setUserId(rs.getInt("USER_ID"));
-                            user.setEmail(rs.getString("EMAIL"));
-                            user.setName(rs.getString("NAME"));
-                            user.setNickname(rs.getString("NICKNAME"));
-                            user.setIntro(rs.getString("INTRO"));
-                            user.setStudyDate(rs.getDate("STUDY_DATE"));
-                            user.setStudyTime(rs.getInt("STUDY_TIME"));
-                            user.setStudyDay(rs.getInt("STUDY_DAY"));
-                            user.setQuizCount(rs.getInt("QUIZ_COUNT"));
-                            user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
-                            user.setPoint(rs.getInt("POINT"));
-                            
-                            logger.info("Login successful for user: " + user.getEmail());
-                        }
+                        logger.info("Login successful for user: " + user.getEmail());
                     }
                 }
             }
-            // -----------------------------------------------------------------------------
-        } catch (Exception Ex) {
-            ExceptionMgr.DisplayException(Ex);
-            throw Ex;
-        } finally {
-            db.close(rs, cstmt, conn);
+        } catch (Exception e) {
+            logger.severe("Error during login: " + e.getMessage());
+            throw e;
         }
         
         return user;
@@ -220,60 +165,20 @@ public class UserDAO {
     * @return boolean : 등록 성공 여부
     ***********************************************************************/
     public boolean register(UserDTO user) throws Exception {
-        Connection conn = null;
-        CallableStatement cstmt = null;
-        boolean success = false;
-
+        String sql = "{call SP_USER_REGISTER(?, ?, ?, ?, ?)}";
+        Object[] params = new Object[]{
+            user.getEmail(),
+            user.getPassword(),
+            user.getName(),
+            user.getNickname()
+        };
+        
         try {
-            // 필수 파라미터 검증
-            if (user == null || 
-                user.getEmail() == null || 
-                user.getPassword() == null || 
-                user.getName() == null || 
-                user.getNickname() == null) {
-                logger.severe("Required parameters are missing");
-                return false;
-            }
-
-            conn = db.getConnection();
-            String sql = "{call SP_USER_REGISTER(?, ?, ?, ?, ?)}";
-            cstmt = conn.prepareCall(sql);
-
-            // 파라미터 설정
-            cstmt.setString(1, user.getEmail());
-            cstmt.setString(2, user.getPassword());
-            cstmt.setString(3, user.getName());
-            cstmt.setString(4, user.getNickname());
-            cstmt.registerOutParameter(5, Types.INTEGER);
-
-            // 프로시저 실행
-            cstmt.execute();
-            int result = cstmt.getInt(5);
-
-            switch (result) {
-                case 1:
-                    success = true;
-                    logger.info("Registration successful for: " + user.getEmail());
-                    break;
-                case 0:
-                    logger.warning("Email already exists: " + user.getEmail());
-                    break;
-                case -1:
-                    logger.warning("Nickname already exists: " + user.getNickname());
-                    break;
-                default:
-                    logger.severe("Unknown result code: " + result);
-                    break;
-            }
-
-        } catch (SQLException e) {
-            logger.severe("SQL Error: " + e.getMessage());
+            return db.RunQuery(sql, params, 5, false); // 5는 다섯 번째 파라미터가 OUT parameter임을 의미
+        } catch (Exception e) {
+            logger.severe("Error during registration: " + e.getMessage());
             throw e;
-        } finally {
-            db.close(cstmt, conn);
         }
-
-        return success;
     }
 }
 //#################################################################################################

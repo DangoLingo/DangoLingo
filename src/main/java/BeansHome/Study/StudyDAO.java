@@ -23,7 +23,7 @@ public class StudyDAO {
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
-    private static final DBOracleMgr db = DBOracleMgr.getInstance();
+    private static final DBOracleMgr db = new DBOracleMgr();
     
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
@@ -51,29 +51,29 @@ public class StudyDAO {
     ***********************************************************************/
     public List<StudyDTO> getStudyStreak(int userId) throws Exception {
         List<StudyDTO> streaks = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
+        String sql = "SELECT STUDY_DATE, COUNT(*) as STUDY_COUNT " +
+                     "FROM TB_STUDY " +
+                     "WHERE USER_ID = ? " +
+                     "GROUP BY STUDY_DATE " +
+                     "ORDER BY STUDY_DATE DESC";
+        
+        Object[] params = new Object[]{userId};
+        
         try {
-            conn = db.getConnection();
-            pstmt = db.getPreparedStatement(conn, "STUDY.SELECT_STREAK");
-            pstmt.setInt(1, userId);
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                StudyDTO study = new StudyDTO();
-                study.setStudyDate(rs.getDate("STUDY_DATE"));
-                study.setStudyCount(rs.getInt("STUDY_COUNT"));
-                streaks.add(study);
+            if (db.RunQuery(sql, params, 0, true)) {
+                ResultSet rs = db.Rs;
+                while (rs.next()) {
+                    StudyDTO study = new StudyDTO();
+                    study.setStudyDate(rs.getDate("STUDY_DATE"));
+                    study.setStudyCount(rs.getInt("STUDY_COUNT"));
+                    streaks.add(study);
+                }
             }
         } catch (Exception Ex) {
             ExceptionMgr.DisplayException(Ex);
             throw Ex;
-        } finally {
-            db.close(rs, pstmt, conn);
         }
-
+        
         return streaks;
     }
 
@@ -84,36 +84,22 @@ public class StudyDAO {
     * @throws Exception
     ***********************************************************************/
     public boolean insertStudyRecord(StudyDTO study) throws Exception {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean success = false;
-
+        String sql = "INSERT INTO TB_STUDY (USER_ID, STUDY_DATE, STUDY_COUNT, STUDY_LEVEL) " +
+                     "VALUES (?, ?, ?, ?)";
+        
+        Object[] params = new Object[]{
+            study.getUserId(),
+            study.getStudyDate(),
+            study.getStudyCount(),
+            study.getStudyLevel()
+        };
+        
         try {
-            // -----------------------------------------------------------------------------
-            // 학습 기록 추가
-            // -----------------------------------------------------------------------------
-            conn = db.getConnection();
-            pstmt = db.getPreparedStatement(conn, "STUDY.INSERT");
-            
-            pstmt.setInt(1, study.getUserId());
-            pstmt.setDate(2, study.getStudyDate());
-            pstmt.setInt(3, study.getStudyCount());
-            pstmt.setInt(4, study.getStudyLevel());
-
-            success = pstmt.executeUpdate() > 0;
-            if (success) {
-                conn.commit();
-            }
-            // -----------------------------------------------------------------------------
+            return db.RunQuery(sql, params, 0, false); // false는 INSERT 쿼리임을 의미
         } catch (Exception Ex) {
-            if (conn != null) conn.rollback();
             ExceptionMgr.DisplayException(Ex);
             throw Ex;
-        } finally {
-            db.close(pstmt, conn);
         }
-
-        return success;
     }
 }
 //#################################################################################################

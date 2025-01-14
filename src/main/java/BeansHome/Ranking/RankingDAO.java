@@ -23,7 +23,7 @@ public class RankingDAO {
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
-    private static final DBOracleMgr db = DBOracleMgr.getInstance();
+    private static final DBOracleMgr db = new DBOracleMgr();
     
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역변수 관리 - 필수영역(정적변수)
@@ -63,39 +63,41 @@ public class RankingDAO {
      ***********************************************************************/
     public List<RankingDTO> getRankings(String type, int limit) throws Exception {
         List<RankingDTO> rankings = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        
+        String sql = switch (type) {
+            case "words" -> "SELECT * FROM (" +
+                           "SELECT u.*, DENSE_RANK() OVER (ORDER BY quiz_right DESC) as rank " +
+                           "FROM TB_USER u) WHERE rank <= ?";
+            case "points" -> "SELECT * FROM (" +
+                            "SELECT u.*, DENSE_RANK() OVER (ORDER BY point DESC) as rank " +
+                            "FROM TB_USER u) WHERE rank <= ?";
+            case "dangos" -> "SELECT * FROM (" +
+                            "SELECT u.*, DENSE_RANK() OVER (ORDER BY dangos DESC) as rank " +
+                            "FROM TB_USER u) WHERE rank <= ?";
+            default -> "SELECT * FROM (" +
+                      "SELECT u.*, DENSE_RANK() OVER (ORDER BY point DESC) as rank " +
+                      "FROM TB_USER u) WHERE rank <= ?";
+        };
+        
+        Object[] params = new Object[]{limit};
         
         try {
-            conn = db.getConnection();
-            String query = switch (type) {
-                case "words" -> "RANKING.SELECT_WORDS";
-                case "points" -> "RANKING.SELECT_POINTS";
-                case "dangos" -> "RANKING.SELECT_DANGOS";
-                default -> "RANKING.SELECT_POINTS";
-            };
-            
-            pstmt = db.getPreparedStatement(conn, query);
-            pstmt.setInt(1, limit);
-            rs = pstmt.executeQuery();
-            
-            int rank = 1;
-            while (rs.next()) {
-                RankingDTO ranking = new RankingDTO();
-                ranking.setRank(rank++);
-                ranking.setUserId(rs.getInt("user_id"));
-                ranking.setNickname(rs.getString("nickname"));
-                ranking.setProfileImage(rs.getString("profile_image"));
-                ranking.setScore(getScoreByType(rs, type));
-                ranking.setType(type);
-                rankings.add(ranking);
+            if (db.RunQuery(sql, params, 0, true)) {
+                ResultSet rs = db.Rs;
+                while (rs.next()) {
+                    RankingDTO ranking = new RankingDTO();
+                    ranking.setRank(rs.getInt("rank"));
+                    ranking.setUserId(rs.getInt("user_id"));
+                    ranking.setNickname(rs.getString("nickname"));
+                    ranking.setProfileImage(rs.getString("profile_image"));
+                    ranking.setScore(getScoreByType(rs, type));
+                    ranking.setType(type);
+                    rankings.add(ranking);
+                }
             }
         } catch (Exception Ex) {
             ExceptionMgr.DisplayException(Ex);
             throw Ex;
-        } finally {
-            db.close(rs, pstmt, conn);
         }
         
         return rankings;
@@ -118,34 +120,36 @@ public class RankingDAO {
 
     public RankingDTO getUserRanking(int userId, String type) throws Exception {
         RankingDTO ranking = null;
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
+        
+        String sql = "SELECT u.*, " +
+                     "(SELECT COUNT(*) + 1 FROM TB_USER t WHERE " +
+                     "CASE ? " +
+                     "  WHEN 'words' THEN t.quiz_right > u.quiz_right " +
+                     "  WHEN 'dangos' THEN t.dangos > u.dangos " +
+                     "  ELSE t.point > u.point " +
+                     "END) as rank " +
+                     "FROM TB_USER u WHERE u.user_id = ?";
+        
+        Object[] params = new Object[]{type, userId};
+        
         try {
-            conn = db.getConnection();
-            pstmt = db.getPreparedStatement(conn, "RANKING.SELECT_USER_RANK");
-            pstmt.setString(1, type);
-            pstmt.setString(2, type);
-            pstmt.setInt(3, userId);
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                ranking = new RankingDTO();
-                ranking.setUserId(rs.getInt("user_id"));
-                ranking.setNickname(rs.getString("nickname"));
-                ranking.setProfileImage(rs.getString("profile_image"));
-                ranking.setScore(rs.getInt("score"));
-                ranking.setRank(rs.getInt("rank"));
-                ranking.setType(type);
+            if (db.RunQuery(sql, params, 0, true)) {
+                ResultSet rs = db.Rs;
+                if (rs.next()) {
+                    ranking = new RankingDTO();
+                    ranking.setUserId(rs.getInt("user_id"));
+                    ranking.setNickname(rs.getString("nickname"));
+                    ranking.setProfileImage(rs.getString("profile_image"));
+                    ranking.setScore(getScoreByType(rs, type));
+                    ranking.setRank(rs.getInt("rank"));
+                    ranking.setType(type);
+                }
             }
         } catch (Exception Ex) {
             ExceptionMgr.DisplayException(Ex);
             throw Ex;
-        } finally {
-            db.close(rs, pstmt, conn);
         }
-
+        
         return ranking;
     }
 }
