@@ -54,9 +54,6 @@ public class RankingDTO {
     public String getNickname() { return nickname; }
     public void setNickname(String nickname) { this.nickname = nickname; }
     
-    public String getProfileImage() { return profileImage; }
-    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
-    
     public String getIntro() { return intro; }
     public void setIntro(String intro) { this.intro = intro; }
     

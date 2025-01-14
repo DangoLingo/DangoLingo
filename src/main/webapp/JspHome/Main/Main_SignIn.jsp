@@ -7,18 +7,37 @@
 <%@page import="java.io.*"%>
 
 <% 
+    // 로거 먼저 생성
+    Logger logger = Logger.getLogger("Main_SignIn.jsp");
+    logger.setLevel(Level.ALL);
+    
     // 로깅 설정
     try {
+        Logger rootLogger = Logger.getLogger("");
+        rootLogger.setLevel(Level.ALL);
+        
+        // 콘솔 핸들러 추가
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        consoleHandler.setLevel(Level.ALL);
+        rootLogger.addHandler(consoleHandler);
+        
+        // 기존 로깅 설정 파일 로드
         InputStream logConfig = application.getResourceAsStream("/WEB-INF/classes/logging.properties");
         if (logConfig != null) {
             LogManager.getLogManager().readConfiguration(logConfig);
+            logger.info("Logging configuration loaded successfully");
+        } else {
+            logger.warning("Could not find logging.properties");
         }
     } catch (Exception e) {
         e.printStackTrace();
+        System.out.println("Error setting up logging: " + e.getMessage());
     }
     
-    Logger logger = Logger.getLogger("Main_SignIn.jsp");
-    logger.setLevel(Level.ALL);
+    // 요청 정보 로깅
+    logger.info("\n\n=== New Login Request ===");
+    logger.info("Request Method: " + request.getMethod());
+    logger.info("Remote Address: " + request.getRemoteAddr());
     
     request.setCharacterEncoding("UTF-8");
     
@@ -38,23 +57,27 @@
             logger.warning("Empty fields detected - Email: " + (email == null) + ", Password: " + (password == null));
         } else {
             try {
-                logger.info("Attempting login for email: " + email);
+                logger.info("\n=== Login Request ===");
+                logger.info("Email: [" + email + "]");
+                logger.info("Password length: " + password.length());
+                
                 UserDAO userDAO = new UserDAO();
                 UserDTO user = userDAO.login(email.trim(), password);
                 
+                logger.info("Login result - User: " + (user != null ? user.getEmail() : "null"));
+                
                 if (user != null) {
-                    logger.info("Login successful for user: " + user.getEmail());
-                    // 로그인 성공 - 세션에 사용자 정보 저장
+                    logger.info("Setting session attributes...");
                     session.setAttribute("userId", user.getUserId());
                     session.setAttribute("userEmail", user.getEmail());
                     session.setAttribute("userNickname", user.getNickname());
+                    session.setAttribute("user", user);
+                    logger.info("User logged in successfully: " + user.getEmail());
                     
-                    logger.info("Session attributes set - UserId: " + user.getUserId() + 
-                              ", Email: " + user.getEmail() + 
-                              ", Nickname: " + user.getNickname());
+                    logger.info("Session attributes set successfully");
+                    logger.info("Redirecting to Main.jsp");
                     
-                    // 메인 페이지로 리다이렉트
-                    response.sendRedirect("../Main/Main.jsp");
+                    response.sendRedirect("Main.jsp");
                     return;
                 } else {
                     errorMessage = "이메일 또는 비밀번호가 올바르지 않습니다.";
@@ -62,8 +85,10 @@
                 }
             } catch (Exception e) {
                 errorMessage = "로그인 처리 중 오류가 발생했습니다: " + e.getMessage();
-                logger.severe("Error during login: " + e.getMessage());
-                e.printStackTrace();
+                logger.severe("Error during login process: " + e.getMessage());
+                StringWriter sw = new StringWriter();
+                e.printStackTrace(new PrintWriter(sw));
+                logger.severe("Stack trace: " + sw.toString());
             }
         }
     }

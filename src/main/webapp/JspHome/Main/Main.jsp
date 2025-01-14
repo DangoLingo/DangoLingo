@@ -23,27 +23,30 @@
         return;
     }
     
-    // 세션에서 로그인 상태 확인
-    String userNickname = (String) session.getAttribute("userNickname");
-    boolean isLoggedIn = userNickname != null;
+    // 세션 체크
+    UserDTO currentUser = (UserDTO) session.getAttribute("user");
     
-    logger.info("Session check - userNickname: " + userNickname);
-    logger.info("isLoggedIn: " + isLoggedIn);
+    // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
+    if (currentUser == null) {
+        response.sendRedirect("Main_SignIn.jsp");
+        return;
+    }
+    
+    logger.info("Session check - userNickname: " + currentUser.getNickname());
+    logger.info("isLoggedIn: " + (currentUser != null));
     
     // 로그인된 경우에만 사용자 정보 조회
     UserDAO userDAO = new UserDAO();
     StudyDAO studyDAO = new StudyDAO();
     RankingDAO rankingDAO = new RankingDAO();
-    UserDTO currentUser = null;
     RankingDTO userRanking = null;
     
-    if (isLoggedIn) {
+    if (currentUser != null) {
         try {
             Integer userId = (Integer) session.getAttribute("userId");
             logger.info("Attempting to get user info for userId: " + userId);
             
             // 현재 사용자 정보 조회
-            currentUser = userDAO.getUserById(userId);
             logger.info("Retrieved user info: " + (currentUser != null ? currentUser.getNickname() : "null"));
             
             // 현재 사용자의 랭킹 정보 조회
@@ -78,12 +81,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/dashboard/statistics.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/dashboard/streak.css">
 </head>
-<body class="<%= isLoggedIn ? "logged-in" : "" %>">
+<body class="<%= currentUser != null ? "logged-in" : "" %>">
     <%----------------------------------------------------------------------
     [HTML Page - 헤더 영역]
     --------------------------------------------------------------------------%>
     <header>
-        <% if (isLoggedIn) { %>
+        <% if (currentUser != null) { %>
             <jsp:include page="../Common/Navbar.jsp" />
         <% } %>
     </header>
@@ -91,8 +94,8 @@
     <%----------------------------------------------------------------------
     [HTML Page - 메인 컨텐츠 영역]
     --------------------------------------------------------------------------%>
-    <main class="<%= isLoggedIn ? "main-container" : "intro-container" %>">
-        <% if (!isLoggedIn) { %>
+    <main class="<%= currentUser != null ? "main-container" : "intro-container" %>">
+        <% if (currentUser == null) { %>
             <%------------------------------------------------------------------
             비로그인 상태일 때 표시될 내용
             -------------------------------------------------------------------%>
@@ -150,14 +153,23 @@
             <section class="dashboard">
                 <article class="user-profile">
                     <div class="profile-image-container">
-                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/<%= currentUser.getProfileImage() %>" 
-                             alt="<%= currentUser.getNickname() %>님의 프로필">
+                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/default_profile.png" 
+                             alt="프로필 이미지">
                     </div>
                     <header class="profile-header">
-                        <h2>안녕하세요, <%= currentUser.getNickname() %>님</h2>
-                        <p><%= currentUser.getIntro() %></p>
-                        <a href="${pageContext.request.contextPath}/JspHome/Words/Words.jsp" class="study-button">학습하기</a>
+                        <h2><%= currentUser.getNickname() %></h2>
+                        <p class="user-intro"><%= currentUser.getIntro() != null ? currentUser.getIntro() : "소개글이 없습니다." %></p>
                     </header>
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">포인트</span>
+                            <span class="stat-value"><%= currentUser.getPoint() %></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">학습일</span>
+                            <span class="stat-value"><%= currentUser.getStudyDay() %></span>
+                        </div>
+                    </div>
                 </article>
                 
                 <section class="statistics">
@@ -248,7 +260,7 @@
     [HTML Page - 푸터 영역]
     --------------------------------------------------------------------------%>
     <footer>
-        <% if (isLoggedIn) { %>
+        <% if (currentUser != null) { %>
             <jsp:include page="../Common/Footer.jsp" />
         <% } %>
     </footer>

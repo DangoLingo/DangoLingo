@@ -15,8 +15,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.StringWriter;
 import java.io.PrintWriter;
-import oracle.jdbc.OracleTypes;
-import java.sql.Types;
+import oracle.jdbc.internal.OracleTypes;
+import java.util.logging.ConsoleHandler;
 
 //═════════════════════════════════════════════════════════════════════════════════════════
 //사용자정의 클래스 영역
@@ -41,8 +41,19 @@ public class UserDAO {
     ***********************************************************************/
     public UserDAO() {
         try {
+            // 로거 설정
+            logger.setLevel(Level.ALL);
+            ConsoleHandler handler = new ConsoleHandler();
+            handler.setLevel(Level.ALL);
+            logger.addHandler(handler);
+            
+            logger.info("\n=== UserDAO Initialization ===");
             ExceptionMgr.SetMode(ExceptionMgr.RUN_MODE.DEBUG);
+            
+            // DB 연결 설정
+            db.SetConnectionStringFromProperties("db.properties");
         } catch (Exception Ex) {
+            logger.severe("Error in constructor: " + Ex.getMessage());
             ExceptionMgr.DisplayException(Ex);
         }
     }
@@ -125,35 +136,55 @@ public class UserDAO {
     ***********************************************************************/
     public UserDTO login(String email, String password) throws Exception {
         UserDTO user = null;
-        String sql = "BEGIN SP_USER_LOGIN(?, ?, ?); END;";
-        Object[] params = new Object[]{email, password};
+        String sql = "{call SP_USER_LOGIN(?, ?, ?)}";  // 일반적인 프로시저 호출 형식
+        Object[] params = new Object[2];
         
         try {
-            if (db.RunQuery(sql, params, 3, true)) { // 3은 세 번째 파라미터가 OUT cursor임을 의미
-                ResultSet rs = db.Rs;
-                if (rs.next()) {
-                    String storedPassword = rs.getString("PASSWORD");
-                    if (password.equals(storedPassword)) {
+            logger.info("\n=== Login Process Start ===");
+            logger.info("Email: [" + email + "]");
+            
+            if (db.DbConnect()) {
+                params[0] = email;               // IN parameter
+                params[1] = password;            // IN parameter
+                
+                // RunQuery 호출 시 OUT parameter 위치를 3으로 지정
+                if (db.RunQuery(sql, params, 3, true)) {
+                    ResultSet rs = db.Rs;
+                    logger.info("\n=== Query executed successfully ===");
+                    if (rs != null && rs.next()) {
                         user = new UserDTO();
                         user.setUserId(rs.getInt("USER_ID"));
                         user.setEmail(rs.getString("EMAIL"));
+                        user.setPassword(rs.getString("PASSWORD"));
                         user.setName(rs.getString("NAME"));
                         user.setNickname(rs.getString("NICKNAME"));
                         user.setIntro(rs.getString("INTRO"));
                         user.setStudyDate(rs.getDate("STUDY_DATE"));
                         user.setStudyTime(rs.getInt("STUDY_TIME"));
-                        user.setStudyDay(rs.getInt("STUDY_DAY"));
+                        user.setStudyDay(rs.getInt("STUDY_DAY")); 
                         user.setQuizCount(rs.getInt("QUIZ_COUNT"));
                         user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
                         user.setPoint(rs.getInt("POINT"));
                         
-                        logger.info("Login successful for user: " + user.getEmail());
+                        // 비밀번호 검증
+                        if (!password.equals(user.getPassword())) {
+                            logger.warning("Invalid password for user: " + email);
+                            user = null;
+                        } else {
+                            logger.info("Login successful for user: " + email);
+                        }
+                    } else {
+                        logger.warning("No user found with email: " + email);
                     }
+                } else {
+                    logger.warning("Failed to execute login query");
                 }
             }
         } catch (Exception e) {
-            logger.severe("Error during login: " + e.getMessage());
+            logger.severe("Login error: " + e.getMessage());
             throw e;
+        } finally {
+            db.DbDisConnect();
         }
         
         return user;

@@ -51,12 +51,10 @@ public class MockDataManager {
             user.setName("사용자" + (i + 1));
             user.setNickname(nicknames[i]);
             user.setIntro(intros[i]);
-            user.setProfileImage(profileImages[i]);
             user.setStudyDay(30 - i);
             user.setQuizCount(100 + (i * 10));
             user.setQuizRight(80 + (i * 8));
             user.setPoint(1000 + (i * 100));
-            user.setDangos(50 + (i * 5));
             
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_MONTH, -i);
@@ -132,7 +130,6 @@ public class MockDataManager {
         
         Comparator<UserDTO> comparator = switch (type) {
             case "words" -> Comparator.comparing(UserDTO::getQuizRight).reversed();
-            case "dangos" -> Comparator.comparing(UserDTO::getDangos).reversed();
             case "points" -> Comparator.comparing(UserDTO::getPoint).reversed();
             default -> Comparator.comparing(UserDTO::getPoint).reversed();
         };
@@ -152,7 +149,6 @@ public class MockDataManager {
             ranking.setRank(i + 1);
             ranking.setUserId(user.getUserId());
             ranking.setNickname(user.getNickname());
-            ranking.setProfileImage(user.getProfileImage());
             ranking.setIntro(user.getIntro());
             ranking.setScore(getScoreByType(user, type));
             ranking.setType(type);
@@ -166,7 +162,6 @@ public class MockDataManager {
         return switch (type) {
             case "words" -> user.getQuizRight();
             case "points" -> user.getPoint();
-            case "dangos" -> user.getDangos();
             default -> user.getPoint();
         };
     }

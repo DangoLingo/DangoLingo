@@ -89,7 +89,6 @@ public class RankingDAO {
                     ranking.setRank(rs.getInt("rank"));
                     ranking.setUserId(rs.getInt("user_id"));
                     ranking.setNickname(rs.getString("nickname"));
-                    ranking.setProfileImage(rs.getString("profile_image"));
                     ranking.setScore(getScoreByType(rs, type));
                     ranking.setType(type);
                     rankings.add(ranking);
@@ -139,7 +138,6 @@ public class RankingDAO {
                     ranking = new RankingDTO();
                     ranking.setUserId(rs.getInt("user_id"));
                     ranking.setNickname(rs.getString("nickname"));
-                    ranking.setProfileImage(rs.getString("profile_image"));
                     ranking.setScore(getScoreByType(rs, type));
                     ranking.setRank(rs.getInt("rank"));
                     ranking.setType(type);
