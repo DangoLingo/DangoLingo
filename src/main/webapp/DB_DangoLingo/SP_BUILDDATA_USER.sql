@@ -7,13 +7,13 @@ BEGIN
   	DECLARE
 mKey			NUMBER;
 		mUserId			NUMBER;						-- 유저 번호
-		mEmail			VARCHAR2(20 CHAR);			-- 이메일
+		mEmail			VARCHAR2(50 CHAR);			-- 이메일
 		mPassword		VARCHAR2(20 CHAR);			-- 비밀번호
 		mName			VARCHAR2(20 CHAR);			-- 이름
 		mNickName		VARCHAR2(20 CHAR);			-- 닉네임
-		mIntro			VARCHAR2(20 CHAR);			-- 소개글
+		mIntro			VARCHAR2(50 CHAR);			-- 소개글
 		mStudyDate		DATE;						-- 마지막 학습 일자
-		mStudyTime		NUMBER;						-- 총 학습 시간
+		mStudyTime		NUMBER;					-- 총 학습 시간
 		mStudyDay		NUMBER;						-- 연속 학습일
 		mQuizCount		NUMBER;						-- 퀴즈 문제 수
 		mQuizRight		NUMBER;						-- 퀴즈 정답 수
