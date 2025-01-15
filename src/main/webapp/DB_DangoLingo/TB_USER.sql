@@ -11,13 +11,13 @@
 	CREATE TABLE TB_USER
 	(
 		user_id			NUMBER				PRIMARY KEY,		-- 유저 번호
-		email			VARCHAR2(20 CHAR)	NOT NULL,			-- 이메일
+		email			VARCHAR2(50 CHAR)	NOT NULL,			-- 이메일
 		password		VARCHAR2(20 CHAR)	NOT NULL,			-- 비밀번호
 		name			VARCHAR2(20 CHAR)	NOT NULL,			-- 이름
 		nickname		VARCHAR2(20 CHAR)	NOT NULL UNIQUE,	-- 닉네임
-		intro			VARCHAR2(20 CHAR)	NULL,				-- 소개글
+		intro			VARCHAR2(50 CHAR)	NULL,				-- 소개글
 		study_date		DATE				NULL,				-- 마지막 학습 일자
-		study_time		TIMESTAMP			NULL,				-- 총 학습 시간
+		study_time		NUMBER  			NULL,				-- 총 학습 시간
 		study_day		NUMBER				DEFAULT		0,		-- 연속 학습일
 		quiz_count		NUMBER				DEFAULT		0,		-- 퀴즈 문제 수
 		quiz_right		NUMBER				DEFAULT		0,		-- 퀴즈 정답 횟수
