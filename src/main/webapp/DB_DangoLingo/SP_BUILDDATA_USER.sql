@@ -1,11 +1,11 @@
-CREATE OR REPLACE PROCEDURE SP_BUILDDATA_USER
+create or replace PROCEDURE SP_BUILDDATA_USER
 (
 	iCount		IN NUMBER		-- 생성할 유저 레코드 수
 )
 IS
 BEGIN
   	DECLARE
-		mKey			NUMBER;							
+mKey			NUMBER;
 		mUserId			NUMBER;						-- 유저 번호
 		mEmail			VARCHAR2(50 CHAR);			-- 이메일
 		mPassword		VARCHAR2(20 CHAR);			-- 비밀번호
@@ -18,7 +18,7 @@ BEGIN
 		mQuizCount		NUMBER;						-- 퀴즈 문제 수
 		mQuizRight		NUMBER;						-- 퀴즈 정답 수
 		mPoint			NUMBER;						-- 포인트
-	BEGIN
+BEGIN
 		mKey := 1;
 
 		DELETE  TB_USER;
@@ -40,10 +40,10 @@ BEGIN
 			mQuizRight := ROUND(DBMS_RANDOM.VALUE(1, 300), 0);
 			mPoint := ROUND(DBMS_RANDOM.VALUE(1, 25000), 0);
 
-			INSERT INTO TB_USER
-			VALUES (mUserId, mEmail, mPassword, mName, mNickName, mIntro, mStudyDate, mStudyTime, mStudyDay, mPoint);
+            INSERT INTO TB_USER
+            VALUES (mUserId, mEmail, mPassword, mName, mNickName, mIntro, mStudyDate, mStudyTime, mStudyDay, mQuizCount, mQuizRight, mPoint);
 
-			mKey := mKey + 1;
-		END LOOP;
-	END;
+            mKey := mKey + 1;
+        END LOOP;
+    END;
 END SP_BUILDDATA_USER;

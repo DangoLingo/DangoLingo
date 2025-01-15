@@ -1,0 +1,157 @@
+/* Features 섹션 */
+.features-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%);
+    text-align: center;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    position: relative;
+}
+
+.section-title {
+    font-size: 40px;
+    font-weight: 700;
+    color: #212529;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+}
+
+.section-description {
+    font-size: 18px;
+    color: #495057;
+    margin-bottom: 80px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 24px;
+}
+
+.features-container {
+    max-width: 1140px;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    padding: 0 24px;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 28px;
+    padding: 48px 32px;
+    transition: all 0.3s ease;
+    border: 1px solid #E9ECEF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: #4a9c5d20;
+}
+
+.feature-icon-wrapper {
+    background: #F1F8F3;
+    width: 120px;
+    height: 120px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.feature-icon {
+    width: 64px;
+    height: 64px;
+}
+
+.feature-content h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 16px;
+}
+
+.feature-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #495057;
+}
+
+/* 반응형 */
+@media screen and (max-width: 1200px) {
+    .features-container {
+        padding: 0 20px;
+        gap: 30px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .features-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .features-section {
+        padding: 60px 20px;
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+
+    .section-description {
+        font-size: 16px;
+        margin-bottom: 40px;
+    }
+
+    .features-container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 0;
+    }
+
+    .feature-card {
+        padding: 40px 24px;
+    }
+
+    .feature-icon-wrapper {
+        width: 100px;
+        height: 100px;
+        border-radius: 24px;
+        margin-bottom: 32px;
+    }
+
+    .feature-icon {
+        width: 52px;
+        height: 52px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .features-section {
+        padding: 40px 16px;
+    }
+
+    .feature-card {
+        padding: 32px 20px;
+    }
+
+    .feature-icon-wrapper {
+        width: 88px;
+        height: 88px;
+        border-radius: 22px;
+        margin-bottom: 28px;
+    }
+
+    .feature-icon {
+        width: 48px;
+        height: 48px;
+    }
+} 

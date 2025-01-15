@@ -1,173 +1,263 @@
+/* Quiz_Play.css와 동일한 기본 구조 */
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Pretendard JP', sans-serif;
+}
+
 body {
-	background-color: #F6F7F5;
-	font-family: "Pretendard JP";
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	height: 100%;
+	background-color: #F8F9FA;
+	padding-top: 60px;
 	margin: 0;
-	justify-content: center; /* 가로 중앙 정렬 */
-	align-items: center; /* 세로 중앙 정렬 */
 }
 
-main {
-	margin-top: 84px;
-	background-color: white;
-	width: 500px; /*단어장 고정 500px*/
+.container {
+	flex: 1;
 	display: flex;
-	justify-content: center; /* 수평 중앙 정렬 */
-	align-items: center; /* 수직 중앙 정렬 */
-	border-radius: 10px;
+	flex-direction: column;
 }
 
-form {
-	padding: 20px 50px;
+.main-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: calc(100vh - 120px);
+	padding: 40px 24px;
 }
-/* 퀴즈 개수, 퀴즈 유형 나타내는 헤딩 */
-.heading {
-	margin-bottom: 20px;
-	font-size: 20px;
-	font-style: normal;
-	font-weight: 600;
+
+.quiz-box {
+	width: 500px;
+	background: white;
+	border-radius: 16px;
+	padding: 40px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	margin: 20px 0;
 }
-/* -----------------------------------------------------------------
-   1) 퀴즈 결과
-  ----------------------------------------------------------------- */
-/* 퀴즈 결과 상자 */
+
+.quiz-box form {
+	padding: 0;
+}
+
+/* 퀴즈 결과 박스 */
 .result-box {
-	margin-top: 40px;
-	margin-bottom: 40px;
-	position: relative;
+	margin: 32px 0 48px;
 	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 16px;
 }
-/* 도넛차트 */
+
+/* 도넛 차트 컨테이너 */
+.result-chart {
+	width: 140px;
+	height: 140px;
+	position: relative;
+	flex-shrink: 0;
+}
+
+/* 차트 기본 스타일 */
 .chart {
 	position: relative;
-	width: 120px; /* 조정된 크기 */
-	height: 120px; /* 조정된 크기 */
-	border-radius: 50%;
-	background: #D1D1D6; /* 도넛의 채워지지 않은 부분의 배경 */
-	display: inline-block;
+	width: 100%;
+	height: 100%;
 }
-/* 도넛차트 내 글씨 */
+
+/* 차트 바 스타일 */
+.chart-bar {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background: conic-gradient(#9ECE9C var(--deg), #F6F7F5 0);
+	transform: rotate(-90deg);
+}
+
+/* 차트 중앙 흰색 원 */
+.chart-bar::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 70%;
+	height: 70%;
+	background-color: white;
+	border-radius: 50%;
+}
+
+/* 차트 텍스트 */
 .chart-text {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	text-align: center;
-	font-size: 17px;
-	font-style: normal;
-	font-weight: 600;
-	line-height: 144.5%; /* 24.565px */
-	letter-spacing: -0.003px;
-	color: #000;
-	text-align: center;
+	font-size: 24px;
+	font-weight: 700;
+	color: #171719;
 	z-index: 1;
 }
-/* 도넛 효과를 만들기 위한 흰색 중심 */
-.chart:after {
-	content: '';
-	background: #fff;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 80px; /* 조정된 크기 */
-	height: 80px; /* 조정된 크기 */
-	border-radius: 50%;
-	transform: translate(-50%, -50%);
-}
-/* 연두색 바 */
-.chart-bar {
-	width: inherit;
-	height: inherit;
-	border-radius: 50%;
-	background: conic-gradient(#9ECE9C var(--deg), #D1D1D6 var(--deg));
-	/* 동적 색상 및 각도 */
-	--deg: 0deg; /* 기본 각도 (동적으로 조정) */
-}
-/* 결과 텍스트 */
+
+/* 결과 상세 정보 */
 .result-details {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	margin-left: 20px;
-	align-items: flex-start; /* 텍스트를 왼쪽 정렬 */
-	font-size: 17px;
-	font-style: normal;
-	list-style: none; /* 기본 목록 스타일 제거 */
-	gap: 10px; /* 위아래 간격 10px */
-}
-/* 결과 텍스트의 list 항목들 */
-.result-details li {
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
-}
-/* 텍스트의 결과 value */
-.result-details .value {
-	font-weight: bold;
-	margin-left: 75px;
-	text-align: right; /* 오른쪽 정렬 */
-}
-/* -----------------------------------------------------------------
-	2) 오답 목록
-     ----------------------------------------------------------------- */
-/* 틀린 단어 */
-.wrong {
-	border: 0.3px solid grey;
-	border-radius: 8px;
-	display: inline-flex;
-	width: 380px;
-	padding: 9px 12px 9px 10px;
-	align-items: flex-start;
-	flex-shrink: 0;
-	margin-bottom: 5px;
-	justify-content: space-between;
-}
-/* 틀린 단어의 뜻 */
-.meaning {
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 400;
-}
-/* -----------------------------------------------------------------
-	3) 다시하기, 나가기 버튼
-    ----------------------------------------------------------------- */
-/* 하단 버튼 2개를 감싸는 div */
-.buttons {
-	margin-top: 30px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	flex-grow: 1;
+	margin-left: 32px;
 }
 
-.buttons .retry, .buttons .exit {
-	width: 180px; /* 조정된 크기 */
-	height: 40px; /* 조정된 크기 */
-	border: none;
+.result-details li {
+	margin-bottom: 12px;
+	font-size: 16px;
+	display: flex;
+	justify-content: space-between;
+	color: #171719;
+	width: 100%;
+}
+
+.result-details li:last-child {
+	margin-bottom: 0;
+}
+
+.result-details .value {
+	font-weight: 600;
+	color: #5C8B6C;
+}
+
+/* 오답 목록 */
+.wrong-box {
+	margin: 24px 0 48px;
+	border-radius: 8px;
+	background-color: #F6F7F5;
+}
+
+.wrong {
+	padding: 16px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #E5E5EA;
+}
+
+.wrong:last-child {
+	border-bottom: none;
+}
+
+.wrong span {
+	font-size: 17px;
+	color: #171719;
+	letter-spacing: -0.3px;
+}
+
+.wrong .meaning {
+	color: #171719;
+}
+
+/* 버튼 */
+.buttons {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.buttons button {
+	flex: 1;
+	width: auto;
+	height: 50px;
 	border-radius: 16px;
 	font-size: 15px;
-	font-style: normal;
-	font-weight: 600;
-	font-family: "Pretendard JP";
+	font-weight: 700;
 	cursor: pointer;
+	letter-spacing: -0.3px;
 }
 
 .buttons .retry {
-	background-color: #324931;
-	color: #fff;
-	margin-right: 40px;
-}
-
-.buttons .retry:hover {
-	background-color: #45a045;
+	background-color: #5C8B6C;
+	color: white;
+	border: none;
 }
 
 .buttons .exit {
-	background-color: #5C8B6C;
-	color: #fff;
+	background-color: white;
+	color: #5C8B6C;
+	border: 2px solid #5C8B6C;
 }
 
-.buttons .exit:hover {
-	background-color: #45a045;
+.buttons button:hover {
+	opacity: 0.9;
 }
 
-/* ----------------------------------------------------------------- */
+/* 헤딩 스타일 */
+.heading {
+	font-size: 20px;
+	font-weight: 700;
+	color: #171719;
+	margin-bottom: 0;
+	letter-spacing: -0.3px;
+}
+
+/* 반응형 디자인 */
+@media screen and (max-width: 576px) {
+	.main-container {
+		padding: 20px 16px;
+	}
+
+	.quiz-box {
+		width: 100%;
+		padding: 24px;
+		margin: 0;
+	}
+
+	/* 결과 박스 모바일 레이아웃 */
+	.result-box {
+		flex-direction: column;
+		align-items: center;
+		gap: 32px;
+		padding: 0;
+	}
+
+	/* 결과 상세 정보 모바일 스타일 */
+	.result-details {
+		width: 100%;
+		margin-left: 0;
+	}
+
+	.result-details li {
+		font-size: 15px;
+	}
+
+	/* 오답 목록 모바일 스타일 */
+	.wrong-box {
+		margin: 20px 0 32px;
+	}
+
+	.wrong {
+		padding: 14px;
+	}
+
+	.wrong span {
+		font-size: 15px;
+	}
+
+	/* 버튼 모바일 스타일 */
+	.buttons {
+		gap: 12px;
+	}
+
+	.buttons button {
+		height: 46px;
+		font-size: 14px;
+	}
+
+	/* 헤딩 모바일 스타일 */
+	.heading {
+		font-size: 18px;
+		margin-bottom: 4px;
+	}
+}

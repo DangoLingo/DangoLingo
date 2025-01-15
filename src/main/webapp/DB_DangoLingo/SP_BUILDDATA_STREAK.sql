@@ -20,7 +20,7 @@ BEGIN
 		WHILE mKey <= iCount
 		LOOP
 			mUserId	:= iUserId;
-			mStreakDate	:= ROUND(DBMS_RANDOM.VALUE(20, 25), 0) || '/' ||
+			mStreakDate	:= ROUND(DBMS_RANDOM.VALUE(21, 25), 0) || '/' ||
 						LPAD(ROUND(DBMS_RANDOM.VALUE(1, 12), 0), 2, '0') || '/' ||
 						LPAD(ROUND(DBMS_RANDOM.VALUE(1, 28), 0), 2, '0');
 			mPoint := ROUND(DBMS_RANDOM.VALUE(1, 500), 0);

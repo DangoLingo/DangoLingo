@@ -87,7 +87,7 @@
 	// ---------------------------------------------------------------------
 	// [JSP 지역 변수 선언 : 일반 변수]
 	// ---------------------------------------------------------------------
-	String sMenuItem1 = "Basic/Basic.jsp";
+	String sMenuItem1 = "Basic/Main.jsp";
 	String sMenuItem2 = "Sawon/SawonList_Rs.jsp?JobProcess=false&jobstatus=SELECT";
 	String sMenuItem3 = "Sawon/SawonList_Ar.jsp?JobProcess=false&jobstatus=SELECT";
 	String sMenuItem4 = "Sawon/SawonList_Sv.jsp";
