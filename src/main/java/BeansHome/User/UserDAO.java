@@ -196,7 +196,7 @@ public class UserDAO {
     * @return boolean : 등록 성공 여부
     ***********************************************************************/
     public boolean register(UserDTO user) throws Exception {
-        String sql = "{call SP_USER_REGISTER(?, ?, ?, ?, ?)}";
+        String sql = "{ call SP_USER_REGISTER(?, ?, ?, ?, ?) }";
         Object[] params = new Object[]{
             user.getEmail(),
             user.getPassword(),
@@ -205,10 +205,54 @@ public class UserDAO {
         };
         
         try {
-            return db.RunQuery(sql, params, 5, false); // 5는 다섯 번째 파라미터가 OUT parameter임을 의미
+            logger.info("Attempting database connection...");
+            if (!db.DbConnect()) {
+                logger.severe("Failed to connect to database");
+                throw new Exception("데이터베이스 연결에 실패했습니다.");
+            }
+            logger.info("Database connected successfully");
+            
+            logger.info("Executing registration procedure with parameters:");
+            logger.info("Email: " + user.getEmail());
+            logger.info("Name: " + user.getName());
+            logger.info("Nickname: " + user.getNickname());
+            
+            if (db.RunQuery(sql, params, 5, true)) {
+                ResultSet rs = db.Rs;
+                if (rs != null && rs.next()) {
+                    int result = rs.getInt("RESULT");
+                    String errorMsg = rs.getString("ERROR_MSG");
+                    logger.info("Registration result code: " + result);
+                    logger.info("Error message: " + errorMsg);
+                    
+                    switch (result) {
+                        case 1:
+                            logger.info("Registration successful");
+                            return true;
+                        case 0:
+                            logger.warning("Email already exists: " + user.getEmail());
+                            throw new Exception(errorMsg);
+                        case -1:
+                            logger.warning("Nickname already exists: " + user.getNickname());
+                            throw new Exception(errorMsg);
+                        default:
+                            logger.severe("Unknown error during registration");
+                            throw new Exception(errorMsg);
+                    }
+                }
+            }
+            logger.severe("Failed to execute registration procedure");
+            return false;
         } catch (Exception e) {
             logger.severe("Error during registration: " + e.getMessage());
             throw e;
+        } finally {
+            try {
+                db.DbDisConnect();
+                logger.info("Database connection closed");
+            } catch (Exception e) {
+                logger.warning("Error closing database connection: " + e.getMessage());
+            }
         }
     }
 }

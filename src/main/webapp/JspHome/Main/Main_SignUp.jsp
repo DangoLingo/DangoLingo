@@ -38,31 +38,34 @@
         name = request.getParameter("name");
         nickname = request.getParameter("nickname");
         
-        UserDAO userDAO = new UserDAO();
-        UserDTO userDTO = new UserDTO();
-        
-        try {
-            userDTO.setEmail(email);
-            userDTO.setPassword(password);
-            userDTO.setName(name);
-            userDTO.setNickname(nickname);
+        // 입력값 검증
+        if (email == null || email.trim().isEmpty() ||
+            password == null || password.trim().isEmpty() ||
+            name == null || name.trim().isEmpty() ||
+            nickname == null || nickname.trim().isEmpty()) {
+            errorMessage = "모든 필드를 입력해주세요.";
+        } else {
+            UserDAO userDAO = new UserDAO();
+            UserDTO userDTO = new UserDTO();
             
-            logger.info("Attempting to register user - Email: " + email + ", Name: " + name + ", Nickname: " + nickname);
-            
-            boolean success = userDAO.register(userDTO);
-            
-            if (success) {
-                logger.info("Registration successful for: " + email);
-                response.sendRedirect("Main_SignIn.jsp?registered=true");
-                return;
-            } else {
-                logger.warning("Registration failed for: " + email);
-                errorMessage = "이미 사용 중인 이메일 또는 닉네임입니다.";
+            try {
+                userDTO.setEmail(email.trim());
+                userDTO.setPassword(password);
+                userDTO.setName(name.trim());
+                userDTO.setNickname(nickname.trim());
+                
+                logger.info("Attempting to register user - Email: " + email + ", Name: " + name + ", Nickname: " + nickname);
+                
+                if (userDAO.register(userDTO)) {
+                    logger.info("Registration successful for: " + email);
+                    response.sendRedirect("Main_SignIn.jsp?registered=true");
+                    return;
+                }
+            } catch (Exception e) {
+                logger.severe("Error during registration: " + e.getMessage());
+                e.printStackTrace();
+                errorMessage = e.getMessage();
             }
-        } catch (Exception e) {
-            logger.severe("Error during registration: " + e.getMessage());
-            e.printStackTrace();
-            errorMessage = "회원가입 처리 중 오류가 발생했습니다: " + e.getMessage();
         }
     }
 %>
