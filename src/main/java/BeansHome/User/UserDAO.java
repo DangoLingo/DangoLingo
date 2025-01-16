@@ -165,7 +165,8 @@ public class UserDAO {
                         user.setQuizCount(rs.getInt("QUIZ_COUNT"));
                         user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
                         user.setPoint(rs.getInt("POINT"));
-                        
+                        user.setTotalPoint(rs.getInt("TOTAL_POINT"));
+
                         // 비밀번호 검증
                         if (!password.equals(user.getPassword())) {
                             logger.warning("Invalid password for user: " + email);
