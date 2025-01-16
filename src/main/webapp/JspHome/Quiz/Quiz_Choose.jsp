@@ -170,17 +170,21 @@
 <body>
 	<%@ include file="../Common/Navbar.jsp"%>
 	<main>
-		<form action="#" method="POST">
+		<form action="Quiz_Play.jsp" method="POST">
 		<%----------------------------------------------------------------------
 		[ 1) 퀴즈 개수 선택 버튼 ]
 		--------------------------------------------------------------------------%>
 			<p class="heading">퀴즈 개수</p>
 			<div class="buttons">
-				<button class="button checkedBtn">10개</button>
-				<button class="button">20개</button>
-				<button class="button">30개</button>
-				<button class="button">40개</button>
-				<button class="button">50개</button>
+				<button class="button checkedBtn" value="10" >10개</button>
+				<button class="button" value="20">20개</button>
+				<button class="button" value="30">30개</button>
+				<button class="button" value="40">40개</button>
+				<button class="button" value="50">50개</button>
+				<!-- 선택된 퀴즈 개수 저장용 hidden input 필드 -->
+				<input type="hidden" name="quizCount" id="quizCount" value="10">
+				<!-- 현재 단어장 저장용 hidden input 필드 -->
+				<input type="hidden" name="words_id" id="words_id">
 			</div>
 		<%----------------------------------------------------------------------
 		[ 2) 퀴즈 유형 선택 라디오버튼 ]
@@ -224,10 +228,15 @@
 	[외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
 	--------------------------------------------------------------------------%>
 	<script type="text/javascript">
+	
 		// -----------------------------------------------------------------
-		// [ 퀴즈 개수 버튼 선택 시 배경색 초록색으로 ]
+		// [ TESTING 현재 단어장이 뭔지 값 넘기기 위함] **전 페이지에서 가져와야할지도 모르지만 일단 테스트용
 		// -----------------------------------------------------------------
-		document.querySelectorAll('button').forEach(function(button) {
+		document.getElementById("words_id").value = "103"; 
+		// -----------------------------------------------------------------
+		// [ 퀴즈 개수 버튼 선택 시 배경색 초록색으로 + 선택된 버튼 값 넘기기 ]
+		// -----------------------------------------------------------------
+		document.querySelectorAll('.button').forEach(function(button) {
 			  button.addEventListener('click', function() {
 				// button 기본 동작 (submit되려고 하는 점) 방지
 				event.preventDefault();
@@ -237,6 +246,10 @@
 			    });
 			    // 클릭된 버튼에 checkedBtn 클래스 추가
 			    button.classList.add('checkedBtn');
+			    
+			 // 선택된 버튼의 값을 hidden input에 설정
+			    const count = button.value;
+			    document.getElementById('quizCount').value = count;
 			  });
 		});
 		// -----------------------------------------------------------------
@@ -266,6 +279,7 @@
 
 		// -----------------------------------------------------------------
 	</script>
+	
 	<%------------------------------------------------------------------
 	[JSP 페이지에서 바로 이동(바이패스)]
 	----------------------------------------------------------------------%>

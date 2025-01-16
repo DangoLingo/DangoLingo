@@ -26,6 +26,7 @@ main {
 /* -----------------------------------------------------------------
 	1) 상단 진행상황 표시
    ----------------------------------------------------------------- */
+
 /* 상단 진행상황 */
 .progress {
 	display: flex;
@@ -44,12 +45,11 @@ main {
 .time-container {
 	display: inline-flex; /* Flexbox 사용 */
 	align-items: center; /* 텍스트를 세로 중앙 정렬 */
-	gap: 8px; /* 텍스트와 SVG 간격 */
 }
 /* 퀴즈 진행 시간 경과 */
 #timePassed {
 	font-weight: 300;
-	margin-right: 16px;
+	margin-right:20px;
 }
 /* 나가기 버튼 */
 circle {
@@ -95,10 +95,12 @@ circle {
 	font-size: 20px;
 	font-style: normal;
 	font-weight: 400;
+	cursor: pointer;
 }
 
 button:hover {
 	background-color: #5C8B6C;
 }
+
 
 /* ----------------------------------------------------------------- */
