@@ -19,7 +19,8 @@ BEGIN
             STUDY_DAY,
             QUIZ_COUNT,
             QUIZ_RIGHT,
-            POINT
+            POINT,
+            TOTAL_POINT
     FROM    TB_USER
     WHERE   EMAIL = iEmail;
 END SP_USER_LOGIN;

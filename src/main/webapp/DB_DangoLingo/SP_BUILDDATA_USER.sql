@@ -5,7 +5,7 @@ create or replace PROCEDURE SP_BUILDDATA_USER
 IS
 BEGIN
   	DECLARE
-mKey			NUMBER;
+        mKey			NUMBER;
 		mUserId			NUMBER;						-- 유저 번호
 		mEmail			VARCHAR2(50 CHAR);			-- 이메일
 		mPassword		VARCHAR2(20 CHAR);			-- 비밀번호
@@ -18,6 +18,7 @@ mKey			NUMBER;
 		mQuizCount		NUMBER;						-- 퀴즈 문제 수
 		mQuizRight		NUMBER;						-- 퀴즈 정답 수
 		mPoint			NUMBER;						-- 포인트
+		mToTalPoint     NUMBER;						-- 누적 포인트
 BEGIN
 		mKey := 1;
 
@@ -25,23 +26,24 @@ BEGIN
 
 		WHILE mKey <= iCount
 		LOOP
-			mUserId	:= mKey;
-			mEmail	:= 'email' || mKey || '@naver.com';
+			mUserId	    := mKey;
+			mEmail	    := 'email' || mKey || '@naver.com';
 			mPassword	:= 'password';
-			mName	:= '성명' || mKey;
+			mName	    := '성명' || mKey;
 			mNickName	:= '닉네임' || mKey;
-			mIntro	:= '소개글' || mKey;
+			mIntro	    := '소개글' || mKey;
 			mStudyDate	:= ROUND(DBMS_RANDOM.VALUE(2023, 2024), 0) || '/' ||
 						LPAD(ROUND(DBMS_RANDOM.VALUE(1, 12), 0), 2, '0') || '/' ||
 						LPAD(ROUND(DBMS_RANDOM.VALUE(1, 28), 0), 2, '0');
 			mStudyTime	:= ROUND(DBMS_RANDOM.VALUE(1, 6000), 0);
 			mStudyDay	:= ROUND(DBMS_RANDOM.VALUE(1, 300), 0);
-			mQuizCount := ROUND(DBMS_RANDOM.VALUE(300, 1000), 0);
-			mQuizRight := ROUND(DBMS_RANDOM.VALUE(1, 300), 0);
-			mPoint := ROUND(DBMS_RANDOM.VALUE(1, 25000), 0);
+			mQuizCount  := ROUND(DBMS_RANDOM.VALUE(300, 1000), 0);
+			mQuizRight  := ROUND(DBMS_RANDOM.VALUE(1, 300), 0);
+			mPoint      := ROUND(DBMS_RANDOM.VALUE(1, 10000), 0);
+			mToTalPoint := ROUND(DBMS_RANDOM.VALUE(10000, 25000), 0);
 
             INSERT INTO TB_USER
-            VALUES (mUserId, mEmail, mPassword, mName, mNickName, mIntro, mStudyDate, mStudyTime, mStudyDay, mQuizCount, mQuizRight, mPoint);
+            VALUES (mUserId, mEmail, mPassword, mName, mNickName, mIntro, mStudyDate, mStudyTime, mStudyDay, mQuizCount, mQuizRight, mPoint, mToTalPoint);
 
             mKey := mKey + 1;
         END LOOP;

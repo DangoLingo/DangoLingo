@@ -1,29 +1,33 @@
-CREATE OR REPLACE PROCEDURE SP_BUILDDATA_USERDANGO
+create or replace PROCEDURE SP_BUILDDATA_USERDANGO
 (
-	iCount		IN NUMBER		-- 유저 레코드 수
+	iCount		IN NUMBER		-- 생성할 유저 레코드 수
 )
 IS
 BEGIN
-	DECLARE
+    DECLARE
         mKey			NUMBER;
-		mCount			NUMBER;
-		mUserId			NUMBER;						-- 유저 번호
-		mDangoId		NUMBER;						-- 당고 번호
-		mBuyDate		DATE;						-- 구매 일자
+        mCount			NUMBER;
+        mUserId			NUMBER;						-- 유저 번호
+        mDangoId		NUMBER;						-- 당고 번호
+        mIsProfile		CHAR(1);					-- 프로필 설정 여부
     BEGIN
-		mKey := 1;
-		DELETE  TB_USER_DANGO;
+        mKey := 1;
 
+        DELETE  TB_USER_DANGO;
         WHILE mKey <= iCount
-		LOOP
-			mUserId		:= mKey;
-            FOR mDangoId IN 1..ROUND(DBMS_RANDOM.VALUE(1, 60), 0)
-			LOOP
-				mBuyDate	:= 	ROUND(DBMS_RANDOM.VALUE(2023, 2024), 0) || '/' ||
-								LPAD(ROUND(DBMS_RANDOM.VALUE(1, 12), 0), 2, '0') || '/' ||
-								LPAD(ROUND(DBMS_RANDOM.VALUE(1, 28), 0), 2, '0');
+        LOOP
+            mUserId		:= mKey;
+            FOR mDangoId IN 1..50
+            LOOP
+                IF
+                mDangoId = 1
+                THEN
+                    mIsProfile := 	'T';
+                ELSE
+                    mIsProfile := 	'F';
+                END IF;
                 INSERT INTO TB_USER_DANGO
-                VALUES (mUserId, mDangoId, mBuyDate);
+                VALUES (mUserId, mDangoId, mIsProfile);
             END LOOP;
             mKey := mKey + 1;
         END LOOP;
