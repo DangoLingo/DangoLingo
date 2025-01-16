@@ -252,8 +252,9 @@
 			    document.getElementById('quizCount').value = count;
 			  });
 		});
+
 		// -----------------------------------------------------------------
-		// [ 라디오 버튼 선택 이벤트 ]
+		// [라디오 버튼 선택 이벤트 ]
 		// -----------------------------------------------------------------
 		document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
 			  radio.addEventListener('change', function() {

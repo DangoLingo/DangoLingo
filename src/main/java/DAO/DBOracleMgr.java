@@ -6,17 +6,18 @@
 // ═════════════════════════════════════════════════════════════════════════════════════════
 package DAO;
 
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
-import Common.ExceptionMgr;
 import oracle.jdbc.internal.OracleCallableStatement;
 import oracle.jdbc.internal.OracleTypes;
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
 /***********************************************************************
- * DBOracleMgr	: 오라클 데이터베이스 클래스<br>
- * Inheritance	: None
+ * DBOracleMgr : 오라클 데이터베이스 클래스<br>
+ * Inheritance : None
  ***********************************************************************/
 public class DBOracleMgr
 {
@@ -33,11 +34,11 @@ public class DBOracleMgr
      ***********************************************************************/
     private static class ConnectionString
     {
-        public String ServerIp = null;				// 오라클 서버 주소
-        public int Port = 0;						// 오라클 서버 연결 포트
-        public String UserId = null;				// 오라클 사용자 계정
-        public String Password = null;				// 오라클 사용자 암호
-        public String SId = null;					// 오라클 SID
+        public String  ServerIp	= null;				// 오라클 서버 주소
+        public Integer Port		= null;				// 오라클 서버 연결 포트
+        public String  UserId	= null;				// 오라클 사용자 계정
+        public String  Password	= null;				// 오라클 사용자 암호
+        public String  SId		= null;				// 오라클 SID
     }
 	// —————————————————————————————————————————————————————————————————————————————————————
 	// 전역변수 관리 - 필수영역(정적변수)
@@ -68,9 +69,9 @@ public class DBOracleMgr
 	///** Rs : Query 결과 저장용 객체 */
 	//private OracleResultSet ORs = null;
 	///** RowCount : ResultSet(Query 결과 저장용 객체) 행 수 */
-	//private int RowCount = 0;
+	//private Integer RowCount = 0;
 	///** ColumnCount : ResultSet(Query 결과 저장용 객체) 컬럼 수 */
-	//private int ColumnCount = 0;
+	//private Integer ColumnCount = 0;
 	// —————————————————————————————————————————————————————————————————————————————————————
 	// 생성자 관리 - 필수영역(인스턴스함수)
 	// —————————————————————————————————————————————————————————————————————————————————————
@@ -90,7 +91,7 @@ public class DBOracleMgr
 		}
 		catch (Exception Ex)
 		{
-			ExceptionMgr.DisplayException(Ex);		// 예외처리(콘솔)
+			Common.ExceptionMgr.DisplayException(Ex);		// 예외처리(콘솔)
 		}
     }
 	// —————————————————————————————————————————————————————————————————————————————————————
@@ -109,7 +110,7 @@ public class DBOracleMgr
 	 * @param SId			: 오라클 SID
 	 * @return void			: None
 	 ***********************************************************************/
-    public synchronized void SetConnectionString(String ServerIp, int Port,
+    public synchronized void SetConnectionString(String ServerIp, Integer Port,
     											 String UserId, String Password, String SId)
 	{
 		try
@@ -126,16 +127,69 @@ public class DBOracleMgr
 		}
 	}
 	/***********************************************************************
+	 * SetConnectionStringFromProperties()	: 오라클 데이터베이스 연결문자열 지정
+	 * @param Resource						: Property File Name and Path
+	 * @param ServerIp						: 오라클서버 주소
+	 * @param Port							: 오라클서버 연결 포트
+	 * @param UserId						: 오라클사용자 계정
+	 * @param Password						: 오라클사용자 암호
+	 * @param SId							: 오라클 SID
+	 * @return void							: None
+	 * @throws Exception 
+	 ***********************************************************************/
+    public synchronized Boolean SetConnectionStringFromProperties(String Resource) throws Exception
+	{
+		InputStream oInputStream	= null;
+		Properties oProperties		= null;
+		
+		Boolean bResult		= false;
+		String  sServerIp	= null;
+		Integer nPort		= null;
+		String  sUserId		= null;
+		String  sPassword	= null;
+		String  sSId		= null;;
+		
+		try
+		{
+			// -----------------------------------------------------------------------------
+			// 오라클 데이터베이스 연결 정보 읽기
+			// -----------------------------------------------------------------------------
+			oInputStream = this.getClass().getResourceAsStream(Resource);
+			
+			if (oInputStream != null)
+			{
+				oProperties = new Properties();
+				oProperties.load(oInputStream);
+				
+				sServerIp = oProperties.getProperty("Oracle.ServerIp");
+				nPort = Integer.valueOf(oProperties.getProperty("Oracle.Port"));
+				sUserId = oProperties.getProperty("Oracle.UserId");
+				sPassword = oProperties.getProperty("Oracle.Password");
+				sSId = oProperties.getProperty("Oracle.SId");
+				
+				this.SetConnectionString(sServerIp, nPort, sUserId, sPassword, sSId);
+				
+				bResult = true;
+			}
+		}
+		catch (Exception Ex)
+		{
+			throw Ex;								// 예외 던지기
+		}
+		
+		return bResult;
+	}
+	/***********************************************************************
 	 * SetTransaction	 : 트랜잭션 모드 설정
 	 * @param AutoCommit : 트랜잭션 모드
 	 * 					   true  - 자동 커밋 모드
 	 * 					   false - 수동 커밋 모드
-	 * @return boolean	 : true | false
-	 * @throws Exception 
+	 * @return Boolean	 : true | false
+	 * @throws Exception
 	 ***********************************************************************/
-    public synchronized boolean SetTransaction(boolean AutoCommit) throws Exception
+    public synchronized Boolean SetTransaction(Boolean AutoCommit) throws Exception
     {
-		boolean bResult = false;
+    	Boolean bResult = false;
 
         try
         {
@@ -155,13 +209,13 @@ public class DBOracleMgr
     }
 	/***********************************************************************
 	 * DbCommit			: 실행한 DML(INSERT/UPDATE/DELETE) 처리 결과를
-	 * 					  오라클 데이터베이스에 반영
-	 * @return boolean	: true | false
-	 * @throws Exception 
+	 * 					: 오라클 데이터베이스에 반영
+	 * @return Boolean	: true | false
+	 * @throws Exception
 	 ***********************************************************************/
-    public synchronized boolean DbCommit() throws Exception
+    public synchronized Boolean DbCommit() throws Exception
     {
-        boolean bResult = false;
+    	Boolean bResult = false;
 
         try
         {
@@ -181,13 +235,13 @@ public class DBOracleMgr
     }
 	/***********************************************************************
 	 * DbRollback		: 실행한 DML(INSERT/UPDATE/DELETE) 처리 결과를
-	 * 					  오라클 데이터베이스에서 취소
-	 * @return boolean	: true | false
-	 * @throws Exception 
+	 * 					: 오라클 데이터베이스에서 취소
+	 * @return Boolean	: true | false
+	 * @throws Exception
 	 ***********************************************************************/
-    public synchronized boolean DbRollback() throws Exception
+    public synchronized Boolean DbRollback() throws Exception
     {
-    	boolean bResult = false;
+    	Boolean bResult = false;
 
         try
         {
@@ -207,13 +261,13 @@ public class DBOracleMgr
     }
 	/***********************************************************************
 	 * DbConnect()		: 오라클 데이터베이스 연결
-	 * 					  트랜잭션 모드는 기본 수동으로 전환 됨
-	 * @return boolean	: true | false
-	 * @throws Exception 
+	 * 					: 트랜잭션 모드는 기본 수동으로 전환 됨
+	 * @return Boolean	: true | false
+	 * @throws Exception
 	 ***********************************************************************/
-	public synchronized boolean DbConnect() throws Exception
+	public synchronized Boolean DbConnect() throws Exception
 	{
-		boolean bResult = false;					// 데이터베이스 연결 상태
+		Boolean bResult = false;					// 데이터베이스 연결 상태
 		String sUrl = null;							// 데이터베이스 연결문자열 저장
 		
 		try
@@ -256,12 +310,12 @@ public class DBOracleMgr
 	}
 	/***********************************************************************
 	 * DbConnect()		: 오라클 데이터베이스 연결
-	 * @return boolean	: true | false
-	 * @throws Exception 
+	 * @return Boolean	: true | false
+	 * @throws Exception
 	 ***********************************************************************/
-	public synchronized boolean DbConnect(String UserId, String Password) throws Exception
+	public synchronized Boolean DbConnect(String UserId, String Password) throws Exception
 	{
-		boolean bResult = false;					// 데이터베이스 연결 상태
+		Boolean bResult = false;					// 데이터베이스 연결 상태
 		String sUrl = null;							// 데이터베이스 연결문자열 저장
 		
 		try
@@ -306,22 +360,22 @@ public class DBOracleMgr
 	}
 	/***********************************************************************
 	 * DbIsConnect()	: 오라클 데이터베이스 연결 끊기
-	 * @return boolean	: true | false
-	 * @throws Exception 
+	 * @return Boolean	: true | false
+	 * @throws Exception
 	 ***********************************************************************/
-	public synchronized boolean DbDisConnect() throws Exception
+	public synchronized Boolean DbDisConnect() throws Exception
 	{
-		boolean bResult = false;					// 오라클 데이터베이스 연결 끊기 상태
+		Boolean bResult = false;					// 오라클 데이터베이스 연결 끊기 상태
 		
 		try
 		{
 			// -----------------------------------------------------------------------------
 			// 오라클 데이터베이스 모든 객체 닫기
 			// -----------------------------------------------------------------------------
-			if (this.Rs != null && this.Rs.isClosed() == false)	// 결과셋 객체 닫기
+			if (this.Rs != null && this.Rs.isClosed() == false)	// 오라클 결과셋 객체 닫기
 				this.Rs.close();
 			
-			if (this.Cs != null && this.Cs.isClosed() == false)	// 명령 객체 닫기
+			if (this.Cs != null && this.Cs.isClosed() == false)	// 오라클 명령 객체 닫기
 				this.Cs.close();
 			
 			if (this.Cn != null && this.Cn.isClosed() == false)	// 연결 객체 닫기
@@ -345,12 +399,12 @@ public class DBOracleMgr
 	}
 	/***********************************************************************
 	 * DbIsConnect()	: 오라클 데이터베이스 연결상태 확인
-	 * @return boolean	: true | false
-	 * @throws Exception 
+	 * @return Boolean	: true | false
+	 * @throws Exception
 	 ***********************************************************************/
-	public synchronized boolean DbIsConnect() throws Exception
+	public synchronized Boolean DbIsConnect() throws Exception
 	{
-		boolean bResult = false;					// 데이터베이스 연결 상태
+		Boolean bResult = false;					// 데이터베이스 연결 상태
 
 		try
 		{
@@ -383,12 +437,12 @@ public class DBOracleMgr
 	 * 							  false	- Non-Query 인 경우
 	 * 									- 등록용 Procedure  인 경우
 	 * 									- 등록용 Embeded-SQL 인 경우 사용(INSERT/UPDATE/DELETE)
-	 * @return boolean			: true | false
-	 * @throws Exception 
+	 * @return Boolean			: true | false
+	 * @throws Exception
 	 ***********************************************************************/
-    public synchronized boolean RunQuery(String Sql, Object[] PaValue, int OutCursorIndex, boolean QueryOK) throws Exception
+    public synchronized Boolean RunQuery(String Sql, Object[] PaValue, Integer OutCursorIndex, Boolean QueryOK) throws Exception
     {
-    	boolean bResult = false;
+    	Boolean bResult = false;
         OracleCallableStatement oOCs = null;
         Object oDummy = null;
         
@@ -429,11 +483,16 @@ public class DBOracleMgr
                 	// DML 문장 실행(OUT Bound가 있는 Procedure type 인 경우)
                 	if (OutCursorIndex > 0)
                 	{
+                		// ojdbc8 인 경우
                 		this.Cs.registerOutParameter(OutCursorIndex, OracleTypes.CURSOR);
-                    	
 	                	this.Cs.execute();
-	            		oOCs = (OracleCallableStatement) this.Cs;
+	                	oOCs = (OracleCallableStatement) this.Cs;
 	            		this.Rs = oOCs.getCursor(OutCursorIndex);
+	            		
+	            		// ojdbc11 이상인 경우
+//                		this.Cs.registerOutParameter(OutCursorIndex, Types.REF_CURSOR);
+//	                	this.Cs.execute();
+//	            		this.Rs = (ResultSet) this.Cs.getObject(OutCursorIndex);
                 	}
                 	// DML 문장 실행(OUT Bound가 없는 Procedure typeEmbeded type 인 경우)
                 	else
