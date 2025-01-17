@@ -7,7 +7,7 @@
 
 <%
 		//form에서 넘어온 파라미터 세 개 
-		String userId = request.getParameter("user_id");
+		Integer userId = (Integer)session.getAttribute("userId");
 	    String quizCount = request.getParameter("quiz_count");
 	    String quizRight = request.getParameter("quiz_right");
 	    
@@ -16,13 +16,13 @@
 	
 	    try {
 	    	result = dao.updateUserStats(
-	                Integer.parseInt(userId),
+	                userId,
 	                Integer.parseInt(quizCount),
 	                Integer.parseInt(quizRight)
 	         );
 	    	
 	    	if (result) {
-	            response.sendRedirect("../Main/Basic.jsp"); // 성공 시 이동할 페이지
+	            response.sendRedirect("../Words/Words.jsp"); // 성공 시 이동할 페이지
 	        } else {
 	        	//실패 시 이동할 페이지.. 어디로 가지? 걍 그대로 있을까?..
 	        }

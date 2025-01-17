@@ -214,9 +214,10 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 		--------------------------------------------------------------------------%>
 			<div class="buttons">
 				<button type="button" class="retry">다시하기</button>
-				<input type="hidden" name="user_id" value="1"><%--**추후 세션에서 받아오는 걸로 변경 --%>
-				<input type="hidden" name="quiz_count" id="quiz_count"> 
-				<input type="hidden" name="quiz_right" id="quiz_right">
+				<input type="hidden" name="user_id">
+				<%--**추후 세션에서 받아오는 걸로 변경 ***************888--%>
+				<input type="hidden" name="quiz_count" id="quiz_count"> <input
+					type="hidden" name="quiz_right" id="quiz_right">
 				<button type="submit" class="exit">나가기</button>
 			</div>
 
