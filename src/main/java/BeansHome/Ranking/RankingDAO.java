@@ -13,6 +13,10 @@ import Common.ExceptionMgr;
 import DAO.DBOracleMgr;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import oracle.jdbc.internal.OracleTypes;
+import java.util.logging.ConsoleHandler;
 
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역
@@ -45,7 +49,13 @@ public class RankingDAO {
      ***********************************************************************/
     public RankingDAO() {
         try {
+            // 로거 설정
             logger.setLevel(Level.ALL);
+            ConsoleHandler handler = new ConsoleHandler();
+            handler.setLevel(Level.ALL);
+            logger.addHandler(handler);
+            
+            logger.info("\n=== RankingDAO Initialization ===");
             ExceptionMgr.SetMode(ExceptionMgr.RUN_MODE.DEBUG);
             db.SetConnectionStringFromProperties("db.properties");
         } catch (Exception Ex) {
@@ -62,53 +72,6 @@ public class RankingDAO {
     // 전역함수 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
-     * getRankings()  : 전체 랭킹 조회
-     * @param type    : 랭킹 타입 (words/points/dangos)
-     * @param limit   : 조회할 랭킹 수
-     * @return List<RankingDTO> : 랭킹 목록
-     ***********************************************************************/
-    public List<RankingDTO> getRankings(String type, int limit) throws Exception {
-        List<RankingDTO> rankings = new ArrayList<>();
-        
-        String sql = switch (type) {
-            case "words" -> "SELECT * FROM (" +
-                           "SELECT u.*, DENSE_RANK() OVER (ORDER BY quiz_right DESC) as rank " +
-                           "FROM TB_USER u) WHERE rank <= ?";
-            case "points" -> "SELECT * FROM (" +
-                            "SELECT u.*, DENSE_RANK() OVER (ORDER BY point DESC) as rank " +
-                            "FROM TB_USER u) WHERE rank <= ?";
-            case "dangos" -> "SELECT * FROM (" +
-                            "SELECT u.*, DENSE_RANK() OVER (ORDER BY dangos DESC) as rank " +
-                            "FROM TB_USER u) WHERE rank <= ?";
-            default -> "SELECT * FROM (" +
-                      "SELECT u.*, DENSE_RANK() OVER (ORDER BY point DESC) as rank " +
-                      "FROM TB_USER u) WHERE rank <= ?";
-        };
-        
-        Object[] params = new Object[]{limit};
-        
-        try {
-            if (db.RunQuery(sql, params, 0, true)) {
-                ResultSet rs = db.Rs;
-                while (rs.next()) {
-                    RankingDTO ranking = new RankingDTO();
-                    ranking.setRank(rs.getInt("rank"));
-                    ranking.setUserId(rs.getInt("user_id"));
-                    ranking.setNickname(rs.getString("nickname"));
-                    ranking.setScore(getScoreByType(rs, type));
-                    ranking.setType(type);
-                    rankings.add(ranking);
-                }
-            }
-        } catch (Exception Ex) {
-            ExceptionMgr.DisplayException(Ex);
-            throw Ex;
-        }
-        
-        return rankings;
-    }
-
-    /***********************************************************************
      * getUserRanking()    : 사용자의 포인트 랭킹 정보 조회
      * @param userId       : 사용자 ID
      * @param type        : 랭킹 타입 (points)
@@ -116,15 +79,21 @@ public class RankingDAO {
      ***********************************************************************/
     public RankingDTO getUserRanking(int userId, String type) {
         RankingDTO ranking = null;
-        String sql = "{ call SP_GET_POINT_RANKING(?, ?) }";
-        Object[] params = new Object[]{ userId };
+        String sql = "{call SP_GET_POINT_RANKING(?, ?)}";
+        Object[] params = new Object[1];
         
         try {
-            logger.info("Getting ranking for user ID: " + userId);
+            logger.info("\n=== Getting Ranking Info ===");
+            logger.info("User ID: [" + userId + "], Type: [" + type + "]");
             
             if (db.DbConnect()) {
+                params[0] = userId;
+                
+                // RunQuery 호출 - OUT parameter는 2번째 위치
                 if (db.RunQuery(sql, params, 2, true)) {
                     ResultSet rs = db.Rs;
+                    logger.info("\n=== Query executed successfully ===");
+                    
                     if (rs != null && rs.next()) {
                         ranking = new RankingDTO();
                         ranking.setRank(rs.getInt("rank"));
@@ -135,11 +104,18 @@ public class RankingDAO {
                         ranking.setType(rs.getString("type"));
                         
                         logger.info("Found ranking: " + ranking.getRank() + " for user: " + ranking.getNickname());
+                    } else {
+                        logger.warning("No ranking found for user ID: " + userId);
                     }
+                } else {
+                    logger.warning("Failed to execute ranking query");
                 }
             }
         } catch (Exception e) {
             logger.severe("Error getting user ranking: " + e.getMessage());
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            logger.severe("Stack trace: " + sw.toString());
         } finally {
             try {
                 db.DbDisConnect();
@@ -149,21 +125,6 @@ public class RankingDAO {
         }
         
         return ranking;
-    }
-
-    /***********************************************************************
-     * getScoreByType()  : 랭킹 타입별 점수 조회
-     * @param rs         : ResultSet 객체
-     * @param type       : 랭킹 타입 (words/points/dangos)
-     * @return int       : 점수
-     * @throws SQLException
-     ***********************************************************************/
-    private int getScoreByType(ResultSet rs, String type) throws SQLException {
-        return switch (type) {
-            case "words" -> rs.getInt("quiz_right");
-            case "dangos" -> rs.getInt("dangos");
-            default -> rs.getInt("point");
-        };
     }
 }
 // #################################################################################################
