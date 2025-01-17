@@ -23,11 +23,12 @@ request.setCharacterEncoding("UTF-8");
 <meta name="keywords" content="검색 엔진을 위해 웹 페이지와 관련된 키워드 목록을 콤마로 구분해서 명시" />
 <meta name="Author" content="문서의 저자를 명시" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <title>당고링고</title>
 <%----------------------------------------------------------------------
 	[HTML Page - 스타일쉬트 구현 영역]
 	--------------------------------------------------------------------------%>
-<link rel="stylesheet" href="../Quiz/css/Quiz_Play.css"/>
+<link rel="stylesheet" href="../Quiz/css/Quiz_Play.css?ver=220610"/>
 <%----------------------------------------------------------------------
 	[HTML Page - 자바스크립트 구현 영역 (상단)]
 	[외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
@@ -55,7 +56,6 @@ request.setCharacterEncoding("UTF-8");
 
 	// -----------------------------------------------------------------
 </script>
-<script type="text/javascript" src="JS/Basic.js"></script>
 </head>
 <%--------------------------------------------------------------------------
 [JSP 전역 변수/함수 선언 영역 - 선언문 영역]
@@ -172,9 +172,18 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 		[ 1) 상단 진행 상황 ]
 		--------------------------------------------------------------------------%>
 		<div class="progress">
-			<span>13/50</span> 
+		<% 
+	        // 현재 단어장명과 퀴즈 개수 받아오기
+	        String quizCount = request.getParameter("quizCount");
+	        String words_id = request.getParameter("words_id");
+		%>
+			<!-- hidden input 필드로 값 설정 -->
+			<input type="hidden" id="quizCount" value="<%= quizCount %>">
+			<input type="hidden" id="words_id" value="<%= words_id %>">
+					
+			<span><span class="currentIndex">1</span>/<%=quizCount %></span> 
 			<span class="time-container"> 
-				<span id="timePassed">30분 12초</span> 
+				<span id="timePassed">0분 0초</span> 
 				<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
 	   			    <circle cx="20" cy="20" r="20" fill="#324931" />
 	   			    <svg xmlns="http://www.w3.org/2000/svg" x="8" y="8" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -188,18 +197,21 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 		<%----------------------------------------------------------------------
 		[ 2) 문제 제시 ]
 		--------------------------------------------------------------------------%>
-		<div class="word-display">食べる</div>
+		<div class="word-display"></div>
 		<%----------------------------------------------------------------------
 		[ 3) 단어 선택 버튼 ]
 		--------------------------------------------------------------------------%>
 		<div class="buttons">
-			<button class="button">잠자다</button>
-			<button class="button">먹다</button>
-			<button class="button">달리다</button>
-			<button class="button">훔치다</button>
+			<button class="button" id="btnCorrectAnswer"></button>
+			<button class="button btnWrongAnswer" id="btn2"></button>
+			<button class="button btnWrongAnswer" id="btn3"></button>
+			<button class="button btnWrongAnswer" id="btn4"></button>
 		</div>
 	</main>
 		 <%@ include file="../Common/Footer.jsp"%>
+	
+	<!-- 반투명 레이어 - 정답 오답 체크시 표시용 -->
+    
 	<%----------------------------------------------------------------------
 	[HTML Page - END]
 	--------------------------------------------------------------------------%>
@@ -211,6 +223,162 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 		// -----------------------------------------------------------------
 		// [사용자 함수 및 로직 구현]
 		// -----------------------------------------------------------------
+		// 타이머 시작
+    function startTimer() {
+        const timeContainer = document.getElementById("timePassed");
+        let elapsedTime = 0; // 시작 시점
+
+        setInterval(() => {
+            elapsedTime++; // 14초씩 증가
+            const minutes = Math.floor(elapsedTime / 60);
+            const seconds = elapsedTime % 60;
+            timeContainer.textContent = minutes + "분 " + seconds + "초";
+        }, 1000);
+    }
+		
+ // 페이지 로드 시 타이머 시작
+    window.onload = function () {
+        startTimer();
+    };
+    
+    
+    $(document).ready(function() {
+        // -----------------------------------------------------------------
+        // [ JSON 데이터 받아오기 ]
+        // -----------------------------------------------------------------
+        var quizCount = $("#quizCount").val();
+        var words_id = $("#words_id").val();
+        var wrongAnswerIdArray = []
+        var currentIndex =0;
+        
+        // 클릭 횟수 추적 변수
+        var correctAnswerCnt = 0;
+        // AJAX 요청으로 DBTestingJson.jsp에서 JSON 데이터 받아오기
+        $.ajax({
+            url: 'QuizRandomJson.jsp', // JSON 데이터를 반환하는 JSP 페이지
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                words_id: words_id  // 서버로 단어장명 전달
+            },
+            success: function(data) {
+                
+                // 전체 kanjiKr 들어간 배열 선언, 값 넣음
+                var allAnswerArray = [];
+                data.forEach(function(item) {
+                    allAnswerArray.push(item.kanjiKr); // 각 kanjiKr 값 넣기
+                });
+                
+                function displayQuiz() {
+                    if (currentIndex < quizCount) {
+                        var quizItem = data[currentIndex];
+
+                        var correctAnswer = quizItem.kanjiKr;
+                        $('.word-display').html(quizItem.kanji);
+                        $('.currentIndex').html(currentIndex + 1);
+                        $('#btnCorrectAnswer').html(correctAnswer);
+                        
+                        // 오답 kanjiKr 넣을 배열 선언
+                        var wrongAnswerArray = [];
+                        wrongAnswerArray = getRandomAnswersExcluding(allAnswerArray, correctAnswer);
+                        
+                        $('#btn2').html(wrongAnswerArray[0]);
+                        $('#btn3').html(wrongAnswerArray[1]);
+                        $('#btn4').html(wrongAnswerArray[2]);
+                        
+                       
+                        
+                     // 버튼 클릭 이벤트 통합
+                        $('.button').on('click', function () {
+                            const clickedButton = $(this); // 클릭한 버튼 저장
+
+                            if (clickedButton.attr('id') === 'btnCorrectAnswer') {
+                                correctAnswerCnt++; // 정답 클릭 시 카운트 증가
+
+                                // 화면 전체 배경색 초록색으로 변경
+                                $('body').css('background-color', 'rgba(0, 128, 0, 0.5)');
+                                clickedButton.css('background-color', 'rgba(0, 128, 0, 0.5)');
+
+                            } else {
+                                // 오답 클릭 시 처리
+                                wrongAnswerIdArray.push(data[currentIndex].japaneseId); // 오답 추가
+
+                                // 화면 전체 배경색 빨간색으로 변경
+                                $('body').css('background-color', 'rgba(255, 0, 0, 0.5)');
+                                clickedButton.css('background-color', 'rgba(255, 0, 0, 0.5)');
+                            }
+
+                            // 0.6초 대기 후 초기화
+                            setTimeout(function () {
+                                $('body').css('background-color', '#F6F7F5'); // 화면 배경 초기화
+                                clickedButton.css('background-color', '#FFFFFF'); // 버튼 배경 초기화
+                                currentIndex++;
+                                shuffleButtons(); // 버튼 섞기
+                                displayQuiz(); // 다음 문제 표시
+                            }, 600);
+                        });
+
+
+                    } else {
+                        // -----------------------------------------------------------------
+                        // [ 퀴즈 끝났을 때 ]
+                        // -----------------------------------------------------------------
+                    	// correctAnswerCnt 값을 localStorage에 저장
+                    	localStorage.setItem("quizCount", quizCount);
+                    	localStorage.setItem("correctAnswerCnt", correctAnswerCnt);
+                    	localStorage.setItem("wrongAnswerCnt", quizCount-correctAnswerCnt);
+                    	localStorage.setItem("timePassed", document.getElementById("timePassed").textContent);
+                    	localStorage.setItem('wrongAnswerIdArray', JSON.stringify(wrongAnswerIdArray));                    	
+                    	
+                    	// 퀴즈 끝났을 때 Quiz_Final.jsp로 리디렉션
+                        window.location.href = 'Quiz_Final.jsp'; // Quiz_Final.jsp로 이동
+	
+                    }
+                }
+
+                // 첫 번째 퀴즈 표시
+                displayQuiz();
+            },
+            error: function() {
+                alert('Failed to load quiz data.');
+            }
+        });
+
+        // -----------------------------------------------------------------
+        // [ 버튼들 랜덤으로 순서 바꾸기 ]
+        // -----------------------------------------------------------------
+        function shuffleButtons() {
+            var buttons = $(".button");
+
+            // 버튼들을 랜덤하게 섞음
+            buttons.sort(function() {
+                return Math.random() - 0.5;
+            });
+
+            // .buttons 안에서 순서대로 배치
+            $(".buttons").empty().append(buttons);
+        }
+        
+    });
+
+    // wrongAnswerArray에서 주어진 값 제외하고 랜덤으로 3개 값 뽑기
+    function getRandomAnswersExcluding(array, excludeValue) {
+        // 주어진 값(excludeValue)을 제외한 새로운 배열 생성
+        var filteredArray = array.filter(function(item) {
+            return item !== excludeValue; // excludeValue를 제외
+        });
+
+        // 필터링된 배열을 랜덤하게 섞음
+        var shuffledArray = filteredArray.sort(function() {
+            return Math.random() - 0.5;
+        });
+
+        // 섞은 배열에서 원하는 개수만큼 잘라서 반환
+        return shuffledArray.slice(0, 3);
+    }
+
+   
+
 
 		// -----------------------------------------------------------------
 	</script>

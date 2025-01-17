@@ -28,14 +28,13 @@
     <meta name="keywords" content="검색 엔진을 위해 웹 페이지와 관련된 키워드 목록을 콤마로 구분해서 명시"/>
     <meta name="Author" content="문서의 저자를 명시"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>당고링고</title>
+    <title>당어장 - 당고링고</title>
     <%----------------------------------------------------------------------
     [HTML Page - 스타일쉬트 구현 영역]
     [외부 스타일쉬트 연결 : <link rel="stylesheet" href="Hello.css?version=1.1"/>]
     --------------------------------------------------------------------------%>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-jp.css" />
-    <link rel="stylesheet" href="CSS/Basic.css?version=1.1"/>
-    <link rel="stylesheet" href="./CSS/Words.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Words/CSS/Words.css">
     <%----------------------------------------------------------------------
     [HTML Page - 자바스크립트 구현 영역 (상단)]
     [외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
@@ -160,7 +159,7 @@ Beans 속성 지정 방법3	: Beans 메서드 직접 호출
     <%----------------------------------------------------------------------
     [HTML Page - Main 디자인 영역]
     --------------------------------------------------------------------------%>
-    <main>
+    <main class="main-container">
         <%------------------------------------------------------------------
             단어장 급수 선택 카드 영역
         ----------------------------------------------------------------------%>
@@ -218,8 +217,8 @@ Beans 속성 지정 방법3	: Beans 메서드 직접 호출
                     </progress>
                 </div>
                 <div class="button-container">
-                    <!-- 페이지 개발 완료 후 연동 필요 -->
-                    <button class="button" type="button">퀴즈</button>
+                    <!-- 페즈 버튼에 Quiz_Choose.jsp 링크 추가 -->
+                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Choose.jsp'">퀴즈</button>
                     <button class="button" type="button">학습</button>
                 </div>
             </article>
@@ -237,6 +236,6 @@ Beans 속성 지정 방법3	: Beans 메서드 직접 호출
 [HTML Page - 자바스크립트 구현 영역 (하단)]
 [외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
 --------------------------------------------------------------------------%>
-<script type="text/javascript" src="./JS/Words.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/JspHome/Words/JS/Words.js"></script>
 </body>
 </html>

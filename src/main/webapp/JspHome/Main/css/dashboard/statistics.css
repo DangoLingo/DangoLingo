@@ -1,0 +1,68 @@
+/* 통계 섹션 */
+.statistics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.stat-item {
+    background-color: #fff;
+    padding: 1.75rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-item h3 {
+    font-size: 14px;
+    color: #868E96;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+}
+
+.stat-number {
+    font-size: 20px;
+    font-weight: 600;
+    color: #5C8B6C;
+    text-align: right;
+}
+
+.stat-item .rank-total {
+    font-size: 0.8em;
+    color: #666;
+    margin-left: 4px;
+}
+
+.my-rank .rank-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #5C8B6C;
+}
+
+/* 반응형 */
+@media screen and (max-width: 768px) {
+    .statistics {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .stat-item {
+        padding: 1.25rem;
+    }
+
+    .stat-item h3 {
+        font-size: 12px;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-number {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .statistics {
+        grid-template-columns: 1fr;
+    }
+} 
