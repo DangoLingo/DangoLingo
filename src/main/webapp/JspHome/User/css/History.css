@@ -154,6 +154,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
+    margin-top: 12px;
 }
 
 .history-card {
@@ -166,6 +167,7 @@
     background: #F6F7F5;
     color: #171719;
     padding : 0 32px;
+    margin-top: 10px;
     margin-bottom: 16px;
     border-radius: 12px;
     font-weight: 700;

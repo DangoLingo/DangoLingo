@@ -29,7 +29,6 @@
     스트릭 영역
 ----------------------------------------------------------------------%>
 <section class="streak-tracker">
-    <h3>학습 기록</h3>
     <div class="streak-container">
         <div class="streak-chart">
             <div class="streak-days">
