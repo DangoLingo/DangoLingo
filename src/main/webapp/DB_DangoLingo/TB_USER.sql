@@ -17,11 +17,12 @@
 		nickname		VARCHAR2(20 CHAR)	NOT NULL UNIQUE,	-- 닉네임
 		intro			VARCHAR2(50 CHAR)	NULL,				-- 소개글
 		study_date		DATE				NULL,				-- 마지막 학습 일자
-		study_time		NUMBER  			DEFAULT		0,				-- 총 학습 시간(분 단위)
+		study_time		NUMBER  			DEFAULT		0,		-- 총 학습 시간(분 단위)
 		study_day		NUMBER				DEFAULT		0,		-- 연속 학습일
 		quiz_count		NUMBER				DEFAULT		0,		-- 퀴즈 문제 수
 		quiz_right		NUMBER				DEFAULT		0,		-- 퀴즈 정답 횟수
-		point			NUMBER(*, 0)		DEFAULT		0		-- 포인트
+		point			NUMBER      		DEFAULT		0,		-- 포인트
+        total_point		NUMBER      		DEFAULT		0		-- 누적 포인트
 	);
 	
   ------------------------------------------------------------------------------------

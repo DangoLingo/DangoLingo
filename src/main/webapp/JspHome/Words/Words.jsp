@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: ha110
-  Date: 2025-01-03
-  Time: 오후 1:04
-  To change this template use File | Settings | File Templates.
---%>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -28,7 +21,8 @@
     <meta name="keywords" content="검색 엔진을 위해 웹 페이지와 관련된 키워드 목록을 콤마로 구분해서 명시"/>
     <meta name="Author" content="문서의 저자를 명시"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>당어장 - 당고링고</title>
+    <link rel="icon" href="../images/favicon-96x96.png" type="image/png" sizes="96x96">
+    <title>당고링고</title>
     <%----------------------------------------------------------------------
     [HTML Page - 스타일쉬트 구현 영역]
     [외부 스타일쉬트 연결 : <link rel="stylesheet" href="Hello.css?version=1.1"/>]

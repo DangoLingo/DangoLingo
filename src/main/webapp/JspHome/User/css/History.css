@@ -6,16 +6,15 @@
     position: relative;
 }
 
+/*
 .streak-tracker h3 {
     font-size: 20px;
     color: #212529;
     margin: 0;
     font-weight: 600;
-}
+}*/
 
 .streak-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     margin: 0 -2rem;
     padding: 0 2rem;
     position: relative;
@@ -155,10 +154,11 @@
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
+    margin-top: 12px;
 }
 
 .history-card {
-    width: 330px;
+    width: 340px;
     height: 60px;
     display: flex;
     flex-direction: row;
@@ -166,7 +166,8 @@
     align-content: center;
     background: #F6F7F5;
     color: #171719;
-    padding : 0 64px;
+    padding : 0 32px;
+    margin-top: 10px;
     margin-bottom: 16px;
     border-radius: 12px;
     font-weight: 700;
@@ -174,5 +175,6 @@
 }
 
 .history-card div {
+    width: auto;
     align-content: center;
 }
