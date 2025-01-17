@@ -7,7 +7,7 @@
 
 <%
 	// quizCount와 words_id를 요청 파라미터로 받기
-	String words_id = request.getParameter("words_id");
+	String words_id = "103";
     // quizList를 담을 ArrayList 생성
     ArrayList<JapaneseDTO> quizList = new ArrayList<>();
     QuizDAO dao = new QuizDAO();
