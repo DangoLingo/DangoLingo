@@ -123,8 +123,8 @@
     private int getScoreByType(UserDTO user, String type) {
         switch (type) {
             case "words": return user.getQuizRight();
-            case "dangos": return user.getDangos();
-            default: return user.getPoint();
+            case "points": return user.getPoint();
+            default: return user.getPoint(); // dangos case는 RankingDTO에서 처리
         }
     }
     

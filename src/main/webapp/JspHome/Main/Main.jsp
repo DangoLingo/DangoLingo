@@ -44,7 +44,7 @@
             logger.info("Retrieved user info: " + (currentUser != null ? currentUser.getNickname() : "null"));
             
             // 현재 사용자의 랭킹 정보 조회
-            userRanking = rankingDAO.getUserRanking(userId, "points");
+            userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), "points");
             logger.info("Retrieved ranking info: " + (userRanking != null ? userRanking.getRank() : "null"));
             
         } catch (Exception e) {
@@ -171,7 +171,7 @@
                     </article>
                     <article class="stat-item">
                         <h3>포인트 랭킹</h3>
-                        <p class="stat-number"><%= userRanking != null ? userRanking.getRank() : "-" %>위</p>
+                        <p class="stat-number"><%= userRanking != null ? String.format("%,d", userRanking.getRank()) : "-" %>위</p>
                     </article>
                 </section>
                 

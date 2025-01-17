@@ -22,10 +22,9 @@ public class RankingDTO {
     private int rank;           // 순위
     private int userId;         // 사용자 ID
     private String nickname;    // 닉네임
-    private String profileImage;// 프로필 이미지
     private String intro;       // 소개글
-    private int score;         // 점수 (포인트/학습일수/퀴즈정답)
-    private String type;       // 랭킹 타입 (words/points/dangos)
+    private int score;         // 점수 (포인트)
+    private String type;       // 랭킹 타입 (points)
     
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
