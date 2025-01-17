@@ -345,7 +345,7 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
                             // 0.6초 대기 후 초기화
                             setTimeout(function () {
                                 $('body').css('background-color', '#F6F7F5'); // 화면 배경 초기화
-                                clickedButton.css('background-color', '#FFFFFF'); // 버튼 배경 초기화
+                                clickedButton.css('background-color', ''); // 버튼 배경 초기화
                                 currentIndex++;
                                 shuffleButtons(); // 버튼 섞기
                                 displayQuiz(quizType); // 다음 문제 표시
