@@ -1,0 +1,194 @@
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+html, body {
+   width: 100%;
+   height: 100%;
+   font-family: 'Pretendard JP';
+   background-color: #f8f9f7;
+   overflow: hidden;
+}
+
+.content {
+   width: 100%;
+   height: calc(100% - 60px);
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   position: relative;
+}
+
+.result-box {
+   width: 500px;
+   height: 511px;
+   background: #ffffff;
+   border-radius: 12px;
+   padding: 20px;
+   text-align: center;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   position: relative;
+   margin-top: 14px;
+}
+
+.progress {
+   display: flex;
+   justify-content: space-between;
+   width: 90%;
+   margin-bottom: 20px;
+   font-size: 17px;
+   font-weight: 600;
+   color: #000;
+   font-feature-settings: 'ss10' on;
+   font-style: normal;
+   line-height: 146.7%;
+   letter-spacing: 0.163px;
+}
+
+.progress span {
+   display: flex;
+   align-items: center;
+}
+
+.kangji {
+   font-size: 48px;
+   font-weight: bold;
+   color: #000000;
+   text-align: center;
+   margin: 0px;
+}
+
+.hurigana {
+   width: 140px;
+   height: 39px;
+   font-size: 18px;
+   display: flex;
+   justify-content: center;
+   text-align: center;
+   margin: 0px;
+}
+
+.kangi_kr {
+   font-size: 18px;
+   color: #444;
+   margin-bottom: 50px;
+}
+
+.example {
+   color: rgba(127, 127, 127, 0.50);
+   font-size: 24px;
+   line-height: normal;
+   letter-spacing: -0.6px;
+   margin-top: 20px;
+   min-height: 60px; /* Adjusted to provide more space */
+}
+
+.example_kr {
+   color: rgba(127, 127, 127, 0.50);
+   font-size: 18px;
+   line-height: normal;
+   letter-spacing: -0.6px;
+   margin-top: 10px; /* Added margin to separate from example */
+   min-height: 40px; /* Adjusted to provide more space */
+}
+
+.buttons {
+   display: flex;
+   justify-content: center;
+   gap: 15px;
+   margin: 20px 0;
+}
+
+.study-toggle-btn {
+   background-color: #324931;
+   color: white;
+   border: none;
+   font-size: 16px;
+   cursor: pointer;
+   border-radius: 100%;
+   width: 32px;
+   height: 32px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.study-toggle-btn:hover {
+   background-color: darkgreen;
+}
+
+.memorized-buttons {
+   display: flex;
+   justify-content: space-between;
+   gap: 10px;
+   margin: 20px 0;
+}
+
+.forgot {
+   width: 180px;
+   height: 40px;
+   border: none;
+   border-radius: 5px;
+   font-size: 15px;
+   cursor: pointer;
+   background-color: #B3261E;
+   color: white;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin: 12px;
+   transition: background-color 0.3s;
+}
+
+.forgot:hover {
+   background-color: #8B1D17;
+}
+
+.memorized {
+   width: 180px;
+   height: 40px;
+   border: none;
+   border-radius: 5px;
+   font-size: 15px;
+   cursor: pointer;
+   background-color: #5C8B6C;
+   color: white;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin: 12px;
+   transition: background-color 0.3s;
+}
+
+.memorized:hover {
+   background-color: #476B53;
+}
+
+.invisible {
+   visibility: hidden;
+}
+
+.Play_Sound {
+   position: absolute;
+   top: 73px;
+   left: 13%;
+   transform: translateX(-50%);
+   cursor: pointer;
+}
+
+.Exit_button {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 32px;
+   height: 32px;
+   border-radius: 50%;
+   background-color: #324931;
+   margin-left: 16px;
+   cursor: pointer;
+}
