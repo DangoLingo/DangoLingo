@@ -30,14 +30,20 @@ int japaneseId = 1;
 String wordsIdParam = request.getParameter("words_id");
 int wordsId = (wordsIdParam != null) ? Integer.parseInt(wordsIdParam) : 105;
 
+// 세션에서 user_id 가져오기 / 없으면 기본값 5 설정
+Integer userId = (Integer) session.getAttribute("userId"); // 세션에서 user_id 가져오기
+if (userId == null) {
+    userId = 4; // 기본값 설정
+    out.println("기본값으로 설정된 사용자 ID: " + userId); // 기본값 출력
+} else {
+    out.println("현재 사용자 ID: " + userId);
+}
+
+
 try {
     // Oracle JDBC 드라이버 로드 및 DB 연결
     Class.forName("oracle.jdbc.driver.OracleDriver");
     connection = DriverManager.getConnection("jdbc:oracle:thin:@cobyserver.iptime.org:1521:xe", user, password);
-
-    // StudyDAO를 사용하여 학습 데이터 가져오기
-    StudyDAO studyDAO = new StudyDAO(connection);
-    studyDTO = studyDAO.getStudyData(1, 2); // 예시 사용자 ID
 
     // 일본어 단어 데이터 조회 쿼리 실행
     String query = "SELECT * FROM tb_japanese WHERE words_id = ? ORDER BY japanese_id";
@@ -291,8 +297,8 @@ try {
 
   // Add function to update TB_SESSION
   function updateSession(status) {
-    const userId = 2; // Replace with actual user ID
-    const wordsId = <%= wordsId %>; // Replace with actual words ID
+    const userId = <%=userId %>; // Replace with actual user ID
+    const wordsId = <%=wordsId %>; // Replace with actual words ID
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '<%= request.getContextPath() %>/UpdateSession', true);

@@ -81,6 +81,15 @@
 	// ---------------------------------------------------------------------
 	// [JSP 지역 변수 선언 : 웹 페이지 get/post 파라미터]
 	// ---------------------------------------------------------------------
+	// 세션에서 user_id 가져오기 / 없으면 기본값 5 설정
+Integer userId = (Integer) session.getAttribute("userId"); // 세션에서 user_id 가져오기
+if (userId == null) {
+    userId = 4; // 기본값 설정
+    out.println("기본값으로 설정된 사용자 ID: " + userId); // 기본값 출력
+} else {
+    out.println("현재 사용자 ID: " + userId);
+}
+
 	// ---------------------------------------------------------------------
 	// [JSP 지역 변수 선언 : 데이터베이스 파라미터]
 	// ---------------------------------------------------------------------
@@ -88,12 +97,10 @@
 	String user = "dango";
 	String password = "lingo";
 	Connection connection = null;
-	StudyDTO studyDTO = null;
 	try {
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		connection = DriverManager.getConnection(url, user, password);
-		StudyDAO studyDAO = new StudyDAO(connection);
-		studyDTO = studyDAO.getStudyData(1,2); // Example userId
+		// DAO and DTO code has been removed.
 	} catch (ClassNotFoundException | SQLException e) {
 		e.printStackTrace();
 	} finally {
@@ -113,6 +120,7 @@
 		timer = "0분 0초";
 	}
 
+	
 	String memorizedCountParam = request.getParameter("memorizedCount");
 	int memorizedCount = memorizedCountParam != null ? Integer.parseInt(memorizedCountParam) : 0;
 
@@ -180,13 +188,7 @@
 <%--------------------------------------------------------------------------
 [Beans DTO 읽기 및 로직 구현 영역]
 ------------------------------------------------------------------------------%>
-<%
-	// Example usage of studyDTO
-	if (studyDTO != null) {
-		out.println("User ID: " + studyDTO.getUserId());
-		out.println("Study Count: " + studyDTO.getStudyCount());
-	}
-%>
+
 <body class="Body">
 	<%----------------------------------------------------------------------
 	[HTML Page - FORM 디자인 영역]
@@ -267,7 +269,7 @@
 
     document.querySelector('.exit').addEventListener('click', () => {
         const timer = '<%= timer %>'; // "00분00초" 형식
-        const userId = 20; // userId를 20으로 고정
+        const userId = <%= userId %>;  // 사용자 ID 추가
         const wordsId = <%= wordsId %>;  // 단어장 ID 추가
         const japaneseId = <%= japaneseId %>;  // 일본어 ID 추가
 
