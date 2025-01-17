@@ -30,7 +30,7 @@
                 <button class="auth-button">회원가입</button>
             <% } else { %>
                 <div class="profile-menu">
-                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango-profile-1.png" alt="프로필" class="profile-image">
+                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango-profile-1.png" alt="프로필" onClick="location.href='${pageContext.request.contextPath}/JspHome/User/MyPage.jsp'" class="profile-image">
                     <button class="auth-button" onclick="handleLogout()">로그아웃</button>
                 </div>
             <% } %>
