@@ -1,10 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="BeansHome.User.UserDAO" %>
-<%@ page import="BeansHome.User.UserDTO" %>
-<%@ page import="BeansHome.Study.StudyDAO" %>
-<%@ page import="BeansHome.Study.StudyDTO" %>
-<%@ page import="BeansHome.Ranking.RankingDAO" %>
-<%@ page import="BeansHome.Ranking.RankingDTO" %>
+<%@ page import="BeansHome.User.*" %>
+<%@ page import="BeansHome.Study.*" %>
+<%@ page import="BeansHome.Ranking.*" %>
+<%@ page import="BeansHome.Streak.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.logging.Logger" %>
@@ -33,7 +31,9 @@
     UserDAO userDAO = new UserDAO();
     StudyDAO studyDAO = new StudyDAO();
     RankingDAO rankingDAO = new RankingDAO();
+    StreakDAO streakDAO = new StreakDAO();
     RankingDTO userRanking = null;
+    List<StreakDTO> userStreaks = null;
     
     if (currentUser != null) {
         try {
@@ -46,6 +46,10 @@
             // 현재 사용자의 랭킹 정보 조회
             userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), "points");
             logger.info("Retrieved ranking info: " + (userRanking != null ? userRanking.getRank() : "null"));
+            
+            // 현재 사용자의 스트릭 정보 조회
+            userStreaks = streakDAO.getUserStreaks(currentUser.getUserId());
+            logger.info("Retrieved streak info: " + (userStreaks != null ? userStreaks.size() + " records" : "null"));
             
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error retrieving user information", e);
@@ -163,7 +167,7 @@
                     </article>
                     <article class="stat-item">
                         <h3>연속 학습</h3>
-                        <p class="stat-number"><%= currentUser.getStudyDay() %>일</p>
+                        <p class="stat-number"><%= userStreaks != null && !userStreaks.isEmpty() ? userStreaks.get(0).getPoint() : "0" %>점</p>
                     </article>
                     <article class="stat-item">
                         <h3>학습 포인트</h3>
@@ -189,21 +193,20 @@
                                 <span>일</span>
                             </div>
                             <% 
-                            // 현재 사용자의 스트릭 데이터 조회
-                            List<StudyDTO> streaks = studyDAO.getStudyStreak(currentUser.getUserId());
+                            // 스트릭 데이터를 Map으로 변환
+                            Map<String, StreakDTO> streakMap = new HashMap<>();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             
-                            // 첫 번째 날짜의 요일 확인
+                            if (userStreaks != null) {
+                                for (StreakDTO streak : userStreaks) {
+                                    streakMap.put(sdf.format(streak.getStreakDate()), streak);
+                                }
+                            }
+                            
+                            // 1년치 날짜 계산 (52주)
                             Calendar cal = Calendar.getInstance();
                             cal.add(Calendar.DATE, -363);  // 52주 전부터 시작
                             cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);  // 월요일부터 시작
-                            
-                            Map<String, StudyDTO> studyMap = new HashMap<>();
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            
-                            // 스트릭 데이터를 Map으로 변환
-                            for (StudyDTO study : streaks) {
-                                studyMap.put(sdf.format(study.getStudyDate()), study);
-                            }
                             
                             for(int week = 0; week < 52; week++) { 
                             %>
@@ -212,25 +215,28 @@
                                     // 각 주의 7일 생성
                                     for(int day = 0; day < 7; day++) {
                                         String dateStr = sdf.format(cal.getTime());
-                                        StudyDTO study = studyMap.get(dateStr);
+                                        StreakDTO streak = streakMap.get(dateStr);
                                         
-                                        if (study == null) {
-                                            study = new StudyDTO();
-                                            study.setStudyLevel(0);
-                                            study.setStudyCount(0);
-                                            study.setStudyDate(new java.sql.Date(cal.getTimeInMillis()));
+                                        // 스트릭 레벨 계산 (포인트에 따라)
+                                        int level = 0;
+                                        int point = 0;
+                                        if (streak != null) {
+                                            point = streak.getPoint();
+                                            if (point > 300) level = 4;
+                                            else if (point > 200) level = 3;
+                                            else if (point > 100) level = 2;
+                                            else if (point > 0) level = 1;
                                         }
-                                        
-                                        int level = study.getStudyLevel();
-                                        int count = study.getStudyCount();
                                     %>
                                         <div class="streak-cell level-<%= level %>" 
-                                             data-count="<%= count %>회 학습"
+                                             title="<%= dateStr %> : <%= point %>점"
+                                             data-point="<%= point %>점"
                                              data-date="<%= dateStr %>">
                                         </div>
                                     <% 
                                         cal.add(Calendar.DATE, 1);  // 다음 날짜로
-                                    } %>
+                                    } 
+                                    %>
                                 </div>
                             <% } %>
                         </div>
