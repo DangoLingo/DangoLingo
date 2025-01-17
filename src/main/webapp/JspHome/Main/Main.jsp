@@ -230,7 +230,7 @@
                                         
                                         // 1년 이전이거나 미래의 날짜는 빈 공간으로 처리
                                         if (cal.before(yearAgo) || cal.after(today)) {
-                                            %><div class="streak-cell empty" style="display: none;"></div><%
+                                            %><div class="streak-cell empty"></div><%
                                         } else {
                                             StreakDTO streak = streakMap.get(dateStr);
                                             

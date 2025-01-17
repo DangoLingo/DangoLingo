@@ -78,9 +78,8 @@
 /* 빈 셀 스타일 */
 .streak-cell.empty {
     background-color: transparent;
-    width: 0;
-    height: 0;
-    margin: 5.5px 5.5px;
+    width: 13px;
+    height: 13px;
     visibility: hidden;
 }
 
@@ -275,6 +274,11 @@
         width: 12px;
         height: 12px;
     }
+
+    .streak-cell.empty {
+        width: 12px;
+        height: 12px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -314,6 +318,11 @@
     .streak-tracker h3 {
         margin-top: 0.25rem;
     }
+
+    .streak-cell.empty {
+        width: 11px;
+        height: 11px;
+    }
 }
 
 /* 가로 모드 대응 */
@@ -331,6 +340,11 @@
     }
 
     .streak-cell {
+        width: 10px;
+        height: 10px;
+    }
+
+    .streak-cell.empty {
         width: 10px;
         height: 10px;
     }
