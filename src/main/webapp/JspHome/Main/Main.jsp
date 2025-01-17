@@ -162,12 +162,12 @@
                 
                 <section class="statistics">
                     <article class="stat-item">
-                        <h3>학습 단어</h3>
+                        <h3>퀴즈 풀이</h3>
                         <p class="stat-number"><%= currentUser.getQuizRight() %>개</p>
                     </article>
                     <article class="stat-item">
                         <h3>연속 학습</h3>
-                        <p class="stat-number"><%= userStreaks != null && !userStreaks.isEmpty() ? userStreaks.get(0).getPoint() : "0" %>점</p>
+                        <p class="stat-number"><%= userStreaks != null && !userStreaks.isEmpty() ? userStreaks.get(0).getPoint() : "0" %>일</p>
                     </article>
                     <article class="stat-item">
                         <h3>학습 포인트</h3>
@@ -184,13 +184,13 @@
                     <div class="streak-container">
                         <div class="streak-chart">
                             <div class="streak-days">
+                                <span>일</span>
                                 <span>월</span>
                                 <span>화</span>
                                 <span>수</span>
                                 <span>목</span>
                                 <span>금</span>
                                 <span>토</span>
-                                <span>일</span>
                             </div>
                             <% 
                             // 스트릭 데이터를 Map으로 변환
@@ -203,37 +203,55 @@
                                 }
                             }
                             
-                            // 1년치 날짜 계산 (52주)
+                            // 오늘 날짜 기준으로 계산
+                            Calendar today = Calendar.getInstance();
                             Calendar cal = Calendar.getInstance();
-                            cal.add(Calendar.DATE, -363);  // 52주 전부터 시작
-                            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);  // 월요일부터 시작
+                            Calendar yearAgo = Calendar.getInstance();
+                            yearAgo.add(Calendar.YEAR, -1); // 1년 전 날짜
                             
-                            for(int week = 0; week < 52; week++) { 
-                            %>
+                            // 정확히 1년 전으로 이동
+                            cal.add(Calendar.YEAR, -1);
+                            
+                            // 시작일이 일요일이 되도록 조정 (깃허브 스타일)
+                            while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                                cal.add(Calendar.DATE, -1);
+                            }
+                            
+                            // 총 주 수 계산 (정확히 53주)
+                            int totalWeeks = 53;
+                            
+                            for(int week = 0; week < totalWeeks; week++) {
+                                %>
                                 <div class="streak-grid">
                                     <% 
                                     // 각 주의 7일 생성
                                     for(int day = 0; day < 7; day++) {
                                         String dateStr = sdf.format(cal.getTime());
-                                        StreakDTO streak = streakMap.get(dateStr);
                                         
-                                        // 스트릭 레벨 계산 (포인트에 따라)
-                                        int level = 0;
-                                        int point = 0;
-                                        if (streak != null) {
-                                            point = streak.getPoint();
-                                            if (point > 300) level = 4;
-                                            else if (point > 200) level = 3;
-                                            else if (point > 100) level = 2;
-                                            else if (point > 0) level = 1;
+                                        // 1년 이전이거나 미래의 날짜는 빈 공간으로 처리
+                                        if (cal.before(yearAgo) || cal.after(today)) {
+                                            %><div class="streak-cell empty" style="display: none;"></div><%
+                                        } else {
+                                            StreakDTO streak = streakMap.get(dateStr);
+                                            
+                                            // 스트릭 레벨 계산 (포인트에 따라)
+                                            int level = 0;
+                                            int point = 0;
+                                            if (streak != null) {
+                                                point = streak.getPoint();
+                                                if (point > 300) level = 4;
+                                                else if (point > 200) level = 3;
+                                                else if (point > 100) level = 2;
+                                                else if (point > 0) level = 1;
+                                            }
+                                            %>
+                                            <div class="streak-cell level-<%= level %>" 
+                                                 title="<%= dateStr %> : <%= point %>점"
+                                                 data-point="<%= point %>점"
+                                                 data-date="<%= dateStr %>">
+                                            </div>
+                                            <%
                                         }
-                                    %>
-                                        <div class="streak-cell level-<%= level %>" 
-                                             title="<%= dateStr %> : <%= point %>점"
-                                             data-point="<%= point %>점"
-                                             data-date="<%= dateStr %>">
-                                        </div>
-                                    <% 
                                         cal.add(Calendar.DATE, 1);  // 다음 날짜로
                                     } 
                                     %>
@@ -258,15 +276,11 @@
     <!-- JavaScript 추가 -->
     <script>
     function handleLogout() {
-        console.log('로그아웃 버튼 클릭됨');
         if (confirm('로그아웃 하시겠습니까?')) {
-            console.log('로그아웃 확인');
             window.location.href = 'Main.jsp?action=logout';
-            console.log('로그아웃 페이지로 이동');
-        } else {
-            console.log('로그아웃 취소');
         }
     }
     </script>
+    <script src="${pageContext.request.contextPath}/JspHome/Main/js/tooltip.js"></script>
 </body>
 </html>
