@@ -103,7 +103,7 @@ public class FriendDAO {
 
                 oPaValue[0] = userId;
 
-                if (this.DBMgr.RunQuery(sSql, oPaValue, 6, true) == true)
+                if (this.DBMgr.RunQuery(sSql, oPaValue, 2, true) == true)
                 {
                     while(this.DBMgr.Rs.next() == true)
                     {
