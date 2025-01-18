@@ -188,6 +188,56 @@ public class UserDAO {
             }
         }
     }
+
+    /***********************************************************************
+    * getUserById()   : 사용자 ID로 사용자 정보 조회 (비밀번호 제외)
+    * @param userId   : 조회할 사용자 ID
+    * @return UserDTO : 조회된 사용자 정보, 없으면 null
+    ***********************************************************************/
+    public UserDTO getUserById(int userId) throws Exception {
+        UserDTO user = null;
+        String sql = "{ call SP_USER_GET_BY_ID(?, ?) }";
+        Object[] params = new Object[]{ userId };
+        
+        try {
+            logger.info("Attempting to get user info for ID: " + userId);
+            if (!db.DbConnect()) {
+                logger.severe("Failed to connect to database");
+                throw new Exception("데이터베이스 연결에 실패했습니다.");
+            }
+            
+            if (db.RunQuery(sql, params, 2, true)) {
+                ResultSet rs = db.Rs;
+                if (rs != null && rs.next()) {
+                    user = new UserDTO();
+                    user.setUserId(rs.getInt("USER_ID"));
+                    user.setEmail(rs.getString("EMAIL"));
+                    user.setName(rs.getString("NAME"));
+                    user.setNickname(rs.getString("NICKNAME"));
+                    user.setIntro(rs.getString("INTRO"));
+                    user.setStudyDate(rs.getDate("STUDY_DATE"));
+                    user.setStudyTime(rs.getInt("STUDY_TIME"));
+                    user.setStudyDay(rs.getInt("STUDY_DAY")); 
+                    user.setQuizCount(rs.getInt("QUIZ_COUNT"));
+                    user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
+                    user.setPoint(rs.getInt("POINT"));
+                    
+                    logger.info("Successfully retrieved user info for ID: " + userId);
+                } else {
+                    logger.warning("No user found with ID: " + userId);
+                }
+            } else {
+                logger.warning("Failed to execute getUserById query");
+            }
+        } catch (Exception e) {
+            logger.severe("Error getting user by ID: " + e.getMessage());
+            throw e;
+        } finally {
+            db.DbDisConnect();
+        }
+        
+        return user;
+    }
 }
 //#################################################################################################
 //<END>

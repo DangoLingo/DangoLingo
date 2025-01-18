@@ -8,10 +8,23 @@
 <%@ page import="java.util.logging.Logger" %>
 <%@ page import="java.util.logging.Level" %>
 <% 
+    // 캐시 제어
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setHeader("Expires", "0"); // Proxies
+    
     // 로거 설정
     Logger logger = Logger.getLogger("Main.jsp");
     
     request.setCharacterEncoding("UTF-8");
+    
+    // DAO 객체들 초기화
+    UserDAO userDAO = new UserDAO();
+    StudyDAO studyDAO = new StudyDAO();
+    RankingDAO rankingDAO = new RankingDAO();
+    StreakDAO streakDAO = new StreakDAO();
+    RankingDTO userRanking = null;
+    List<StreakDTO> userStreaks = null;
     
     // 로그아웃 처리
     String action = request.getParameter("action");
@@ -22,22 +35,24 @@
     }
     
     // 세션 체크
-    UserDTO currentUser = (UserDTO) session.getAttribute("user");
+    UserDTO currentUser = null;
+    Integer userId = (Integer) session.getAttribute("userId");
+    if (userId != null) {
+        try {
+            currentUser = userDAO.getUserById(userId);
+            // 세션 업데이트
+            session.setAttribute("user", currentUser);
+        } catch (Exception e) {
+            logger.severe("Error refreshing user data: " + e.getMessage());
+        }
+    }
     
     logger.info("Session check - userNickname: " + (currentUser != null ? currentUser.getNickname() : "Not logged in"));
     logger.info("isLoggedIn: " + (currentUser != null));
     
     // 로그인된 경우에만 사용자 정보 조회
-    UserDAO userDAO = new UserDAO();
-    StudyDAO studyDAO = new StudyDAO();
-    RankingDAO rankingDAO = new RankingDAO();
-    StreakDAO streakDAO = new StreakDAO();
-    RankingDTO userRanking = null;
-    List<StreakDTO> userStreaks = null;
-    
     if (currentUser != null) {
         try {
-            Integer userId = (Integer) session.getAttribute("userId");
             logger.info("Attempting to get user info for userId: " + userId);
             
             // 현재 사용자 정보 조회
