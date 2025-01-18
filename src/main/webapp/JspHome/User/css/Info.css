@@ -24,7 +24,6 @@
     height: auto;
     padding: 0 50px;
     position: relative;
-    align-content: center;
 }
 
 .card h1 {
@@ -230,5 +229,5 @@
 }
 
 .signup-card button[type="submit"] {
-    margin: 8px 0 24px;
+    margin: 8px 0 16px;
 }

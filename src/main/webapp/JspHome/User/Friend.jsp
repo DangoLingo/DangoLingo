@@ -6,6 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.logging.Level" %>
+<%@ page import="BeansHome.User.UserDAO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
@@ -14,9 +15,18 @@
     logger.setLevel(Level.ALL);
 
     FriendDAO friendDAO = new FriendDAO();
-    UserDTO currentUser = (UserDTO) session.getAttribute("user");
+    UserDAO userDAO = new UserDAO();
+
+    // 세션에 사용자가 있는 경우 사용자 정보 업데이트
+    UserDTO currentUser = new UserDTO();
+    Integer userId = (Integer) session.getAttribute("userId");
     ArrayList<UserDTO> friends = new ArrayList<>();
+
+
     try {
+        if(userDAO.readUser(userId, currentUser)) {
+            session.setAttribute("user", currentUser);
+        }
         friendDAO.readFriendList(currentUser.getUserId(), friends);
         session.setAttribute("user", currentUser);
     } catch (Exception e) {

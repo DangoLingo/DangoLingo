@@ -7,42 +7,33 @@
 <%@ page import="java.io.StringWriter" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.util.logging.ConsoleHandler" %>
+<%@ page import="BeansHome.Study.StudyDAO" %>
+<%@ page import="BeansHome.Streak.StreakDAO" %>
+<%@ page import="BeansHome.Session.SessionDAO" %>
+<%@ page import="BeansHome.Streak.StreakDTO" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/User/css/Info.css">
 <%
-    Logger logger = Logger.getLogger("Main_SignUp.jsp");
-    UserDTO currentUser = (UserDTO) session.getAttribute("user");
+    // 로거 먼저 생성
+    Logger logger = Logger.getLogger("Main_SignIn.jsp");
     logger.setLevel(Level.ALL);
 
-    request.setCharacterEncoding("UTF-8");
+    UserDAO userDAO = new UserDAO();
 
-    // 로깅 설정
+    // 세션에 사용자가 있는 경우 사용자 정보 업데이트
+    UserDTO currentUser = new UserDTO();
+    Integer userId = (Integer) session.getAttribute("userId");
+
     try {
-        Logger rootLogger = Logger.getLogger("");
-        rootLogger.setLevel(Level.ALL);
-
-        // 콘솔 핸들러 추가
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.ALL);
-        rootLogger.addHandler(consoleHandler);
-
-        // 기존 로깅 설정 파일 로드
-        InputStream logConfig = application.getResourceAsStream("/WEB-INF/classes/logging.properties");
-        if (logConfig != null) {
-            LogManager.getLogManager().readConfiguration(logConfig);
-            logger.info("Logging configuration loaded successfully");
-        } else {
-            logger.warning("Could not find logging.properties");
+        // 현재 사용자 정보 조회
+        if(userDAO.readUser(userId, currentUser)) {
+            session.setAttribute("user", currentUser);
         }
     } catch (Exception e) {
+        logger.log(Level.SEVERE, "Error retrieving user information", e);
         e.printStackTrace();
-        System.out.println("Error setting up logging: " + e.getMessage());
     }
-
-    // 요청 정보 로깅
-    logger.info("\n\n=== Update User Request ===");
-    logger.info("Request Method: " + request.getMethod());
-    logger.info("Remote Address: " + request.getRemoteAddr());
 
     // 변수 초기화
     String nickname = currentUser.getNickname();
@@ -64,7 +55,6 @@
             nickname == null || nickname.trim().isEmpty()) {
             errorMessage = "모든 필드를 입력해주세요.";
         } else {
-            UserDAO userDAO = new UserDAO();
             UserDTO user = new UserDTO();
 
             try {
@@ -89,241 +79,6 @@
         }
     }
 %>
-<style>
-    .info-section {
-        display: flex;
-        flex-direction: row;
-        padding-top: 16px;
-        justify-content: center;
-    }
-
-    .card {
-        width: 500px;
-        background-color: white;
-        border-radius: 16px;
-        text-align: center;
-        box-sizing: border-box;
-        padding: 0 50px;
-    }
-
-    .login-card {
-        height: auto;
-        min-height: 400px;
-        padding: 40px 50px;
-    }
-
-    .signup-card {
-        height: auto;
-        padding: 0 50px;
-        position: relative;
-    }
-
-    .card h1 {
-        font-size: 28px;
-        font-weight: bold;
-        margin-top: 50px;
-        margin-bottom: 40px;
-        text-align: left;
-        width: 100%;
-        padding-left: 0;
-        font-family: "LaundryGothicOTF";
-        color: #000000;
-    }
-
-    .card input {
-        width: 100%;
-        height: 48px;
-        padding: 0 16px;
-        margin-bottom: 16px;
-        border-radius: 16px;
-        border: 1px solid rgba(112, 115, 124, 0.22);
-        font-family: "Pretendard JP";
-        font-size: 16px;
-        box-sizing: border-box;
-        transition: all 0.2s ease;
-        background-color: white;
-    }
-
-    .card input:focus {
-        border: 2px solid #5C8B6C;
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(92, 139, 108, 0.1);
-    }
-
-    .card .links {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin: 0 auto;
-        font-size: 14px;
-        font-family: "Pretendard JP";
-        gap: 0;
-        letter-spacing: -0.3px;
-    }
-
-    .card .links a {
-        text-decoration: none;
-        color: #324931;
-        width: 110px;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 24px;
-        font-weight: 400;
-    }
-
-    .card .links .divider {
-        color: rgba(50, 73, 49, 0.4);
-        font-family: "Pretendard JP";
-        font-size: 12px;
-        transform: scaleY(0.8);
-        padding: 0 40px;
-    }
-
-    .card button {
-        width: 100%;
-        height: 48px;
-        background-color: #5C8B6C;
-        color: white;
-        border-radius: 16px;
-        border: none;
-        text-align: center;
-        cursor: pointer;
-        margin: 20px 0 30px;
-        font-family: "Pretendard JP";
-        font-size: 16px;
-    }
-
-    .card button:hover {
-        background-color: #4a7058;
-    }
-
-    /* 에러/성공 메시지 스타일 */
-    .error-message {
-        color: #e03131;
-        font-size: 14px;
-        margin: 8px 0 16px;
-        text-align: center;
-        background-color: #fff5f5;
-        padding: 8px 12px;
-        border-radius: 8px;
-        border: 1px solid #ffc9c9;
-    }
-
-    .success-message {
-        color: #4CAF50;
-        font-size: 14px;
-        margin: 8px 0 16px;
-        text-align: center;
-    }
-
-    /* 비밀번호 일치 여부 표시 */
-    .password-match {
-        font-size: 12px;
-        margin-top: -12px;
-        margin-bottom: 12px;
-        text-align: left;
-        padding-left: 16px;
-    }
-
-    .match {
-        color: #4CAF50;
-    }
-
-    .not-match {
-        color: #ff4444;
-    }
-
-    /* 모바일 반응형 스타일 */
-    @media screen and (max-width: 768px) {
-        .card {
-            width: 90%;
-            height: auto;
-            padding: 20px 30px;
-            margin: 0 10px;
-        }
-
-        .card h1 {
-            font-size: 24px;
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-
-        .card input {
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-
-        .card .links {
-            width: 100%;
-        }
-
-        .card .links a {
-            width: 90px;
-        }
-
-        .card .links .divider {
-            font-size: 11px;
-            padding: 0 32px;
-        }
-
-        .signup-card {
-            height: auto;
-            min-height: 580px;
-            padding: 20px 30px 40px;
-            margin: 20px 10px 40px;
-        }
-
-        .login-card {
-            min-height: 380px;
-            padding: 20px 30px;
-        }
-    }
-
-    /* 로그인 링크 스타일 */
-    .login-link {
-        display: block;
-        text-decoration: none;
-        color: #324931;
-        font-size: 14px;
-        font-family: "Pretendard JP";
-        margin: 24px 0;
-        opacity: 0.8;
-        transition: opacity 0.2s ease;
-    }
-
-    .login-link:hover {
-        opacity: 1;
-    }
-
-    /* 비밀번호 유효성 표시 */
-    .password-validation {
-        font-size: 12px;
-        margin-top: -12px;
-        margin-bottom: 12px;
-        text-align: left;
-        padding-left: 16px;
-    }
-
-    .valid {
-        color: #40c057;
-    }
-
-    .invalid {
-        color: #e03131;
-    }
-
-    /* 하단 버튼 영역 고정 */
-    .signup-card .login-link {
-        margin: 16px 0 8px;
-    }
-
-    .signup-card button[type="submit"] {
-        margin: 8px 0 16px;
-    }
-</style>
 <%----------------------------------------------------------------------
 [HTML Component - 정보 수정 디자인 영역]
 --------------------------------------------------------------------------%>

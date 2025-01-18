@@ -3,6 +3,9 @@
 <%@ page import="java.util.logging.Logger" %>
 <%@ page import="BeansHome.User.UserDTO" %>
 <%@ page import="java.util.logging.Level" %>
+<%@ page import="BeansHome.Ranking.RankingDAO" %>
+<%@ page import="BeansHome.Ranking.RankingDTO" %>
+<%@ page import="BeansHome.User.UserDAO" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8");%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -52,6 +55,17 @@
                 });
             });
         }
+
+        window.addEventListener("load", (event) => {
+            <%
+            Integer userId = (Integer) session.getAttribute("userId");
+            UserDAO userDAO = new UserDAO();
+            UserDTO currentUser = new UserDTO();
+            if(userDAO.readUser(userId, currentUser)) {
+                session.setAttribute("user", currentUser);
+            }
+            %>
+        });
         // -----------------------------------------------------------------
         // [사용자 함수 및 로직 구현]
         // -----------------------------------------------------------------
@@ -63,8 +77,16 @@
             Logger logger = Logger.getLogger("Main_SignIn.jsp");
             logger.setLevel(Level.ALL);
 
+            request.setCharacterEncoding("UTF-8");
+
             StudyDAO studyDAO = new StudyDAO();
-            UserDTO currentUser = (UserDTO) session.getAttribute("user");
+            RankingDAO rankingDAO = new RankingDAO();
+            RankingDTO userRanking = null;
+
+            if(userDAO.readUser(userId, currentUser)) {
+                session.setAttribute("user", currentUser);
+            }
+            userRanking = rankingDAO.getUserRanking(userId, "points");
 
         %>
 </head>
@@ -93,7 +115,7 @@
                 </div>
                 <div class =profile-record>
                     <div class="profile-point"><h3 class="profile-title">포인트</h3><div><fmt:formatNumber value="<%= currentUser.getPoint() %>" pattern="#,###,###"/></div></div>
-                    <div class="profile-rank"><h3 class="profile-title">랭킹</h3><div>-위</div></div>
+                    <div class="profile-rank"><h3 class="profile-title">랭킹</h3><div><%= userRanking != null ? String.format("%,d", userRanking.getRank()) : "-" %>위</div></div>
                 </div>
             </div>
         </section>
@@ -162,6 +184,7 @@
             }
         });
     });
+
 </script>
 </body>
 </html>
