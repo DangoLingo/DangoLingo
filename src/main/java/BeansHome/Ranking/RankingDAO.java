@@ -72,24 +72,72 @@ public class RankingDAO {
     // 전역함수 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
+     * getRankings()      : 포인트 기반 랭킹 목록 조회
+     * @param limit       : 조회할 랭킹 수
+     * @return List<RankingDTO> : 랭킹 목록
+     ***********************************************************************/
+    public List<RankingDTO> getRankings() {
+        List<RankingDTO> rankings = new ArrayList<>();
+        String sql = "{call SP_GET_POINT_RANKINGS(?)}";
+        Object[] params = new Object[0]; // 파라미터 없음
+        
+        try {
+            logger.info("\n=== Getting Point Rankings ===");
+            
+            if (db.DbConnect()) {
+                // OUT 파라미터의 위치를 1로 지정 (이제 IN 파라미터가 없음)
+                if (db.RunQuery(sql, params, 1, true)) {
+                    ResultSet rs = db.Rs;
+                    logger.info("\n=== Query executed successfully ===");
+                    
+                    while (rs != null && rs.next()) {
+                        RankingDTO ranking = new RankingDTO();
+                        ranking.setRank(rs.getInt("rank"));
+                        ranking.setUserId(rs.getInt("user_id"));
+                        ranking.setNickname(rs.getString("nickname"));
+                        ranking.setIntro(rs.getString("intro"));
+                        ranking.setPoint(rs.getInt("score"));
+                        
+                        rankings.add(ranking);
+                        logger.info("Added ranking - Rank: " + ranking.getRank() + 
+                                  ", User: " + ranking.getNickname() + 
+                                  ", Point: " + ranking.getPoint());
+                    }
+                } else {
+                    logger.warning("Failed to execute rankings query");
+                }
+            }
+        } catch (Exception e) {
+            logger.severe("Error getting rankings: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                db.DbDisConnect();
+            } catch (Exception e) {
+                logger.warning("Error closing database connection: " + e.getMessage());
+            }
+        }
+        
+        return rankings;
+    }
+
+    /***********************************************************************
      * getUserRanking()    : 사용자의 포인트 랭킹 정보 조회
      * @param userId       : 사용자 ID
-     * @param type        : 랭킹 타입 (points)
-     * @return RankingDTO : 랭킹 정보
+     * @return RankingDTO  : 랭킹 정보
      ***********************************************************************/
-    public RankingDTO getUserRanking(int userId, String type) {
+    public RankingDTO getUserRanking(int userId) {
         RankingDTO ranking = null;
-        String sql = "{call SP_GET_POINT_RANKING(?, ?)}";
+        String sql = "{call SP_GET_USER_POINT_RANKING(?, ?)}";
         Object[] params = new Object[1];
         
         try {
-            logger.info("\n=== Getting Ranking Info ===");
-            logger.info("User ID: [" + userId + "], Type: [" + type + "]");
+            logger.info("\n=== Getting User Ranking Info ===");
+            logger.info("User ID: [" + userId + "]");
             
             if (db.DbConnect()) {
                 params[0] = userId;
                 
-                // RunQuery 호출 - OUT parameter는 2번째 위치
                 if (db.RunQuery(sql, params, 2, true)) {
                     ResultSet rs = db.Rs;
                     logger.info("\n=== Query executed successfully ===");
@@ -100,15 +148,10 @@ public class RankingDAO {
                         ranking.setUserId(rs.getInt("user_id"));
                         ranking.setNickname(rs.getString("nickname"));
                         ranking.setIntro(rs.getString("intro"));
-                        ranking.setScore(rs.getInt("score"));
-                        ranking.setType(rs.getString("type"));
+                        ranking.setPoint(rs.getInt("score"));
                         
                         logger.info("Found ranking: " + ranking.getRank() + " for user: " + ranking.getNickname());
-                    } else {
-                        logger.warning("No ranking found for user ID: " + userId);
                     }
-                } else {
-                    logger.warning("Failed to execute ranking query");
                 }
             }
         } catch (Exception e) {

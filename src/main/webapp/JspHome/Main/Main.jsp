@@ -59,7 +59,7 @@
             logger.info("Retrieved user info: " + (currentUser != null ? currentUser.getNickname() : "null"));
             
             // 현재 사용자의 랭킹 정보 조회
-            userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), "points");
+            userRanking = rankingDAO.getUserRanking(currentUser.getUserId());
             logger.info("Retrieved ranking info: " + (userRanking != null ? userRanking.getRank() : "null"));
             
             // 현재 사용자의 스트릭 정보 조회
