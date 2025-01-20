@@ -52,7 +52,8 @@ BEGIN
             STUDY_DAY,
             QUIZ_COUNT,
             QUIZ_RIGHT,
-            POINT
+            POINT,
+            TOTAL_POINT
         ) VALUES (
             SQ_USER_ID.NEXTVAL,   -- USER_ID: 자동 증가
             iEmail,               -- EMAIL
@@ -65,7 +66,8 @@ BEGIN
             0,                    -- STUDY_DAY: 기본값 0
             0,                    -- QUIZ_COUNT: 기본값 0
             0,                    -- QUIZ_RIGHT: 기본값 0
-            0                     -- POINT: 기본값 0
+            0,                    -- POINT: 기본값 0
+            0                     -- TOTAL_POINT: 기본값 0
         );
 
         -- 커밋 및 성공 메시지 반환

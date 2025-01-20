@@ -1,0 +1,75 @@
+.friends-header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.friends-header h2 {
+    font-size: 18px;
+    color: #212529;
+}
+
+
+.friend-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    padding-top: 16px;
+}
+
+.friend-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    position: relative;
+}
+
+.friend-card img {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+.friend-info h3 {
+    font-size: 14px;
+    color: #212529;
+    margin: 0 0 4px 0;
+}
+
+.friend-info p {
+    font-size: 12px;
+    color: #868E96;
+    margin: 0;
+}
+
+.delete-friend {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 14px;
+}
+
+.friend-card:hover .delete-friend {
+    opacity: 1;
+}
+
+.delete-friend:hover {
+    background-color: #cc0000;
+}

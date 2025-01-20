@@ -11,14 +11,14 @@
 	(
 		user_id			NUMBER			NOT NULL,			-- 유저 번호
 		dango_id		NUMBER			NOT NULL,			-- 당고 번호
-		buy_date		DATE			NOT NULL			-- 구매 일자
+        is_profile		CHAR(1)			NOT NULL			-- 구매 일자
 	);
 	
   ------------------------------------------------------------------------------------
   --  Constraints for Table TB_USER_DANGO
   ------------------------------------------------------------------------------------
 	ALTER TABLE TB_USER_DANGO ADD CONSTRAINT PK_USER_DANGO PRIMARY KEY(user_id, dango_id);
-	
+    ALTER TABLE TB_USER_DANGO ADD CONSTRAINT CK_IS_PROFILE CHECK(is_profile IN('T', 'F'));
 /*------------------------------------------------------------------------------------
 	END
 ------------------------------------------------------------------------------------*/

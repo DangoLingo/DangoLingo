@@ -52,7 +52,8 @@ public class UserDTO {
     private int quizRight;
     /** point         : 포인트 */
     private int point;
-
+    /** point         : 누적 포인트 */
+    private int totalPoint;
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -173,6 +174,13 @@ public class UserDTO {
 
     public void setPoint(int point) {
         this.point = point;
+    }
+    public int getTotalPoint() {
+        return totalPoint;
+    }
+
+    public void setTotalPoint(int totalPoint) {
+        this.totalPoint = totalPoint;
     }
     // —————————————————————————————————————————————————————————————————————————————————————
 }

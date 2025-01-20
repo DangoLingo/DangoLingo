@@ -176,15 +176,17 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 	        // 현재 단어장명과 퀴즈 개수 받아오기
 	        String quizCount = request.getParameter("quizCount");
 	        String words_id = request.getParameter("words_id");
+	        String quizType = request.getParameter("quizType");
 		%>
 			<!-- hidden input 필드로 값 설정 -->
 			<input type="hidden" id="quizCount" value="<%= quizCount %>">
 			<input type="hidden" id="words_id" value="<%= words_id %>">
+			<input type="hidden" id="quizType" value="<%= quizType %>">
 					
 			<span><span class="currentIndex">1</span>/<%=quizCount %></span> 
 			<span class="time-container"> 
 				<span id="timePassed">0분 0초</span> 
-				<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+				<svg class="exit" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
 	   			    <circle cx="20" cy="20" r="20" fill="#324931" />
 	   			    <svg xmlns="http://www.w3.org/2000/svg" x="8" y="8" width="24" height="24" viewBox="0 0 24 24" fill="none">
 		     		    <g clip-path="url(#clip0_405_1299)">
@@ -221,26 +223,26 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 	--------------------------------------------------------------------------%>
 	<script type="text/javascript">
 		// -----------------------------------------------------------------
-		// [사용자 함수 및 로직 구현]
+		// [ 타이머 ]
 		// -----------------------------------------------------------------
 		// 타이머 시작
-    function startTimer() {
-        const timeContainer = document.getElementById("timePassed");
-        let elapsedTime = 0; // 시작 시점
-
-        setInterval(() => {
-            elapsedTime++; // 14초씩 증가
-            const minutes = Math.floor(elapsedTime / 60);
-            const seconds = elapsedTime % 60;
-            timeContainer.textContent = minutes + "분 " + seconds + "초";
-        }, 1000);
-    }
-		
- // 페이지 로드 시 타이머 시작
-    window.onload = function () {
-        startTimer();
-    };
-    
+	    function startTimer() {
+	        const timeContainer = document.getElementById("timePassed");
+	        let elapsedTime = 0; // 시작 시점
+	
+	        setInterval(() => {
+	            elapsedTime++; // 14초씩 증가
+	            const minutes = Math.floor(elapsedTime / 60);
+	            const seconds = elapsedTime % 60;
+	            timeContainer.textContent = minutes + "분 " + seconds + "초";
+	        }, 1000);
+	    }
+			
+	 	// 페이지 로드 시 타이머 시작
+	    window.onload = function () {
+	        startTimer();
+	    };
+	    
     
     $(document).ready(function() {
         // -----------------------------------------------------------------
@@ -248,11 +250,16 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
         // -----------------------------------------------------------------
         var quizCount = $("#quizCount").val();
         var words_id = $("#words_id").val();
+        var quizType = $("#quizType").val();
+        
         var wrongAnswerIdArray = []
         var currentIndex =0;
         
-        // 클릭 횟수 추적 변수
         var correctAnswerCnt = 0;
+        var question = null; //문제
+        
+        
+        
         // AJAX 요청으로 DBTestingJson.jsp에서 JSON 데이터 받아오기
         $.ajax({
             url: 'QuizRandomJson.jsp', // JSON 데이터를 반환하는 JSP 페이지
@@ -263,22 +270,49 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
             },
             success: function(data) {
                 
-                // 전체 kanjiKr 들어간 배열 선언, 값 넣음
+                // 전체 답지 들어간 배열 선언, 값 넣음
                 var allAnswerArray = [];
                 data.forEach(function(item) {
-                    allAnswerArray.push(item.kanjiKr); // 각 kanjiKr 값 넣기
-                });
+                	
+                	//퀴즈 종류에 따라 답지 배열 종류 
+                    switch (quizType) {
+                    case 'ktoh':  //답지 히라가나로 표시
+                    case 'mtoh': 
+                    	allAnswerArray.push(item.hiragana);  break;
+                    case 'ktom': // 답지 한글뜻으로 표시
+                        allAnswerArray.push(item.kanjiKr);  break;
+                    case 'mtok': // 답지 한자로 표시 
+                        allAnswerArray.push(item.kanji);  break;
+
+                }
+               });
                 
-                function displayQuiz() {
+                function displayQuiz(quizType) {
+                	console.log(quizType);
                     if (currentIndex < quizCount) {
                         var quizItem = data[currentIndex];
-
-                        var correctAnswer = quizItem.kanjiKr;
-                        $('.word-display').html(quizItem.kanji);
+						var correctAnswer =null;
+                        
+                        //퀴즈 종류에 따라 문제 한자 or 뜻으로 display 하게 
+                        switch(quizType){
+                        case 'ktoh':
+                        	$('.word-display').html(quizItem.kanji);
+                        	correctAnswer = quizItem.hiragana; break;
+                        case 'ktom':
+                        	$('.word-display').html(quizItem.kanji);
+                        	correctAnswer = quizItem.kanjiKr; break;
+                        case 'mtoh':
+                        	$('.word-display').html(quizItem.kanjiKr);
+                        	correctAnswer = quizItem.hiragana; break;
+                        case 'mtok':
+                        	$('.word-display').html(quizItem.kanjiKr); 
+                        	correctAnswer = quizItem.kanji; break;
+                        }
+                        
                         $('.currentIndex').html(currentIndex + 1);
                         $('#btnCorrectAnswer').html(correctAnswer);
                         
-                        // 오답 kanjiKr 넣을 배열 선언
+                        // 오답 넣을 배열 선언
                         var wrongAnswerArray = [];
                         wrongAnswerArray = getRandomAnswersExcluding(allAnswerArray, correctAnswer);
                         
@@ -311,10 +345,10 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
                             // 0.6초 대기 후 초기화
                             setTimeout(function () {
                                 $('body').css('background-color', '#F6F7F5'); // 화면 배경 초기화
-                                clickedButton.css('background-color', '#FFFFFF'); // 버튼 배경 초기화
+                                clickedButton.css('background-color', ''); // 버튼 배경 초기화
                                 currentIndex++;
                                 shuffleButtons(); // 버튼 섞기
-                                displayQuiz(); // 다음 문제 표시
+                                displayQuiz(quizType); // 다음 문제 표시
                             }, 600);
                         });
 
@@ -337,7 +371,7 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
                 }
 
                 // 첫 번째 퀴즈 표시
-                displayQuiz();
+                displayQuiz(quizType);
             },
             error: function() {
                 alert('Failed to load quiz data.');
@@ -376,8 +410,13 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
         // 섞은 배열에서 원하는 개수만큼 잘라서 반환
         return shuffledArray.slice(0, 3);
     }
-
-   
+	
+    // -----------------------------------------------------------------
+    // [ 나가기 버튼 클릭시 단어장 페이지로 리다이렉트 ]
+    // -----------------------------------------------------------------
+    document.querySelector('.exit').addEventListener('click', function () {
+        window.location.href = '../Words/Words.jsp'; // 리디렉션할 페이지 경로
+    });
 
 
 		// -----------------------------------------------------------------
