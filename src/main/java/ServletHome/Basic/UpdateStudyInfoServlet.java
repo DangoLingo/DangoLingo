@@ -12,10 +12,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 서블릿 클래스: 학습 횟수, 포인트 등을 업데이트하는 서블릿입니다.
+ */
 @WebServlet("/UpdateStudyInfo")
 public class UpdateStudyInfoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * doPost 메서드: 클라이언트에서 받은 학습 정보를 분석하여
+     * TB_STUDY, TB_USER 테이블에 반영합니다.
+     *
+     * @param request  HttpServletRequest 객체
+     * @param response HttpServletResponse 객체
+     * @throws ServletException 서블릿 예외
+     * @throws IOException      입출력 예외
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String url = "jdbc:oracle:thin:@cobyserver.iptime.org:1521:xe";
         String user = "dango";
