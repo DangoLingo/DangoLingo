@@ -25,6 +25,7 @@ request.setCharacterEncoding("UTF-8");
 <meta name="Author" content="문서의 저자를 명시" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="icon" href="../images/favicon-96x96.png" type="image/png" sizes="96x96">
 <title>당고링고</title>
 <%----------------------------------------------------------------------
 	[HTML Page - 스타일쉬트 구현 영역]
@@ -183,7 +184,9 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 			<%
 			String correctAnswerCnt = "<script>document.write(localStorage.getItem('correctAnswerCnt'));</script>";
 			String wrongAnswerCnt = "<script>document.write(localStorage.getItem('wrongAnswerCnt'));</script>";
+			String wordsId = request.getParameter("words_id");
 			%>
+			<input type="hidden" name="words_id" id="words_id" value="<%= wordsId %>"> 
 			<p class="heading">퀴즈 결과</p>
 			<div class="result-box">
 				<%----------------------------------------------------------------------
@@ -214,10 +217,8 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 		--------------------------------------------------------------------------%>
 			<div class="buttons">
 				<button type="button" class="retry">다시하기</button>
-				<input type="hidden" name="user_id">
-				<%--**추후 세션에서 받아오는 걸로 변경 ***************888--%>
-				<input type="hidden" name="quiz_count" id="quiz_count"> <input
-					type="hidden" name="quiz_right" id="quiz_right">
+				<input type="hidden" name="quiz_count" id="quiz_count"> 
+				<input type="hidden" name="quiz_right" id="quiz_right">
 				<button type="submit" class="exit">나가기</button>
 			</div>
 
@@ -231,109 +232,8 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 	[HTML Page - 자바스크립트 구현 영역 (하단)]
 	[외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
 	--------------------------------------------------------------------------%>
-	<script type="text/javascript">
-	document.getElementById('quiz_right').value = localStorage.getItem('correctAnswerCnt')
-	document.getElementById('quiz_count').value = localStorage.getItem('quizCount')
-		// -----------------------------------------------------------------
-		// [ 도넛 차트 ]
-		// -----------------------------------------------------------------
-		const chartBar = document.querySelector('.chart-bar');
-const chartText = document.querySelector('.chart-text');
+	<script src="../Quiz/js/Quiz_Final.js" type="text/javascript">
 
-// localStorage에서 값 가져오기
-var correctAnswerCnt = parseInt(localStorage.getItem('correctAnswerCnt'), 10) || 0;
-var wrongAnswerCnt = parseInt(localStorage.getItem('wrongAnswerCnt'), 10) || 0;
-var totalAnswersCnt = correctAnswerCnt + wrongAnswerCnt;
-
-// 비율 계산
-const percentage = (correctAnswerCnt / totalAnswersCnt) * 100 || 0;
-const targetDegree = (percentage / 100) * 360;
-
-// 애니메이션 함수
-function animateChart(targetDegree) {
-  let currentDegree = 0;
-  const duration = 1000; // 애니메이션 지속 시간 (ms)
-  const startTime = performance.now();
-
-  function updateAnimation(currentTime) {
-    const elapsedTime = currentTime - startTime;
-    const progress = Math.min(elapsedTime / duration, 1); // 진행 비율 (0~1)
-
-    currentDegree = targetDegree * progress;
-    chartBar.style.setProperty('--deg', currentDegree + 'deg');
-    chartText.textContent = Math.round((currentDegree / 360) * 100) + '%';
-
-    if (progress < 1) {
-      requestAnimationFrame(updateAnimation);
-    }
-  }
-
-  requestAnimationFrame(updateAnimation);
-}
-
-// 애니메이션 실행
-animateChart(targetDegree);
-
-
-		// 결과 텍스트를 동적으로 업데이트
-		chartText.innerText = correctAnswerCnt + '/' + totalAnswersCnt;
-
-		// -----------------------------------------------------------------
-		// [ 시간 경과 표시 ]
-		// -----------------------------------------------------------------
-		var timePassed = localStorage.getItem('timePassed');
-		document.getElementById("timePassed").textContent = timePassed;
-
-		// -----------------------------------------------------------------
-		// [ 오답 목록 표시]
-		// -----------------------------------------------------------------
-		var wrongAnswerIdArray = JSON.parse(localStorage.getItem('wrongAnswerIdArray'));
-
-		// wrongAnswerIdArray가 비어있지 않으면 AJAX 요청
-		if (wrongAnswerIdArray && wrongAnswerIdArray.length > 0) {
-			// AJAX 요청 (서버에서 데이터를 가져옴)
-			$.ajax({
-				url : 'QuizRandomJson.jsp', // 데이터 요청 URL
-				type : 'GET',
-				dataType : 'json',
-				data : {
-					words_id : 103
-				// 서버로 단어장명 전달. ***추후에 변경필요
-				},
-				success : function(data) {
-					// 서버로부터 받은 데이터에서, wrongAnswerIdArray에 있는 japaneseId만 필터링
-					var filteredData = data.filter(function(item) {
-						return wrongAnswerIdArray.includes(item.japaneseId); // 배열에 해당 japaneseId가 있는지 확인
-					});
-
-					// 화면에 데이터를 하나씩 출력
-					filteredData.forEach(function(item) {
-						var wrongElement = '<div class="wrong">' + '<span>'
-								+ item.kanji + ' (' + item.hiragana
-								+ ')</span>' + '<span class="meaning">'
-								+ item.kanjiKr + '</span>' + '</div>';
-						// #quizContainer에 추가하는 대신, .wrong-box에 추가
-						$('.wrong-box').append(wrongElement);
-					});
-				},
-				error : function() {
-					alert('데이터를 불러오는 데 실패했습니다.');
-				}
-			});
-		} else {
-			// wrongAnswerIdArray가 비어있으면 '데이터가 없습니다' 메시지 표시
-			var noDataElement = '<div class="wrong">데이터가 없습니다</div>';
-			$('.wrong-box').append(noDataElement);
-		}
-
-		// -----------------------------------------------------------------
-		// [ 나가기 버튼 클릭 시 Quiz_Choose.jsp 로 리다이렉트]
-		// -----------------------------------------------------------------
-		document.querySelector('.retry').addEventListener('click', function () {
-		    const redirectUrl = 'Quiz_Choose.jsp';
-		    window.location.href = redirectUrl;
-		});
-		// -----------------------------------------------------------------
 	</script>
 	<%------------------------------------------------------------------
 	[JSP 페이지에서 바로 이동(바이패스)]
