@@ -3,6 +3,16 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.apache.naming.java.javaURLContextFactory"%>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.logging.Level" %>
+<%@ page import="java.util.logging.Logger" %>
+<%@ page import="BeansHome.User.UserDAO" %>
+<%@ page import="BeansHome.Study.StudyDAO" %>
+<%@ page import="BeansHome.Streak.StreakDAO" %>
+<%@ page import="BeansHome.Session.SessionDAO" %>
+<%@ page import="BeansHome.Streak.StreakDTO" %>
+<%@ page import="BeansHome.User.UserDTO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="BeansHome.Study.StudyDTO" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8");%>
 <!DOCTYPE html>
@@ -33,118 +43,57 @@
     [HTML Page - 자바스크립트 구현 영역 (상단)]
     [외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
     --------------------------------------------------------------------------%>
+    <script>
 
+        <%
+            // 로거 먼저 생성
+            Logger logger = Logger.getLogger("Main_SignIn.jsp");
+            logger.setLevel(Level.ALL);
+
+            UserDAO userDAO = new UserDAO();
+            StudyDAO studyDAO = new StudyDAO();
+            SessionDAO sessionDAO = new SessionDAO();
+            // 세션에 사용자가 있는 경우 사용자 정보 업데이트
+            UserDTO currentUser = new UserDTO();
+            StudyDTO currentStudy = new StudyDTO();
+            Integer userId = (Integer) session.getAttribute("userId");
+            Integer defaultLevel = 5;
+            Integer bookmarkIdx;
+
+            try {
+
+                // 현재 사용자 정보 조회
+                logger.info("Retrieved user info: " + (currentUser != null ? currentUser.getNickname() : "null"));
+                if(userDAO.readUser(userId, currentUser)) {
+                    session.setAttribute("user", currentUser);
+                }
+
+                //if(studyDAO.readCurrentStudy(userId, 1, 1, currentStudy)) {
+                    //defaultLevel = currentStudy.getWordsId();
+                //    String def = Integer.toString(defaultLevel).substring(0, 1);
+                %>
+                //  여기서 def랑 name 같은 li를 active 해줘야 하는데 어케 하는걸까...;;
+                // 그 다음엔 class="nav-card-date" 인 태그 안에 value를
+                // 최근 학습 날짜: 2024년 12월 25일 이런식으로 바꿔줘야함 키키;;;
+
+                // ++ 추가로 드롭다운 선택해서 값 바뀔 때 마다 그거 name 값 가져와서
+                // 변수에 집어 넣고 그 값으로 아래에서 readCurrentStudy 호출해서 북마크 찍어줘야 함
+
+                <%
+                //    defaultLevel = currentStudy.getWordsId();
+                //}
+
+                if(studyDAO.readCurrentStudy(userId, 1, 0, currentStudy)) {
+                    bookmarkIdx = Integer.parseInt(Integer.toString(currentStudy.getWordsId()).substring(1, 2));
+                }
+
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error retrieving user information", e);
+                e.printStackTrace();
+            }
+        %>
+    </script>
 </head>
-<%--------------------------------------------------------------------------
-[JSP 전역 변수/함수 선언 영역 - 선언문 영역]
-	- this 로 접근 가능 : 같은 페이지가 여러번 갱신 되더라도 변수/함수 유지 됨
-	- 즉 현재 페이지가 여러번 갱신 되는 경우 선언문은 한번만 실행 됨
-------------------------------------------------------------------------------%>
-<%!
-    // ---------------------------------------------------------------------
-    // [JSP 전역 변수/함수 선언]
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-%>
-<%--------------------------------------------------------------------------
-[JSP 지역 변수 선언 및 로직 구현 영역 - 스크립트릿 영역]
-	- this 로 접근 불가 : 같은 페이지가 여러번 갱신되면 변수/함수 유지 안 됨
-	- 즉 현재 페이지가 여러번 갱신 될 때마다 스크립트릿 영역이 다시 실행되어 모두 초기화 됨
-------------------------------------------------------------------------------%>
-<%
-    // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 웹 페이지 get/post 파라미터]
-    // ---------------------------------------------------------------------
-    String txtData1 = "";
-    String txtData2 = "";
-    // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 데이터베이스 파라미터]
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 일반 변수]
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-    // [웹 페이지 get/post 파라미터 조건 필터링]
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-    // [일반 변수 조건 필터링]
-    // ---------------------------------------------------------------------
-    if (request.getParameter("txtData1") != null)
-        txtData1 = request.getParameter("txtData1");
-
-    if (request.getParameter("txtData2") != null)
-        txtData2 = request.getParameter("txtData2");
-
-    // session & application 변수 등록
-    session.setAttribute("HelloSession", "Session-OK!");
-    application.setAttribute("HelloApplication", "Application-OK!");
-
-    // 현재 날짜 / 시간 구하기
-    SimpleDateFormat Sdf = null;
-    String Date  = "20231231 121212";
-
-    Date CurDate = new Date();
-    String Date1 = String.format("%tF %tT 입니다.", CurDate, CurDate);
-
-    Sdf = new SimpleDateFormat("yyyy년 MM월 dd일 hh시 mm분 ss초 입니다.");
-    String Date2 = Sdf.format(CurDate);
-
-    Sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss 입니다.");
-    String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
-    // ---------------------------------------------------------------------
-%>
-<%--------------------------------------------------------------------------
-[Beans/DTO 선언 및 속성 지정 영역]
-------------------------------------------------------------------------------%>
-<%----------------------------------------------------------------------
-Beans 객체 사용 선언	: id	- 임의의 이름 사용 가능(클래스 명 권장)
-                    : class	- Beans 클래스 명
-                    : scope	- Beans 사용 기간을 request 단위로 지정 Hello.HelloDTO
-------------------------------------------------------------------------
-<jsp:useBean id="HelloDTO" class="Hello.HelloDTO" scope="request"></jsp:useBean>
---%>
-<%----------------------------------------------------------------------
-Beans 속성 지정 방법1	: Beans Property에 * 사용
-                    :---------------------------------------------------
-                    : name		- <jsp:useBean>의 id
-                    : property	- HTML 태그 입력양식 객체 전체
-                    :---------------------------------------------------
-주의사항				: HTML 태그의 name 속성 값은 소문자로 시작!
-                    : HTML 태그에서 데이터 입력 없는 경우 null 입력 됨!
-------------------------------------------------------------------------
-<jsp:setProperty name="HelloDTO" property="*"/>
---%>
-<%----------------------------------------------------------------------
-Beans 속성 지정 방법2	: Beans Property에 HTML 태그 name 사용
-                    :---------------------------------------------------
-                    : name		- <jsp:useBean>의 id
-                    : property	- HTML 태그 입력양식 객체 name
-                    :---------------------------------------------------
-주의사항				: HTML 태그의 name 속성 값은 소문자로 시작!
-                    : HTML 태그에서 데이터 입력 없는 경우 null 입력 됨!
-                    : Property를 각각 지정 해야 함!
-------------------------------------------------------------------------
-<jsp:setProperty name="HelloDTO" property="data1"/>
-<jsp:setProperty name="HelloDTO" property="data2"/>
---%>
-<%----------------------------------------------------------------------
-Beans 속성 지정 방법3	: Beans 메서드 직접 호출
-                    :---------------------------------------------------
-                    : Beans 메서드를 각각 직접 호출 해야함!
---------------------------------------------------------------------------%>
-<%
-    // HelloDTO.setData1(request.getParameter("data1"));
-%>
-<%--------------------------------------------------------------------------
-[Beans DTO 읽기 및 로직 구현 영역]
-------------------------------------------------------------------------------%>
-<%
-
-%>
 <body class="Body">
     <%----------------------------------------------------------------------
     [HTML Page - Header 영역]
@@ -160,16 +109,16 @@ Beans 속성 지정 방법3	: Beans 메서드 직접 호출
         <section class="nav-card">
             <header class="nav-card-header">
                 <div class="nav-card-left">
-                    <span class="nav-card-title">JLPT</span>
+                    <span class="nav-card-title">JLPT<%currentStudy.getWordsId();%><%currentStudy.getStudyDate();%></span>
                     <div class="nav-dropdown">
                         <!-- DB 연동 후 수정 필요 -->
                         <button class="label">N5</button>
                         <ul class="option-list">
-                            <li class="option-item">N1</li>
-                            <li class="option-item">N2</li>
-                            <li class="option-item">N3</li>
-                            <li class="option-item">N4</li>
-                            <li class="option-item">N5</li>
+                            <li name="1" class="option-item">N1</li>
+                            <li name="2" class="option-item">N2</li>
+                            <li name="3" class="option-item">N3</li>
+                            <li name="4" class="option-item">N4</li>
+                            <li name="5" class="option-item">N5</li>
                         </ul>
                     </div>
                 </div>
@@ -186,7 +135,7 @@ Beans 속성 지정 방법3	: Beans 메서드 직접 호출
             <!-- JSP 반복문을 활용해 Day 카드 출력 -->
             <% for (int i = 1; i <= 10; i++) {
                 // 북마크 표시 조건 - DB 연동 후 수정 필요
-                boolean isBookmarked = (i == 2);
+                boolean isBookmarked = ( i == 2);// (Integer.parseInt(Integer.toString(currentStudy.getWordsId()).substring(1, 3)) == 2);
             %>
             <article class="card">
                 <% if (isBookmarked) { %>
@@ -206,14 +155,14 @@ Beans 속성 지정 방법3	: Beans 메서드 직접 호출
                 </div>
                 <div class="progress-bar-container">
                     <!-- DB 연동 후 수정 필요 -->
-                    <p class="progress-text">13/50</p>
-                    <progress class="progress-bar" value="13" min="0" max="50">
+                    <p class="progress-text"><% currentStudy.getStudyCount(); %>/50</p>
+                    <progress class="progress-bar" value="<% currentStudy.getStudyCount(); %>" min="0" max="50">
                     </progress>
                 </div>
                 <div class="button-container">
                     <!-- 페즈 버튼에 Quiz_Choose.jsp 링크 추가 -->
-                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Choose.jsp'">퀴즈</button>
-                    <button class="button" type="button">학습</button>
+                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Choose.jsp?wordsId=<%currentStudy.getWordsId();%>'">퀴즈</button>
+                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Study/Words_Study.jsp?wordsId=<%currentStudy.getWordsId();%>'">학습</button>
                 </div>
             </article>
             <% } %>
