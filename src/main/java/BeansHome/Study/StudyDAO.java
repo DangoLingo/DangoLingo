@@ -1,70 +1,3 @@
-
-package BeansHome.Study;
-
-// ═════════════════════════════════════════════════════════════════════════════════════════
-// 사용자정의 클래스 영역
-// ═════════════════════════════════════════════════════════════════════════════════════════
-/***********************************************************************
- * StudyDAO		    : 학습 진행 기록 DAO 클래스<br>
- * Inheritance	    : None
- ***********************************************************************/
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-public class StudyDAO {
-    // —————————————————————————————————————————————————————————————————————————————————————
-    // 전역변수 관리 - 필수영역(인스턴스변수)
-    // —————————————————————————————————————————————————————————————————————————————————————
-    private Connection connection;
-
-    // —————————————————————————————————————————————————————————————————————————————————————
-    // 생성자 관리 - 필수영역(인스턴스함수)
-    
-    // —————————————————————————————————————————————————————————————————————————————————————
-    /***********************************************************************
-     * StudyDAO()       :  기본 생성자
-     * @param connection: 데이터베이스 연결 객체
-     ***********************************************************************/
-    public StudyDAO(Connection connection) {
-        this.connection = connection;
-    }
-
-    // —————————————————————————————————————————————————————————————————————————————————————
-    // 전역함수 관리 - 필수영역(인스턴스함수)
-    // —————————————————————————————————————————————————————————————————————————————————————
-    /***********************************************************************
-     * getStudyData()   :  유저 ID로 학습 기록을 가져오는 함수
-     * @param userId    :  유저 ID
-     * @return StudyDTO :  학습 기록 DTO 객체
-     * @throws SQLException : SQL 예외 처리
-     ***********************************************************************/
-    public StudyDTO getStudyData(int userId, int study_id) throws SQLException {
-    	StudyDTO studyDTO = null;
-        String query = "SELECT * FROM Tb_study WHERE user_id = ? and study_id = ?";
-        
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, userId);
-            stmt.setInt(2, study_id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    studyDTO = new StudyDTO();
-                    
-                    studyDTO.setStudyId(rs.getInt("study_id"));
-                    studyDTO.setUserId(rs.getInt("user_id"));
-                    studyDTO.setWordsId(rs.getInt("words_id"));
-                    studyDTO.setJapaneseId(rs.getInt("japanese_id"));
-                    studyDTO.setStudyDate(rs.getDate("study_date"));
-                    studyDTO.setStudyCount(rs.getInt("study_count"));
-                }
-            }
-        }
-        
-        return studyDTO;
-    }
-}
-=======
 //#################################################################################################
 //StudyDAO.java - 학습 진행 기록 DAO 모듈
 //#################################################################################################
@@ -76,8 +9,15 @@ package BeansHome.Study;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+
+import BeansHome.User.UserDAO;
+import BeansHome.User.UserDTO;
 import Common.ExceptionMgr;
 import DAO.DBOracleMgr;
+
 
 //═════════════════════════════════════════════════════════════════════════════════════════
 //사용자정의 클래스 영역
@@ -91,7 +31,8 @@ public class StudyDAO {
     // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
     private static final DBOracleMgr db = new DBOracleMgr();
-    
+    private static final Logger logger = Logger.getLogger(UserDAO.class.getName());
+
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -101,8 +42,19 @@ public class StudyDAO {
     ***********************************************************************/
     public StudyDAO() {
         try {
+            // 로거 설정
+            logger.setLevel(Level.ALL);
+            ConsoleHandler handler = new ConsoleHandler();
+            handler.setLevel(Level.ALL);
+            logger.addHandler(handler);
+
+            logger.info("\n=== UserDAO Initialization ===");
             ExceptionMgr.SetMode(ExceptionMgr.RUN_MODE.DEBUG);
+
+            // DB 연결 설정
+            db.SetConnectionStringFromProperties("db.properties");
         } catch (Exception Ex) {
+            logger.severe("Error in constructor: " + Ex.getMessage());
             ExceptionMgr.DisplayException(Ex);
         }
     }
@@ -111,37 +63,54 @@ public class StudyDAO {
     // 전역함수 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
-    * getStudyStreak()    : 학습 스트릭 조회
-    * @param userId       : 사용자 ID
-    * @return List<StudyDTO> : 학습 스트릭 목록
-    * @throws Exception
-    ***********************************************************************/
-    public List<StudyDTO> getStudyStreak(int userId) throws Exception {
-        List<StudyDTO> streaks = new ArrayList<>();
-        String sql = "SELECT STUDY_DATE, COUNT(*) as STUDY_COUNT " +
-                     "FROM TB_STUDY " +
-                     "WHERE USER_ID = ? " +
-                     "GROUP BY STUDY_DATE " +
-                     "ORDER BY STUDY_DATE DESC";
-        
-        Object[] params = new Object[]{userId};
-        
+     * readCurrentStudy()   : 등급별 가장 최근 학습한 단어장 읽어오기
+     * @param user          : 사용자 DTO
+     * @return boolean      : 업데이트 성공 여부
+     * @throws Exception
+     ***********************************************************************/
+    public boolean readCurrentStudy(int userId, int wordsId, int totalCheck, StudyDTO study) throws Exception {
+        String sql = "BEGIN SP_USER_R(?,?); END;";
+        Object[] params = new Object[]{
+                userId,
+                wordsId,
+                totalCheck
+        };
+        boolean bResult = false;
+
         try {
-            if (db.RunQuery(sql, params, 0, true)) {
-                ResultSet rs = db.Rs;
-                while (rs.next()) {
-                    StudyDTO study = new StudyDTO();
-                    study.setStudyDate(rs.getDate("STUDY_DATE"));
-                    study.setStudyCount(rs.getInt("STUDY_COUNT"));
-                    streaks.add(study);
-                }
+            logger.info("Attempting database connection...");
+            if (!db.DbConnect()) {
+                logger.severe("Failed to connect to database");
+                throw new Exception("데이터베이스 연결에 실패했습니다.");
             }
-        } catch (Exception Ex) {
-            ExceptionMgr.DisplayException(Ex);
-            throw Ex;
+            logger.info("Database connected successfully");
+
+            if (db.RunQuery(sql, params, 4, true)) {
+                ResultSet rs = db.Rs;
+                if (rs.next()) {
+                    study.setWordsId(rs.getInt("WORDS_ID"));
+                    study.setStudyDate(rs.getDate("STUDY_DATE"));
+                   logger.info("Study found: " + study.getWordsId());
+                } else {
+                    logger.warning("No study found with ID: " + userId);
+                }
+
+                bResult = true;
+            }
+            logger.severe("Failed to execute update procedure");
+            bResult = false;
+        } catch (Exception e) {
+            logger.severe("Error during update: " + e.getMessage());
+            Common.ExceptionMgr.DisplayException(e);		// 예외처리(콘솔)
+        } finally {
+            try {
+                db.DbDisConnect();
+                logger.info("Database connection closed");
+            } catch (Exception e) {
+                logger.warning("Error closing database connection: " + e.getMessage());
+            }
+            return bResult;
         }
-        
-        return streaks;
     }
 
     /***********************************************************************
@@ -172,4 +141,3 @@ public class StudyDAO {
 //#################################################################################################
 //<END>
 //#################################################################################################
-
