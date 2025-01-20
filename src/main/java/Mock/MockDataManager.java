@@ -127,13 +127,21 @@ public class MockDataManager {
     
     public List<UserDTO> getRankingList(String type, int limit) {
         List<UserDTO> sortedUsers = new ArrayList<>(mockUsers);
-        
-        Comparator<UserDTO> comparator = switch (type) {
-            case "words" -> Comparator.comparing(UserDTO::getQuizRight).reversed();
-            case "points" -> Comparator.comparing(UserDTO::getPoint).reversed();
-            default -> Comparator.comparing(UserDTO::getPoint).reversed();
-        };
-        
+
+        Comparator<UserDTO> comparator;
+        switch (type) {
+            case "words":
+                comparator = Comparator.comparing(UserDTO::getQuizRight).reversed();
+                break;
+            case "points":
+                comparator = Comparator.comparing(UserDTO::getPoint).reversed();
+                break;
+            default:
+                comparator = Comparator.comparing(UserDTO::getPoint).reversed();
+                break;
+        }
+
+
         sortedUsers.sort(comparator);
         return sortedUsers.subList(0, Math.min(limit, sortedUsers.size()));
     }
@@ -159,10 +167,19 @@ public class MockDataManager {
     }
     
     private int getScoreByType(UserDTO user, String type) {
-        return switch (type) {
-            case "words" -> user.getQuizRight();
-            case "points" -> user.getPoint();
-            default -> user.getPoint();
-        };
+        int result;
+        switch (type) {
+            case "words":
+                result = user.getQuizRight();
+                break;
+            case "points":
+                result = user.getPoint();
+                break;
+            default:
+                result = user.getPoint();
+                break;
+        }
+        return result;
+
     }
 } 

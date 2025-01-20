@@ -1,41 +1,41 @@
 // #################################################################################################
-// RankingDTO.java - 랭킹 DTO 모듈
+// StreakDAO.java - 스트릭 DAO 모듈
 // #################################################################################################
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 외부모듈 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
-package BeansHome.Ranking;
+package BeansHome.Streak;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import Common.ExceptionMgr;
+import DAO.DBOracleMgr;
 
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역
 // ═════════════════════════════════════════════════════════════════════════════════════════
 /***********************************************************************
- * RankingDTO     : 랭킹 DTO 클래스<br>
- * Inheritance    : None
+ * StreakDAO    : 스트릭 DAO 클래스<br>
+ * Inheritance : None
  ***********************************************************************/
-public class RankingDTO {
+public class StreakDAO {
     // —————————————————————————————————————————————————————————————————————————————————————
-    // 전역변수 관리 - 필수영역(인스턴스변수)
+    // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
-    private int rank;           // 순위
-    private int userId;         // 사용자 ID
-    private String nickname;    // 닉네임
-    private String intro;       // 소개글
-    private int score;         // 점수 (포인트)
-    private String type;       // 랭킹 타입 (points)
+    private static final DBOracleMgr db = new DBOracleMgr();
 
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
-     * RankingDTO()  : 생성자
-     * @param void   : None
+     * StreakDAO()    : 생성자
+     * @param void    : None
      ***********************************************************************/
-    public RankingDTO() {
+    public StreakDAO() {
         try {
             ExceptionMgr.SetMode(ExceptionMgr.RUN_MODE.DEBUG);
+            db.SetConnectionStringFromProperties("db.properties");
         } catch (Exception Ex) {
             ExceptionMgr.DisplayException(Ex);
         }
@@ -44,23 +44,42 @@ public class RankingDTO {
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역함수 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
-    public int getRank() { return rank; }
-    public void setRank(int rank) { this.rank = rank; }
+    /***********************************************************************
+     * getUserStreaks()     : 사용자의 최근 1년간 스트릭 정보 조회
+     * @param userId       : 사용자 ID
+     * @return List<StreakDTO> : 스트릭 정보 목록
+     ***********************************************************************/
+    public List<StreakDTO> getUserStreaks(int userId) {
+        List<StreakDTO> streaks = new ArrayList<>();
+        String sql = "{call SP_GET_USER_STREAK(?, ?)}";
+        Object[] params = new Object[]{userId};
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+        try {
+            if (db.DbConnect()) {
+                if (db.RunQuery(sql, params, 2, true)) {
+                    ResultSet rs = db.Rs;
 
-    public String getNickname() { return nickname; }
-    public void setNickname(String nickname) { this.nickname = nickname; }
+                    while (rs != null && rs.next()) {
+                        StreakDTO streak = new StreakDTO();
+                        streak.setUserId(rs.getInt("user_id"));
+                        streak.setStreakDate(rs.getDate("streak_date"));
+                        streak.setPoint(rs.getInt("point"));
+                        streaks.add(streak);
+                    }
+                }
+            }
+        } catch (Exception Ex) {
+            ExceptionMgr.DisplayException(Ex);
+        } finally {
+            try {
+                db.DbDisConnect();
+            } catch (Exception Ex) {
+                ExceptionMgr.DisplayException(Ex);
+            }
+        }
 
-    public String getIntro() { return intro; }
-    public void setIntro(String intro) { this.intro = intro; }
-
-    public int getScore() { return score; }
-    public void setScore(int score) { this.score = score; }
-
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+        return streaks;
+    }
 }
 // #################################################################################################
 // <END>
