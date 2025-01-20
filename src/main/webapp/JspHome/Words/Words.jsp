@@ -14,6 +14,7 @@
 <%@ page import="BeansHome.User.UserDTO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="BeansHome.Study.StudyDTO" %>
+<%@ page import="java.util.ArrayList" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8");%>
 <!DOCTYPE html>
@@ -57,9 +58,11 @@
             // 세션에 사용자가 있는 경우 사용자 정보 업데이트
             UserDTO currentUser = new UserDTO();
             StudyDTO currentStudy = new StudyDTO();
+            StudyDTO curLevStudy = new StudyDTO();
+            ArrayList<StudyDTO> studysCount = new ArrayList<>();
             Integer userId = (Integer) session.getAttribute("userId");
             Integer defaultLevel = 5;
-            Integer bookmarkIdx;
+            Integer bookmarkIdx = 0;
 
             try {
 
@@ -69,10 +72,8 @@
                     session.setAttribute("user", currentUser);
                 }
 
-                //if(studyDAO.readCurrentStudy(userId, 1, 1, currentStudy)) {
-                    //defaultLevel = currentStudy.getWordsId();
-                //    String def = Integer.toString(defaultLevel).substring(0, 1);
-                %>
+                studyDAO.readCurrentStudy(userId, 1, 1, currentStudy);
+
                 //  여기서 def랑 name 같은 li를 active 해줘야 하는데 어케 하는걸까...;;
                 // 그 다음엔 class="nav-card-date" 인 태그 안에 value를
                 // 최근 학습 날짜: 2024년 12월 25일 이런식으로 바꿔줘야함 키키;;;
@@ -80,13 +81,11 @@
                 // ++ 추가로 드롭다운 선택해서 값 바뀔 때 마다 그거 name 값 가져와서
                 // 변수에 집어 넣고 그 값으로 아래에서 readCurrentStudy 호출해서 북마크 찍어줘야 함
 
-                <%
-                //    defaultLevel = currentStudy.getWordsId();
-                //}
+                defaultLevel = currentStudy.getWordsId();
+                studyDAO.readCurrentStudy(userId, defaultLevel, 0, curLevStudy);
+                bookmarkIdx = curLevStudy.getWordsId() % 100;
 
-                if(studyDAO.readCurrentStudy(userId, 1, 0, currentStudy)) {
-                    bookmarkIdx = Integer.parseInt(Integer.toString(currentStudy.getWordsId()).substring(1, 2));
-                }
+                studyDAO.readStudyCounts(userId, currentStudy.getWordsId() / 100, studysCount);
 
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Error retrieving user information", e);
@@ -136,7 +135,7 @@
             <!-- JSP 반복문을 활용해 Day 카드 출력 -->
             <% for (int i = 1; i <= 10; i++) {
                 // 북마크 표시 조건 - DB 연동 후 수정 필요
-                boolean isBookmarked = ( i == 2);// (Integer.parseInt(Integer.toString(currentStudy.getWordsId()).substring(1, 3)) == 2);
+                boolean isBookmarked = (i == bookmarkIdx);
             %>
             <article class="card">
                 <% if (isBookmarked) { %>
@@ -156,8 +155,8 @@
                 </div>
                 <div class="progress-bar-container">
                     <!-- DB 연동 후 수정 필요 -->
-                    <p class="progress-text"><% currentStudy.getStudyCount(); %>/50</p>
-                    <progress class="progress-bar" value="<% currentStudy.getStudyCount(); %>" min="0" max="50">
+                    <p class="progress-text"><% studysCount.get(i-1).getStudyCount(); %>/50</p>
+                    <progress class="progress-bar" value="<% studysCount.get(i-1).getStudyCount(); %>" min="0" max="50">
                     </progress>
                 </div>
                 <div class="button-container">

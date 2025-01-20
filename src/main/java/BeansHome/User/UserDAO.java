@@ -96,8 +96,7 @@ public class UserDAO {
                     user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
                     user.setPoint(rs.getInt("POINT"));
 
-                    logger.info("Successfully retrieved user info for ID: " + userId);
-                } else {
+                    logger.info("Successfully retrieved user info for ID: " + userId);} else {
                     logger.warning("No user found with ID: " + userId);
                 }
             } else {
