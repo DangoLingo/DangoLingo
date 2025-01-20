@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -109,7 +110,7 @@
         <section class="nav-card">
             <header class="nav-card-header">
                 <div class="nav-card-left">
-                    <span class="nav-card-title">JLPT<%currentStudy.getWordsId();%><%currentStudy.getStudyDate();%></span>
+                    <span class="nav-card-title">JLPT</span>
                     <div class="nav-dropdown">
                         <!-- DB 연동 후 수정 필요 -->
                         <button class="label">N5</button>
@@ -124,7 +125,7 @@
                 </div>
                 <div class="nav-card-right">
                     <!-- DB 연동 후 수정 필요 -->
-                    <time class="nav-card-date">최근 학습 날짜: 2024년 12월 25일</time>
+                    <time class="nav-card-date">최근 학습 날짜: <fmt:formatDate value="<%= currentUser.getStudyDate() %>" pattern="yyyy년 MM월 dd일" /></time>
                 </div>
             </header>
         </section>
