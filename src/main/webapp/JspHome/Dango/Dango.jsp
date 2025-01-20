@@ -124,7 +124,7 @@
 		}
 		
 		.rarity{
-		   background-color: orange;
+		   background-color: #A0D468;
 		   border-radius: 30px;
 		   padding:0px 7px;
 		   font-size: 12px;
@@ -363,7 +363,7 @@
 					<img class="grid-image <%=sLockState%>"
 											alt="<%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%>"
 											src="<%=this.dangoDAO.DBMgr.Rs.getString("LOCATION_IMG")%>"><br>
-					<a class="rarity"><%=sRarityName%></a><br>
+					<a class="rarity" name="rarity" data-value="<%=sRarityName%>"><%=sRarityName%></a><br>
 					<a class="dangoname"><%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%></a>
 		         </div>
 			<%
