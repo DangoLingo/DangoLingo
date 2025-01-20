@@ -1,6 +1,20 @@
+/* Pretendard 폰트 CDN */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+/* LaundryGothic 폰트 */
 @font-face {
-    font-family: 'LaundryGothicOTF';
-    src: url('../Main/fonts/LaundryGothicOTF.otf') format('opentype');
+    font-family: 'LaundryGothic';
+    src: url('../fonts/laundrygothic-bold.ttf') format('truetype'),
+         url('../fonts/laundrygothic-bold.woff') format('woff'),
+         url('../fonts/laundrygothic-bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* 기본 폰트 설정 */
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
 
 .header {
@@ -27,10 +41,11 @@
 }
 
 .logo {
-    font-family: 'LaundryGothicOTF', sans-serif;
-    font-size: 20px;
-    font-weight: 600;
+    font-family: 'LaundryGothic', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
     color: #212529;
+    letter-spacing: 0.5px;
 }
 
 .auth-buttons {
