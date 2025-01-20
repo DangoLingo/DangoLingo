@@ -14,7 +14,6 @@
 <%@ page import="BeansHome.User.UserDTO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="BeansHome.Study.StudyDTO" %>
-<%@ page import="java.util.ArrayList" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8");%>
 <!DOCTYPE html>
@@ -46,52 +45,71 @@
     [외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
     --------------------------------------------------------------------------%>
     <script>
-
         <%
-            // 로거 먼저 생성
-            Logger logger = Logger.getLogger("Main_SignIn.jsp");
+            Logger logger = Logger.getLogger("Words.jsp");
             logger.setLevel(Level.ALL);
 
             UserDAO userDAO = new UserDAO();
             StudyDAO studyDAO = new StudyDAO();
             SessionDAO sessionDAO = new SessionDAO();
-            // 세션에 사용자가 있는 경우 사용자 정보 업데이트
             UserDTO currentUser = new UserDTO();
             StudyDTO currentStudy = new StudyDTO();
-            StudyDTO curLevStudy = new StudyDTO();
-            ArrayList<StudyDTO> studysCount = new ArrayList<>();
             Integer userId = (Integer) session.getAttribute("userId");
-            Integer defaultLevel = 5;
-            Integer bookmarkIdx = 0;
-
+            
+            // 기본값 설정
+            Integer selectedNLevel = 5;  // 기본 N5
+            Integer currentDay = 1;     // 기본 Day 1
+            
+            // URL 파라미터에서 선택된 레벨 확인
+            String levelParam = request.getParameter("level");
+            if (levelParam != null && !levelParam.isEmpty()) {
+                selectedNLevel = Integer.parseInt(levelParam);
+            }
+            
             try {
-
                 // 현재 사용자 정보 조회
-                logger.info("Retrieved user info: " + (currentUser != null ? currentUser.getNickname() : "null"));
                 if(userDAO.readUser(userId, currentUser)) {
                     session.setAttribute("user", currentUser);
                 }
 
-                studyDAO.readCurrentStudy(userId, 1, 1, currentStudy);
-
-                //  여기서 def랑 name 같은 li를 active 해줘야 하는데 어케 하는걸까...;;
-                // 그 다음엔 class="nav-card-date" 인 태그 안에 value를
-                // 최근 학습 날짜: 2024년 12월 25일 이런식으로 바꿔줘야함 키키;;;
-
-                // ++ 추가로 드롭다운 선택해서 값 바뀔 때 마다 그거 name 값 가져와서
-                // 변수에 집어 넣고 그 값으로 아래에서 readCurrentStudy 호출해서 북마크 찍어줘야 함
-
-                defaultLevel = currentStudy.getWordsId();
-                studyDAO.readCurrentStudy(userId, defaultLevel, 0, curLevStudy);
-                bookmarkIdx = curLevStudy.getWordsId() % 100;
-
-                studyDAO.readStudyCounts(userId, currentStudy.getWordsId() / 100, studysCount);
-
+                // 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
+                if(studyDAO.readCurrentStudy(userId, 1, 0, currentStudy)) {
+                    int wordsId = currentStudy.getWordsId();
+                    // 예: wordsId가 104라면 N1의 Day 04를 의미
+                    
+                    // URL에서 레벨이 지정되지 않은 경우에만 현재 학습 중인 레벨을 사용
+                    if (levelParam == null) {
+                        selectedNLevel = wordsId / 100;  // 첫 자리 (N레벨)
+                    }
+                    currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
+                    
+                    // 디버깅을 위한 로그
+                    logger.info("Current Study ID: " + wordsId + 
+                               ", Selected Level: " + selectedNLevel + 
+                               ", Current Day: " + currentDay);
+                }
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "Error retrieving user information", e);
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Error retrieving information", e);
             }
         %>
+
+        // N레벨 변경 함수
+        function changeLevel(level) {
+            // URL에 선택한 레벨을 파라미터로 추가하고 페이지 새로고침
+            window.location.href = '${pageContext.request.contextPath}/JspHome/Words/Words.jsp?level=' + level;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const levelButton = document.querySelector('.label');
+            levelButton.textContent = 'N<%= selectedNLevel %>';
+            
+            const options = document.querySelectorAll('.option-item');
+            options.forEach(option => {
+                if(option.textContent === 'N<%= selectedNLevel %>') {
+                    option.classList.add('active');
+                }
+            });
+        });
     </script>
 </head>
 <body class="Body">
@@ -111,14 +129,13 @@
                 <div class="nav-card-left">
                     <span class="nav-card-title">JLPT</span>
                     <div class="nav-dropdown">
-                        <!-- DB 연동 후 수정 필요 -->
-                        <button class="label">N5</button>
+                        <button class="label">N<%= selectedNLevel %></button>
                         <ul class="option-list">
-                            <li name="1" class="option-item">N1</li>
-                            <li name="2" class="option-item">N2</li>
-                            <li name="3" class="option-item">N3</li>
-                            <li name="4" class="option-item">N4</li>
-                            <li name="5" class="option-item">N5</li>
+                            <li name="1" class="option-item" onclick="changeLevel(1)">N1</li>
+                            <li name="2" class="option-item" onclick="changeLevel(2)">N2</li>
+                            <li name="3" class="option-item" onclick="changeLevel(3)">N3</li>
+                            <li name="4" class="option-item" onclick="changeLevel(4)">N4</li>
+                            <li name="5" class="option-item" onclick="changeLevel(5)">N5</li>
                         </ul>
                     </div>
                 </div>
@@ -132,13 +149,34 @@
             단어장 일자별 선택 카드 영역
         ----------------------------------------------------------------------%>
         <section class="day-cards">
-            <!-- JSP 반복문을 활용해 Day 카드 출력 -->
-            <% for (int i = 1; i <= 10; i++) {
-                // 북마크 표시 조건 - DB 연동 후 수정 필요
-                boolean isBookmarked = (i == bookmarkIdx);
-            %>
+            <% for (int i = 1; i <= 10; i++) { %>
             <article class="card">
-                <% if (isBookmarked) { %>
+                <%-- 현재 선택된 N레벨과 Day가 모두 일치할 때만 북마크 표시 --%>
+                <% 
+                // 현재 카드의 wordsId 계산 (예: N1의 Day 04는 104)
+                int cardWordsId = (selectedNLevel * 100) + i;
+                
+                // 현재 단어장의 학습 정보 조회
+                StudyDTO studyInfo = new StudyDTO();
+                int studyCount = 0;
+                try {
+                    if(studyDAO.readCurrentStudy(userId, selectedNLevel, i, studyInfo)) {
+                        studyCount = studyInfo.getStudyCount();
+                    }
+                } catch(Exception e) {
+                    logger.log(Level.SEVERE, "Error retrieving study info", e);
+                }
+                
+                // 현재 학습 중인 단어장과 비교 (정수형으로 비교)
+                boolean isCurrentStudy = (currentStudy.getWordsId() == cardWordsId);
+                
+                // 디버깅을 위한 로그
+                logger.info("Comparing - Current Study ID: " + currentStudy.getWordsId() + 
+                           ", Card ID: " + cardWordsId + 
+                           ", Is Current: " + isCurrentStudy);
+                %>
+                
+                <% if (isCurrentStudy) { %>
                 <div class="bookmark"></div>
                 <% } %>
                 <div class="card-title-container">
@@ -147,22 +185,20 @@
                     <% } else { %>
                     <h2 class="card-title">Day <%= i %></h2>
                     <% } %>
-                    <% if (isBookmarked) { %>
+                    <% if (isCurrentStudy) { %>
                     <p class="card-subtitle">최근 학습한 단어장</p>
                     <% } else { %>
                     <p style="visibility: hidden;" class="card-subtitle">최근 학습한 단어장</p>
                     <% } %>
                 </div>
                 <div class="progress-bar-container">
-                    <!-- DB 연동 후 수정 필요 -->
-                    <p class="progress-text"><% studysCount.get(i-1).getStudyCount(); %>/50</p>
-                    <progress class="progress-bar" value="<% studysCount.get(i-1).getStudyCount(); %>" min="0" max="50">
+                    <p class="progress-text"><%= studyCount %>/50</p>
+                    <progress class="progress-bar" value="<%= studyCount %>" min="0" max="50">
                     </progress>
                 </div>
                 <div class="button-container">
-                    <!-- 페즈 버튼에 Quiz_Choose.jsp 링크 추가 -->
-                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Choose.jsp?wordsId=<%currentStudy.getWordsId();%>'">퀴즈</button>
-                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Study/Words_Study.jsp?wordsId=<%currentStudy.getWordsId();%>'">학습</button>
+                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Choose.jsp?wordsId=<%= cardWordsId %>'">퀴즈</button>
+                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Study/Words_Study.jsp?wordsId=<%= cardWordsId %>'">학습</button>
                 </div>
             </article>
             <% } %>
