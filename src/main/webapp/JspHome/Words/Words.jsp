@@ -14,6 +14,7 @@
 <%@ page import="BeansHome.User.UserDTO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="BeansHome.Study.StudyDTO" %>
+<%@ page import="java.util.ArrayList" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8");%>
 <!DOCTYPE html>
@@ -54,17 +55,13 @@
             SessionDAO sessionDAO = new SessionDAO();
             UserDTO currentUser = new UserDTO();
             StudyDTO currentStudy = new StudyDTO();
+            ArrayList<StudyDTO> studyCounts = new ArrayList<>();
             Integer userId = (Integer) session.getAttribute("userId");
             
             // 기본값 설정
             Integer selectedNLevel = 5;  // 기본 N5
             Integer currentDay = 1;     // 기본 Day 1
-            
-            // URL 파라미터에서 선택된 레벨 확인
-            String levelParam = request.getParameter("level");
-            if (levelParam != null && !levelParam.isEmpty()) {
-                selectedNLevel = Integer.parseInt(levelParam);
-            }
+
             
             try {
                 // 현재 사용자 정보 조회
@@ -73,14 +70,13 @@
                 }
 
                 // 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
-                if(studyDAO.readCurrentStudy(userId, 1, 0, currentStudy)) {
+                if(studyDAO.readCurrentStudy(userId, 1, 1, currentStudy)) {
                     int wordsId = currentStudy.getWordsId();
                     // 예: wordsId가 104라면 N1의 Day 04를 의미
                     
                     // URL에서 레벨이 지정되지 않은 경우에만 현재 학습 중인 레벨을 사용
-                    if (levelParam == null) {
-                        selectedNLevel = wordsId / 100;  // 첫 자리 (N레벨)
-                    }
+                    selectedNLevel = wordsId / 100;  // 첫 자리 (N레벨)
+
                     currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
                     
                     // 디버깅을 위한 로그
@@ -88,6 +84,11 @@
                                ", Selected Level: " + selectedNLevel + 
                                ", Current Day: " + currentDay);
                 }
+
+                // 일자별 학습한 단어 정보 조회
+                if(studyDAO.readStudyCounts(userId, selectedNLevel, studyCounts)) {
+                }
+
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Error retrieving information", e);
             }
@@ -192,8 +193,8 @@
                     <% } %>
                 </div>
                 <div class="progress-bar-container">
-                    <p class="progress-text"><%= studyCount %>/50</p>
-                    <progress class="progress-bar" value="<%= studyCount %>" min="0" max="50">
+                    <p class="progress-text"><%= studyCounts.get(i-1).getStudyCount() %>/50</p>
+                    <progress class="progress-bar" value="<%= studyCounts.get(i-1).getStudyCount() %>" min="0" max="50">
                     </progress>
                 </div>
                 <div class="button-container">
