@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 대각선 막대와 손잡이 -->
+    <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    
+    <!-- 상단 당고 (나무) -->
+    <circle cx="160" cy="160" r="35" fill="#228B22"/>
+    <!-- 나뭇잎 -->
+    <path d="M145 150 Q160 140 175 150" stroke="#32CD32" stroke-width="3"/>
+    <path d="M145 160 Q160 150 175 160" stroke="#32CD32" stroke-width="3"/>
+    <!-- 평화로운 표정 -->
+    <path d="M150 165 Q160 170 170 165" stroke="#FFFFFF" stroke-width="2"/>
+    <circle cx="155" cy="155" r="3" fill="#FFFFFF"/>
+    <circle cx="165" cy="155" r="3" fill="#FFFFFF"/>
+
+    <!-- 중간 당고 (버섯) -->
+    <circle cx="200" cy="200" r="35" fill="#FF6B6B"/>
+    <!-- 버섯 점 -->
+    <circle cx="190" cy="190" r="3" fill="#FFFFFF"/>
+    <circle cx="210" cy="190" r="3" fill="#FFFFFF"/>
+    <circle cx="200" cy="210" r="3" fill="#FFFFFF"/>
+    <!-- 귀여운 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="195" cy="195" r="2" fill="#3F1F1F"/>
+    <circle cx="205" cy="195" r="2" fill="#3F1F1F"/>
+
+    <!-- 하단 당고 (꽃) -->
+    <circle cx="240" cy="240" r="35" fill="#FFC0CB"/>
+    <!-- 꽃잎 -->
+    <circle cx="230" cy="230" r="8" fill="#FFB6C1"/>
+    <circle cx="250" cy="230" r="8" fill="#FFB6C1"/>
+    <circle cx="240" cy="250" r="8" fill="#FFB6C1"/>
+    <!-- 행복한 표정 -->
+    <path d="M230 245 Q240 250 250 245" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="235" cy="235" r="2" fill="#3F1F1F"/>
+    <circle cx="245" cy="235" r="2" fill="#3F1F1F"/>
+</svg> 
