@@ -1,0 +1,53 @@
+create or replace PROCEDURE SP_USER_U
+(
+    iUserId      IN  NUMBER,        -- 유저 번호
+    iNickname    IN  VARCHAR2,        -- 닉네임
+    iIntro       IN  VARCHAR2,        -- 소개글
+    iPassword    IN  VARCHAR2,        -- 비밀번호
+    oCursor      OUT SYS_REFCURSOR    -- 결과 커서
+)
+IS
+    vCount NUMBER;                   -- 중복 체크용 변수
+    vErrorMsg VARCHAR2(4000);        -- 에러 메시지 변수
+    vCleanedNickname VARCHAR2(50);   -- 정리된 닉네임
+    vCleanedEmail VARCHAR2(50);      -- 정리된 이메일
+BEGIN
+    -- 입력 데이터 정리 (공백 제거 및 대소문자 통일)
+    vCleanedNickname := TRIM(UPPER(iNickname));
+
+    -- 닉네임 중복 체크
+    SELECT COUNT(*) INTO vCount
+    FROM TB_USER
+    WHERE UPPER(TRIM(NICKNAME)) = vCleanedNickname;
+
+    IF vCount > 0 THEN
+        OPEN oCursor FOR
+        SELECT -1 AS RESULT, '이미 사용 중인 닉네임입니다.' AS ERROR_MSG FROM DUAL;
+        RETURN;
+    END IF;
+
+    -- 정보 수정
+    BEGIN
+        UPDATE TB_USER a
+		SET a.NICKNAME = iNickname, a.INTRO = iIntro, a.PASSWORD = iPassword
+		WHERE USER_ID = iUserId;
+
+        -- 커밋 및 성공 메시지 반환
+        COMMIT;
+        OPEN oCursor FOR
+        SELECT 1 AS RESULT, '정보 수정이 완료되었습니다.' AS ERROR_MSG FROM DUAL;
+
+    EXCEPTION
+        -- UNIQUE 제약 조건 위반 처리
+        WHEN DUP_VAL_ON_INDEX THEN
+            ROLLBACK;
+            OPEN oCursor FOR
+            SELECT -1 AS RESULT, '닉네임 또는 이메일이 중복됩니다.' AS ERROR_MSG FROM DUAL;
+        -- 기타 예외 처리
+        WHEN OTHERS THEN
+            ROLLBACK;
+            vErrorMsg := SQLERRM;
+            OPEN oCursor FOR
+            SELECT -2 AS RESULT, '정보 수정 중 오류: ' || vErrorMsg AS ERROR_MSG FROM DUAL;
+    END;
+END SP_USER_U;

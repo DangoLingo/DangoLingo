@@ -1,0 +1,24 @@
+create or replace PROCEDURE SP_USER_R
+(
+	iUserId		IN	int,			-- 유저번호
+	oCur		OUT	SYS_REFCURSOR	-- 결과 반환용 커서
+)
+IS
+BEGIN
+	OPEN 	oCur FOR
+	SELECT	a.User_id,
+			a.Email,
+			a.Password,
+			a.Name,
+			a.NickName,
+			a.Intro,
+			a.Study_date,
+			a.Study_time,
+			a.Study_day,
+			a.Quiz_Count,
+			a.Quiz_Right,
+			a.Point,
+			a.Total_Point
+	FROM	TB_USER a
+	WHERE	a.user_id	= iUserId;
+END SP_USER_R;
