@@ -1,19 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="BeansHome.User.UserDAO" %>
-<%@ page import="BeansHome.User.UserDTO" %>
-<%@ page import="BeansHome.Study.StudyDAO" %>
-<%@ page import="BeansHome.Study.StudyDTO" %>
-<%@ page import="BeansHome.Ranking.RankingDAO" %>
-<%@ page import="BeansHome.Ranking.RankingDTO" %>
+<%@ page import="BeansHome.User.*" %>
+<%@ page import="BeansHome.Study.*" %>
+<%@ page import="BeansHome.Ranking.*" %>
+<%@ page import="BeansHome.Streak.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.logging.Logger" %>
 <%@ page import="java.util.logging.Level" %>
 <% 
+    // 캐시 제어
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setHeader("Expires", "0"); // Proxies
+    
     // 로거 설정
     Logger logger = Logger.getLogger("Main.jsp");
     
     request.setCharacterEncoding("UTF-8");
+    
+    // DAO 객체들 초기화
+    UserDAO userDAO = new UserDAO();
+    StudyDAO studyDAO = new StudyDAO();
+    RankingDAO rankingDAO = new RankingDAO();
+    StreakDAO streakDAO = new StreakDAO();
+    RankingDTO userRanking = null;
+    List<StreakDTO> userStreaks = null;
     
     // 로그아웃 처리
     String action = request.getParameter("action");
@@ -24,28 +35,36 @@
     }
     
     // 세션 체크
-    UserDTO currentUser = (UserDTO) session.getAttribute("user");
+    UserDTO currentUser = null;
+    Integer userId = (Integer) session.getAttribute("userId");
+    if (userId != null) {
+        try {
+            currentUser = userDAO.getUserById(userId);
+            // 세션 업데이트
+            session.setAttribute("user", currentUser);
+        } catch (Exception e) {
+            logger.severe("Error refreshing user data: " + e.getMessage());
+        }
+    }
     
     logger.info("Session check - userNickname: " + (currentUser != null ? currentUser.getNickname() : "Not logged in"));
     logger.info("isLoggedIn: " + (currentUser != null));
     
     // 로그인된 경우에만 사용자 정보 조회
-    UserDAO userDAO = new UserDAO();
-    StudyDAO studyDAO = new StudyDAO();
-    RankingDAO rankingDAO = new RankingDAO();
-    RankingDTO userRanking = null;
-    
     if (currentUser != null) {
         try {
-            Integer userId = (Integer) session.getAttribute("userId");
             logger.info("Attempting to get user info for userId: " + userId);
             
             // 현재 사용자 정보 조회
             logger.info("Retrieved user info: " + (currentUser != null ? currentUser.getNickname() : "null"));
             
             // 현재 사용자의 랭킹 정보 조회
-            userRanking = rankingDAO.getUserRanking(userId, "points");
+            userRanking = rankingDAO.getUserRanking(currentUser.getUserId());
             logger.info("Retrieved ranking info: " + (userRanking != null ? userRanking.getRank() : "null"));
+            
+            // 현재 사용자의 스트릭 정보 조회
+            userStreaks = streakDAO.getUserStreaks(currentUser.getUserId());
+            logger.info("Retrieved streak info: " + (userStreaks != null ? userStreaks.size() + " records" : "null"));
             
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error retrieving user information", e);
@@ -158,12 +177,12 @@
                 
                 <section class="statistics">
                     <article class="stat-item">
-                        <h3>학습 단어</h3>
+                        <h3>퀴즈 풀이</h3>
                         <p class="stat-number"><%= currentUser.getQuizRight() %>개</p>
                     </article>
                     <article class="stat-item">
                         <h3>연속 학습</h3>
-                        <p class="stat-number"><%= currentUser.getStudyDay() %>일</p>
+                        <p class="stat-number"><%= userStreaks != null && !userStreaks.isEmpty() ? userStreaks.get(0).getPoint() : "0" %>일</p>
                     </article>
                     <article class="stat-item">
                         <h3>학습 포인트</h3>
@@ -171,7 +190,7 @@
                     </article>
                     <article class="stat-item">
                         <h3>포인트 랭킹</h3>
-                        <p class="stat-number"><%= userRanking != null ? userRanking.getRank() : "-" %>위</p>
+                        <p class="stat-number"><%= userRanking != null ? String.format("%,d", userRanking.getRank()) : "-" %>위</p>
                     </article>
                 </section>
                 
@@ -180,57 +199,77 @@
                     <div class="streak-container">
                         <div class="streak-chart">
                             <div class="streak-days">
+                                <span>일</span>
                                 <span>월</span>
                                 <span>화</span>
                                 <span>수</span>
                                 <span>목</span>
                                 <span>금</span>
                                 <span>토</span>
-                                <span>일</span>
                             </div>
                             <% 
-                            // 현재 사용자의 스트릭 데이터 조회
-                            List<StudyDTO> streaks = studyDAO.getStudyStreak(currentUser.getUserId());
-                            
-                            // 첫 번째 날짜의 요일 확인
-                            Calendar cal = Calendar.getInstance();
-                            cal.add(Calendar.DATE, -363);  // 52주 전부터 시작
-                            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);  // 월요일부터 시작
-                            
-                            Map<String, StudyDTO> studyMap = new HashMap<>();
+                            // 스트릭 데이터를 Map으로 변환
+                            Map<String, StreakDTO> streakMap = new HashMap<>();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             
-                            // 스트릭 데이터를 Map으로 변환
-                            for (StudyDTO study : streaks) {
-                                studyMap.put(sdf.format(study.getStudyDate()), study);
+                            if (userStreaks != null) {
+                                for (StreakDTO streak : userStreaks) {
+                                    streakMap.put(sdf.format(streak.getStreakDate()), streak);
+                                }
                             }
                             
-                            for(int week = 0; week < 52; week++) { 
-                            %>
+                            // 오늘 날짜 기준으로 계산
+                            Calendar today = Calendar.getInstance();
+                            Calendar cal = Calendar.getInstance();
+                            Calendar yearAgo = Calendar.getInstance();
+                            yearAgo.add(Calendar.YEAR, -1); // 1년 전 날짜
+                            
+                            // 정확히 1년 전으로 이동
+                            cal.add(Calendar.YEAR, -1);
+                            
+                            // 시작일이 일요일이 되도록 조정 (깃허브 스타일)
+                            while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                                cal.add(Calendar.DATE, -1);
+                            }
+                            
+                            // 총 주 수 계산 (정확히 53주)
+                            int totalWeeks = 53;
+                            
+                            for(int week = 0; week < totalWeeks; week++) {
+                                %>
                                 <div class="streak-grid">
                                     <% 
                                     // 각 주의 7일 생성
                                     for(int day = 0; day < 7; day++) {
                                         String dateStr = sdf.format(cal.getTime());
-                                        StudyDTO study = studyMap.get(dateStr);
                                         
-                                        if (study == null) {
-                                            study = new StudyDTO();
-                                            study.setStudyLevel(0);
-                                            study.setStudyCount(0);
-                                            study.setStudyDate(new java.sql.Date(cal.getTimeInMillis()));
+                                        // 1년 이전이거나 미래의 날짜는 빈 공간으로 처리
+                                        if (cal.before(yearAgo) || cal.after(today)) {
+                                            %><div class="streak-cell empty"></div><%
+                                        } else {
+                                            StreakDTO streak = streakMap.get(dateStr);
+                                            
+                                            // 스트릭 레벨 계산 (포인트에 따라)
+                                            int level = 0;
+                                            int point = 0;
+                                            if (streak != null) {
+                                                point = streak.getPoint();
+                                                if (point > 300) level = 4;
+                                                else if (point > 200) level = 3;
+                                                else if (point > 100) level = 2;
+                                                else if (point > 0) level = 1;
+                                            }
+                                            %>
+                                            <div class="streak-cell level-<%= level %>" 
+                                                 title="<%= dateStr %> : <%= point %>점"
+                                                 data-point="<%= point %>점"
+                                                 data-date="<%= dateStr %>">
+                                            </div>
+                                            <%
                                         }
-                                        
-                                        int level = study.getStudyLevel();
-                                        int count = study.getStudyCount();
-                                    %>
-                                        <div class="streak-cell level-<%= level %>" 
-                                             data-count="<%= count %>회 학습"
-                                             data-date="<%= dateStr %>">
-                                        </div>
-                                    <% 
                                         cal.add(Calendar.DATE, 1);  // 다음 날짜로
-                                    } %>
+                                    } 
+                                    %>
                                 </div>
                             <% } %>
                         </div>
@@ -252,15 +291,11 @@
     <!-- JavaScript 추가 -->
     <script>
     function handleLogout() {
-        console.log('로그아웃 버튼 클릭됨');
         if (confirm('로그아웃 하시겠습니까?')) {
-            console.log('로그아웃 확인');
             window.location.href = 'Main.jsp?action=logout';
-            console.log('로그아웃 페이지로 이동');
-        } else {
-            console.log('로그아웃 취소');
         }
     }
     </script>
+    <script src="${pageContext.request.contextPath}/JspHome/Main/js/tooltip.js"></script>
 </body>
 </html>

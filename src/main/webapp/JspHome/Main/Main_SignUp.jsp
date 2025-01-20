@@ -20,6 +20,22 @@
     logger.setLevel(Level.ALL);
     
     request.setCharacterEncoding("UTF-8");
+    
+    // 세션에 사용자가 있는 경우 사용자 정보 업데이트
+    UserDTO currentUser = (UserDTO) session.getAttribute("user");
+    if (currentUser != null) {
+        try {
+            UserDAO userDAO = new UserDAO();
+            UserDTO updatedUser = userDAO.getUserById(currentUser.getUserId());
+            if (updatedUser != null) {
+                session.setAttribute("user", updatedUser);
+                logger.info("User session updated for user ID: " + currentUser.getUserId());
+            }
+        } catch (Exception e) {
+            logger.severe("Error updating user session: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 %>
 
 <%
