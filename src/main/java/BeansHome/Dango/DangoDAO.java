@@ -29,6 +29,7 @@ import java.util.logging.ConsoleHandler;
  * Inheritance : None
  ***********************************************************************/
 public class DangoDAO {
+    private static final Logger logger = Logger.getLogger(DangoDAO.class.getName());
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -71,35 +72,31 @@ public class DangoDAO {
      ***********************************************************************/
     public boolean ReadBoardList(Integer userId) throws Exception
     {
-        String sSql = null;                      // DML 문장
-        Object[] oPaValue = null;                // DML 문장에 필요한 파라미터 객체
+        String sSql = null;
+        Object[] oPaValue = null;
         boolean bResult = false;
 
-        try
-        {
-            // -----------------------------------------------------------------------------
-            // 당고정보 읽기
-            // -----------------------------------------------------------------------------
-            if (this.DBMgr.DbConnect() == true)
-            {
-                // 사원정보 읽기
-                sSql = "BEGIN SP_IMG_R(?,?); END;";
+        try {
+            if (this.DBMgr.DbConnect()) {
+                // SP_IMG_R 프로시저 호출 준비
+                sSql = "{call SP_IMG_R(?, ?)}";  // 저장 프로시저 호출 구문 수정
+                
+                // 파라미터 설정 (IN: userId, OUT: cursor)
+                oPaValue = new Object[2];
+                oPaValue[0] = userId;                   // IN parameter
+                oPaValue[1] = OracleTypes.CURSOR;      // OUT parameter (SYS_REFCURSOR)
 
-                // IN 파라미터 만큼만 할당
-                oPaValue = new Object[1];
-
-                oPaValue[0] = userId;
-
-                if (this.DBMgr.RunQuery(sSql, oPaValue, 2, true) == true)
-                {
-                    bResult = true;
+                // 프로시저 실행 (2개 파라미터, OUT 파라미터 있음)
+                if (this.DBMgr.RunQuery(sSql, oPaValue, 2, true)) {
+                    // ResultSet 가져오기
+                    if (this.DBMgr.Rs != null) {
+                        bResult = true;
+                    }
                 }
             }
-            // -----------------------------------------------------------------------------
-        }
-        catch (Exception Ex)
-        {
-            Common.ExceptionMgr.DisplayException(Ex);        // 예외처리(콘솔)
+        } catch (Exception Ex) {
+            logger.severe("Error in ReadBoardList: " + Ex.getMessage());
+            ExceptionMgr.DisplayException(Ex);
         }
         return bResult;
     }

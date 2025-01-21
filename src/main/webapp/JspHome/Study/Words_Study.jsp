@@ -27,7 +27,7 @@ List<String[]> wordsList = new ArrayList<>();
 int japaneseId = 1;
 
 // words_id 파라미터 가져오기
-String wordsIdParam = request.getParameter("words_id");
+String wordsIdParam = request.getParameter("wordsId");
 int wordsId = (wordsIdParam != null) ? Integer.parseInt(wordsIdParam) : 101;
 
 // 세션에서 user_id 가져오기 / 없으면 기본값 5 설정

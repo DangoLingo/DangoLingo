@@ -120,40 +120,27 @@
 [Beans DTO 읽기 및 로직 구현 영역]
 ------------------------------------------------------------------------------%>
 <%
-	
-   // bJobProcess 작업처리 허용	
-	// 당고정보 검색
-	if (this.dangoDAO.ReadBoardList(nUserId) == true)
-	{
-		if (this.dangoDAO.DBMgr != null && this.dangoDAO.DBMgr.Rs != null)
-		{
-			bContinue = true;
-		}
-	}
-%>
-<%
+    // 첫 번째 쿼리 실행 - 카운트 계산
+    if (this.dangoDAO.ReadBoardList(nUserId)) {
+        if (this.dangoDAO.DBMgr != null && this.dangoDAO.DBMgr.Rs != null) {
+            while (this.dangoDAO.DBMgr.Rs.next()) {
+                todalDangoCount++;
+                if (this.dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") != -1) {
+                    userDangoCount++;
+                }
+            }
+        }
+    }
 
-	while (bContinue == true && this.dangoDAO.DBMgr.Rs.next())
-	{
-		todalDangoCount ++;
-	
-		if (this.dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") != -1)	userDangoCount++;
-	}
-	bContinue = false;
+    // 두 번째 쿼리 실행 - 이미지 표시용
+    bContinue = false;
+    if (this.dangoDAO.ReadBoardList(nUserId)) {
+        if (this.dangoDAO.DBMgr != null && this.dangoDAO.DBMgr.Rs != null) {
+            bContinue = true;
+        }
+    }
 %>
 
-
-<%
-   // bJobProcess 작업처리 허용	
-	// 당고정보 검색
-	if (this.dangoDAO.ReadBoardList(nUserId) == true)
-	{
-		if (this.dangoDAO.DBMgr != null && this.dangoDAO.DBMgr.Rs != null)
-		{
-			bContinue = true;
-		}
-	}
-%>
 <body class="has-navbar">
     <%@ include file="../Common/Navbar.jsp"%>
     
@@ -166,45 +153,37 @@
         
         <div class="grid-container">
             <%
-                    	while (bContinue == true && this.dangoDAO.DBMgr.Rs.next())
-                    	{
-                    		switch (this.dangoDAO.DBMgr.Rs.getString("RARITY"))
-                    		{
-                    	 	case "U":
-                    	 			sRarityName = "UNIQUE";
-                    	 			sRarityColor = "rarity_unique";
-                    	 			break;
-                     		
-                    	 	case "R":
-                     	 			sRarityName = "RARE";
-                     	 			sRarityColor = "rarity_rare";
-                     	 			break;
-                     		
-                    	 	case "C":
-                     	 			sRarityName = "COMMON";
-                     	 			sRarityColor = "rarity_common";
-                     	 			break;       		
-                    		}
-                    		
-                    	if (this.dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") == -1)	sLockState = "locked";
-
-                    	else 		    		sLockState = "";		
-                    		
-              
-                %>
-                <div class="grid-item">
-                    <img class="grid-image <%=sLockState%>"
-                                            alt="<%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%>"
-                                            src="<%=this.dangoDAO.DBMgr.Rs.getString("LOCATION_IMG")%>"><br>
-                    <a class="rarity <%=sRarityColor %>"><%=sRarityName%></a><br>
-                    <a class="dangoname"><%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%></a>
-                </div>
-                <%
-                }         	
-                %>
+                while (bContinue && this.dangoDAO.DBMgr.Rs.next()) {
+                    // 등급에 따른 표시 설정
+                    switch (this.dangoDAO.DBMgr.Rs.getString("RARITY")) {
+                        case "U":
+                            sRarityName = "UNIQUE";
+                            sRarityColor = "rarity_unique";
+                            break;
+                        case "R":
+                            sRarityName = "RARE";
+                            sRarityColor = "rarity_rare";
+                            break;
+                        case "C":
+                            sRarityName = "COMMON";
+                            sRarityColor = "rarity_common";
+                            break;
+                    }
+                    
+                    // 잠금 상태 설정
+                    sLockState = (this.dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") == -1) ? "locked" : "";
+            %>
+            <div class="grid-item">
+                <img class="grid-image <%=sLockState%>"
+                     alt="<%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%>"
+                     src="<%=this.dangoDAO.DBMgr.Rs.getString("LOCATION_IMG")%>"><br>
+                <a class="rarity <%=sRarityColor %>"><%=sRarityName%></a><br>
+                <a class="dangoname"><%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%></a>
             </div>
-            
-        </section>
+            <%
+                }
+            %>
+        </div>
     </main>
 
     <!-- 모달 -->
