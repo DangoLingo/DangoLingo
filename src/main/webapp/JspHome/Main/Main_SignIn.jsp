@@ -106,7 +106,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>로그인 - 당고링고</title>
+    <link rel="icon" href="../images/favicon-96x96.png" type="image/png" sizes="96x96">
+    <title>당고링고</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-jp.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Main/css/auth.css">
 </head>
