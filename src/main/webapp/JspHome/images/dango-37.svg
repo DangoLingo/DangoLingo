@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 대각선 막대와 손잡이 -->
+    <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    
+    <!-- 상단 당고 (테니스) -->
+    <circle cx="160" cy="160" r="35" fill="#98FB98"/>
+    <!-- 테니스공 무늬 -->
+    <path d="M145 160 Q160 150 175 160" stroke="#FFFFFF" stroke-width="3" fill="none"/>
+    <path d="M145 160 Q160 170 175 160" stroke="#FFFFFF" stroke-width="3" fill="none"/>
+    <!-- 활기찬 표정 -->
+    <path d="M150 165 Q160 170 170 165" stroke="#3F1F1F" stroke-width="2"/>
+    <path d="M155 155 L150 150" stroke="#3F1F1F" stroke-width="2"/>
+    <path d="M165 155 L170 150" stroke="#3F1F1F" stroke-width="2"/>
+
+    <!-- 중간 당고 (배구공) -->
+    <circle cx="200" cy="200" r="35" fill="#FFFFFF"/>
+    <!-- 배구공 무늬 -->
+    <path d="M185 200 Q200 180 215 200" stroke="#000000" stroke-width="2"/>
+    <path d="M185 200 Q200 220 215 200" stroke="#000000" stroke-width="2"/>
+    <!-- 집중하는 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="195" cy="195" r="3" fill="#3F1F1F"/>
+    <circle cx="205" cy="195" r="3" fill="#3F1F1F"/>
+
+    <!-- 하단 당고 (농구공) -->
+    <circle cx="240" cy="240" r="35" fill="#FFA500"/>
+    <!-- 농구공 무늬 -->
+    <path d="M225 240 L255 240" stroke="#000000" stroke-width="2"/>
+    <path d="M240 225 L240 255" stroke="#000000" stroke-width="2"/>
+    <!-- 자신감 있는 표정 -->
+    <path d="M230 245 Q240 250 250 245" stroke="#3F1F1F" stroke-width="2"/>
+    <path d="M235 235 L230 230" stroke="#3F1F1F" stroke-width="2"/>
+    <path d="M245 235 L250 230" stroke="#3F1F1F" stroke-width="2"/>
+</svg> 

@@ -318,6 +318,40 @@ if (userId == null) {
         xhr.send(params);
     });
 
+    function animateDonutChart(correctAnswers, totalAnswers, duration) {
+        const chartBar = document.querySelector('.chart-bar');
+        const chartResult = document.querySelector('.chart-result');
+        let startTime;
+        let startNumber = 0;
+        let finalNumber = correctAnswers;
+        const finalDegree = (correctAnswers / totalAnswers) * 360;
+
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+
+            // Animate donut fill
+            chartBar.style.setProperty('--deg', (finalDegree * progress) + 'deg');
+
+            // Animate number counting
+            const currentNumber = Math.floor(startNumber + (finalNumber - startNumber) * progress);
+            chartResult.innerText = currentNumber + '/' + totalAnswers;
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
+
+    // Call the animation when the page is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        const correctAnswers = <%= memorizedCount %>; // already calculated
+        const totalAnswers = 50;                       // fixed total
+        animateDonutChart(correctAnswers, totalAnswers, 2000); // 2 seconds
+    });
+
 </script>
 
 

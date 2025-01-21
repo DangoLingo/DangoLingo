@@ -1,3 +1,4 @@
+<%@page import="BeansHome.Dango.DangoDAO"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.apache.naming.java.javaURLContextFactory"%>
@@ -22,45 +23,8 @@
     <title>JSP-Basic Page</title>
 	<%----------------------------------------------------------------------
 	[HTML Page - 스타일쉬트 구현 영역]
-	[외부 스타일쉬트 연결 : <link rel="stylesheet" href="Hello.css?version=1.1"/>]
 	--------------------------------------------------------------------------%>
-	<link rel="stylesheet" href="CSS/Basic.css?version=1.1"/>
-	<style type="text/css">
-		/* -----------------------------------------------------------------
-			HTML Page 스타일시트
-		   ----------------------------------------------------------------- */
-			
-        /* ----------------------------------------------------------------- */
-	</style>
-	<%----------------------------------------------------------------------
-	[HTML Page - 자바스크립트 구현 영역 (상단)]
-	[외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
-	--------------------------------------------------------------------------%>
-	<script type="text/javascript">
-		// -----------------------------------------------------------------
-		// [브라우저 갱신 완료 시 호출 할 이벤트 핸들러 연결 - 필수]
-		// -----------------------------------------------------------------
-		// window.onload = function () { DocumentInit('페이지가 모두 로드되었습니다!'); }
-		// -----------------------------------------------------------------
-		// [브라우저 갱신 완료 및 초기화 구현 함수 - 필수]
-		// -----------------------------------------------------------------
-		// 브라우저 갱신 완료 까지 기다리는 함수 - 필수
-		// 일반적인 방식 : setTimeout(()=>alert('페이지가 모두 로드되었습니다!'), 50);
-		function DocumentInit(Msg)
-		{
-			requestAnimationFrame(function() {
-				requestAnimationFrame(function() {
-					alert(Msg);
-				});
-			});
-        }
-		// -----------------------------------------------------------------
-		// [사용자 함수 및 로직 구현]
-		// -----------------------------------------------------------------
-		
-		// -----------------------------------------------------------------
-	</script>
-	<script type="text/javascript" src="JS/Basic.js"></script>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Dango/css/pick.css">
 </head>
 <%--------------------------------------------------------------------------
 [JSP 전역 변수/함수 선언 영역 - 선언문 영역]
@@ -71,7 +35,7 @@
 	// ---------------------------------------------------------------------
 	// [JSP 전역 변수/함수 선언]
 	// ---------------------------------------------------------------------
-	
+	public DangoDAO dangoDAO = new DangoDAO();
 	// ---------------------------------------------------------------------
 %>
 <%--------------------------------------------------------------------------
@@ -83,8 +47,7 @@
 	// ---------------------------------------------------------------------
 	// [JSP 지역 변수 선언 : 웹 페이지 get/post 파라미터]
 	// ---------------------------------------------------------------------
-	String txtData1 = "";
-	String txtData2 = "";
+	
 	// ---------------------------------------------------------------------
 	// [JSP 지역 변수 선언 : 데이터베이스 파라미터]
 	// ---------------------------------------------------------------------
@@ -92,7 +55,13 @@
 	// ---------------------------------------------------------------------
 	// [JSP 지역 변수 선언 : 일반 변수]
 	// ---------------------------------------------------------------------
-	
+	Boolean bContinue		= false;			// 당고 검색 유무	
+	Integer userId			= null;
+	Integer deduction 		= null;
+	Integer currentPoint    = null;
+	Integer dangoId         = null;
+	String  dangoName       = null;
+	String  dangoImgPath    = null;
 	// ---------------------------------------------------------------------
 	// [웹 페이지 get/post 파라미터 조건 필터링]
 	// ---------------------------------------------------------------------
@@ -100,28 +69,8 @@
 	// ---------------------------------------------------------------------
 	// [일반 변수 조건 필터링]
 	// ---------------------------------------------------------------------
-	if (request.getParameter("txtData1") != null)
-		txtData1 = request.getParameter("txtData1");
-		
-	if (request.getParameter("txtData2") != null)
-		txtData2 = request.getParameter("txtData2");
-		
-	// session & application 변수 등록
-	session.setAttribute("HelloSession", "Session-OK!");
-	application.setAttribute("HelloApplication", "Application-OK!");
-	
-	// 현재 날짜 / 시간 구하기
-	SimpleDateFormat Sdf = null;
-	String Date  = "20231231 121212";
-	
-	Date CurDate = new Date();
-	String Date1 = String.format("%tF %tT 입니다.", CurDate, CurDate);
-	
-	Sdf = new SimpleDateFormat("yyyy년 MM월 dd일 hh시 mm분 ss초 입니다.");
-	String Date2 = Sdf.format(CurDate);
-	
-	Sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss 입니다.");
-	String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
+	userId    = (Integer) session.getAttribute("userId");
+	deduction = 100;
 	// ---------------------------------------------------------------------
 %>
 <%--------------------------------------------------------------------------
@@ -170,66 +119,67 @@
 [Beans DTO 읽기 및 로직 구현 영역]
 ------------------------------------------------------------------------------%>
 <%
-	
+	if (this.dangoDAO.UpdatePoint(userId, deduction) == true)
+	{
+		if (this.dangoDAO.DBMgr != null && this.dangoDAO.DBMgr.Rs != null)
+		{
+			bContinue = true;
+		}
+	}	
 %>
+<%
+	while (bContinue == true && this.dangoDAO.DBMgr.Rs.next())
+	{
+		currentPoint = 	this.dangoDAO.DBMgr.Rs.getInt("POINT");
+	}
+
+	bContinue = false;
+%>
+
+<%
+	if (this.dangoDAO.RandomImg() == true)
+	{
+		if (this.dangoDAO.DBMgr != null && this.dangoDAO.DBMgr.Rs != null)
+		{
+			bContinue = true;
+		}
+	}
+
+%>
+<%
+	while (bContinue == true && this.dangoDAO.DBMgr.Rs.next())
+	{
+		dangoId = this.dangoDAO.DBMgr.Rs.getInt("DANGO_ID");
+		dangoName = this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME");
+		dangoImgPath = this.dangoDAO.DBMgr.Rs.getString("LOCATION_IMG");
+	}
+	bContinue = false;
+%>
+
+<%
+	if (this.dangoDAO.InsertDango(userId, dangoId) == true)
+	{
+		if (this.dangoDAO.DBMgr != null && this.dangoDAO.DBMgr.Rs != null)
+		{
+			bContinue = true;
+		}
+	}
+	bContinue = false;
+%>
+
 <body class="Body">
 	<%----------------------------------------------------------------------
 	[HTML Page - FORM 디자인 영역]
 	--------------------------------------------------------------------------%>
-	<form name="form1" action="Basic.jsp" method="post">
+	<form name="form1" action="" method="post">
 		<%------------------------------------------------------------------
-			타이틀
-		----------------------------------------------------------------------%>
-		<hr class="Line">
-		<p class="Title">JSP 기본 페이지</p>
-		<hr class="Line">&nbsp;
-		<%------------------------------------------------------------------
-			입력필드
-		----------------------------------------------------------------------%>
-		<label class="Data"   for="Data1">데이터-1</label>
-		<input class="Data"   type="text" class="Condition" id="Data1" name="txtData1" value="<%=txtData1 %>">&nbsp;&nbsp;
-		<label class="Data"   for="Data2">데이터-2</label>
-		<input class="Data"   type="text" class="Condition" id="Data2" name="txtData2" value="<%=txtData2 %>">&nbsp;&nbsp;
-		<input class="Submit" type="submit" value=" 화면갱신(POST) ">
-		<%------------------------------------------------------------------
-			입력내용
-		----------------------------------------------------------------------%>
-		<hr class="Line">
-		<ul>
-			<li>
-				<p class="Subject">[입력내용]</p>
-				<ol>
-					<li class="Content">같은 이전 페이지의 데이터-1 : <%=request.getParameter("txtData1") %></li>
-					<li class="Content">같은 이전 페이지의 데이터-2 : <%=request.getParameter("txtData2") %></li>
-				</ol>
-			</li>
-		<%------------------------------------------------------------------
-			현재 날짜 / 시간 출력
-		----------------------------------------------------------------------%>
-			<li>
-				<p class="Subject">[현재 날짜 / 시간 출력]</p>
-				<ol>
-					<li class="Content">형식1 - 현재 날짜 / 시간은 : <%=Date1 %></li>
-					<li class="Content">형식2 - 현재 날짜 / 시간은 : <%=Date2 %></li>
-					<li class="Content">형식3 - 특정 날짜 / 시간은 : <%=Date3 %></li>
-					<li class="Content">
-						<input class="Submit" type="button" value=" 현재 날짜 / 시간 - alert() 출력 " onclick="PrintDate('<%=Date1 %>');">
-					</li>
-				</ol>
-			</li>
-		<%------------------------------------------------------------------
-			페이지 이동
-		----------------------------------------------------------------------%>
-			<li>
-				<p class="Subject">[페이지 이동]</p>
-				<ul>
-					<li class="Content">하이퍼링크사용(GET) : <a href="#" onclick="MoveDetail();">다음 JSP 상세 페이지로 이동하기 (Detail.jsp)</a></li>
-					<li class="Content">하이퍼링크사용(GET) : <a href="#" onclick="MoveServletDetail();">다음 Servlet 상세 페이지로 이동하기 (ServletDetail.java)</a></li>
-					<li class="Content">하이퍼링크사용(GET) : <a href="#" onclick="location.href='../Index.jsp'">INDEX 페이지로 돌아가기 (Index.jsp)</a></li>
-				</ul>
-			</li>
-		</ul>
-		<hr class="Line">
+			뽑기 모달
+		----------------------------------------------------------------------%>        
+		<br><br>
+		<img alt="당고 뽑기 결과" src=<%=dangoImgPath %>><br>
+		<a class="dangoname"><%=dangoName %></a>
+		<p>보유포인트: <%=currentPoint %>pt</p>
+		<button type="button" onclick="location.href='Dango_Pick_final.jsp'">뽑기 (100pt 차감)</button>	
 	</form>
 	<%----------------------------------------------------------------------
 	[HTML Page - END]
@@ -242,7 +192,7 @@
 		// -----------------------------------------------------------------
 		// [사용자 함수 및 로직 구현]
 		// -----------------------------------------------------------------
-		
+
 		// -----------------------------------------------------------------
 	</script>
 	<%------------------------------------------------------------------

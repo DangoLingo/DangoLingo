@@ -7,17 +7,29 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.logging.Logger" %>
 <%@ page import="java.util.logging.Level" %>
+<<<<<<< HEAD
 <%
+=======
+<% 
+>>>>>>> dev
     // 캐시 제어
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
     response.setHeader("Expires", "0"); // Proxies
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> dev
     // 로거 설정
     Logger logger = Logger.getLogger("Main.jsp");
 
     request.setCharacterEncoding("UTF-8");
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> dev
     // DAO 객체들 초기화
     UserDAO userDAO = new UserDAO();
     StudyDAO studyDAO = new StudyDAO();
@@ -25,7 +37,11 @@
     StreakDAO streakDAO = new StreakDAO();
     RankingDTO userRanking = null;
     List<StreakDTO> userStreaks = null;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> dev
     // 로그아웃 처리
     String action = request.getParameter("action");
     if ("logout".equals(action)) {
@@ -46,7 +62,11 @@
             logger.severe("Error refreshing user data: " + e.getMessage());
         }
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> dev
     logger.info("Session check - userNickname: " + (currentUser != null ? currentUser.getNickname() : "Not logged in"));
     logger.info("isLoggedIn: " + (currentUser != null));
 
@@ -59,6 +79,7 @@
             logger.info("Retrieved user info: " + (currentUser != null ? currentUser.getNickname() : "null"));
 
             // 현재 사용자의 랭킹 정보 조회
+<<<<<<< HEAD
             userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), "points");
             logger.info("Retrieved ranking info: " + (userRanking != null ? userRanking.getRank() : "null"));
 
@@ -66,6 +87,15 @@
             userStreaks = streakDAO.getUserStreaks(currentUser.getUserId());
             logger.info("Retrieved streak info: " + (userStreaks != null ? userStreaks.size() + " records" : "null"));
 
+=======
+            userRanking = rankingDAO.getUserRanking(currentUser.getUserId());
+            logger.info("Retrieved ranking info: " + (userRanking != null ? userRanking.getRank() : "null"));
+            
+            // 현재 사용자의 스트릭 정보 조회
+            userStreaks = streakDAO.getUserStreaks(currentUser.getUserId());
+            logger.info("Retrieved streak info: " + (userStreaks != null ? userStreaks.size() + " records" : "null"));
+            
+>>>>>>> dev
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error retrieving user information", e);
             e.printStackTrace();
@@ -207,6 +237,7 @@
                         <span>금</span>
                         <span>토</span>
                     </div>
+<<<<<<< HEAD
                     <%
                         // 스트릭 데이터를 Map으로 변환
                         Map<String, StreakDTO> streakMap = new HashMap<>();
@@ -264,6 +295,111 @@
                              title="<%= dateStr %> : <%= point %>점"
                              data-point="<%= point %>점"
                              data-date="<%= dateStr %>">
+=======
+                    <header class="profile-header">
+                        <h2><%= currentUser.getNickname() %></h2>
+                        <p class="user-intro"><%= currentUser.getIntro() != null ? currentUser.getIntro() : "소개글이 없습니다." %></p>
+                    </header>
+                </article>
+                
+                <section class="statistics">
+                    <article class="stat-item">
+                        <h3>퀴즈 풀이</h3>
+                        <p class="stat-number"><%= currentUser.getQuizRight() %>개</p>
+                    </article>
+                    <article class="stat-item">
+                        <h3>연속 학습</h3>
+                        <p class="stat-number"><%= userStreaks != null && !userStreaks.isEmpty() ? userStreaks.get(0).getPoint() : "0" %>일</p>
+                    </article>
+                    <article class="stat-item">
+                        <h3>학습 포인트</h3>
+                        <p class="stat-number"><%= String.format("%,d", currentUser.getPoint()) %>점</p>
+                    </article>
+                    <article class="stat-item">
+                        <h3>포인트 랭킹</h3>
+                        <p class="stat-number"><%= userRanking != null ? String.format("%,d", userRanking.getRank()) : "-" %>위</p>
+                    </article>
+                </section>
+                
+                <section class="streak-tracker">
+                    <h3>학습 기록</h3>
+                    <div class="streak-container">
+                        <div class="streak-chart">
+                            <div class="streak-days">
+                                <span>일</span>
+                                <span>월</span>
+                                <span>화</span>
+                                <span>수</span>
+                                <span>목</span>
+                                <span>금</span>
+                                <span>토</span>
+                            </div>
+                            <% 
+                            // 스트릭 데이터를 Map으로 변환
+                            Map<String, StreakDTO> streakMap = new HashMap<>();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            
+                            if (userStreaks != null) {
+                                for (StreakDTO streak : userStreaks) {
+                                    streakMap.put(sdf.format(streak.getStreakDate()), streak);
+                                }
+                            }
+                            
+                            // 오늘 날짜 기준으로 계산
+                            Calendar today = Calendar.getInstance();
+                            Calendar cal = Calendar.getInstance();
+                            Calendar yearAgo = Calendar.getInstance();
+                            yearAgo.add(Calendar.YEAR, -1); // 1년 전 날짜
+                            
+                            // 정확히 1년 전으로 이동
+                            cal.add(Calendar.YEAR, -1);
+                            
+                            // 시작일이 일요일이 되도록 조정 (깃허브 스타일)
+                            while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                                cal.add(Calendar.DATE, -1);
+                            }
+                            
+                            // 총 주 수 계산 (정확히 53주)
+                            int totalWeeks = 53;
+                            
+                            for(int week = 0; week < totalWeeks; week++) {
+                                %>
+                                <div class="streak-grid">
+                                    <% 
+                                    // 각 주의 7일 생성
+                                    for(int day = 0; day < 7; day++) {
+                                        String dateStr = sdf.format(cal.getTime());
+                                        
+                                        // 1년 이전이거나 미래의 날짜는 빈 공간으로 처리
+                                        if (cal.before(yearAgo) || cal.after(today)) {
+                                            %><div class="streak-cell empty"></div><%
+                                        } else {
+                                            StreakDTO streak = streakMap.get(dateStr);
+                                            
+                                            // 스트릭 레벨 계산 (포인트에 따라)
+                                            int level = 0;
+                                            int point = 0;
+                                            if (streak != null) {
+                                                point = streak.getPoint();
+                                                if (point > 300) level = 4;
+                                                else if (point > 200) level = 3;
+                                                else if (point > 100) level = 2;
+                                                else if (point > 0) level = 1;
+                                            }
+                                            %>
+                                            <div class="streak-cell level-<%= level %>" 
+                                                 title="<%= dateStr %> : <%= point %>점"
+                                                 data-point="<%= point %>점"
+                                                 data-date="<%= dateStr %>">
+                                            </div>
+                                            <%
+                                        }
+                                        cal.add(Calendar.DATE, 1);  // 다음 날짜로
+                                    } 
+                                    %>
+                                </div>
+                            <% } %>
+>>>>>>> dev
                         </div>
                         <%
                                 }
@@ -295,7 +431,12 @@
             window.location.href = 'Main.jsp?action=logout';
         }
     }
+<<<<<<< HEAD
 </script>
 <script src="${pageContext.request.contextPath}/JspHome/Main/js/tooltip.js"></script>
+=======
+    </script>
+    <script src="${pageContext.request.contextPath}/JspHome/Main/js/tooltip.js"></script>
+>>>>>>> dev
 </body>
 </html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 대각선 막대와 손잡이 -->
+    <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    
+    <!-- 상단 당고 (롤리팝) -->
+    <circle cx="160" cy="160" r="35" fill="#FF69B4"/>
+    <!-- 나선무늬 -->
+    <path d="M145 160 Q160 150 175 160" stroke="#FFFFFF" stroke-width="3"/>
+    <path d="M145 165 Q160 155 175 165" stroke="#FFFFFF" stroke-width="3"/>
+    <!-- 달콤한 표정 -->
+    <path d="M150 165 Q160 170 170 165" stroke="#FF1493" stroke-width="2"/>
+    <circle cx="155" cy="155" r="3" fill="#FF1493"/>
+    <circle cx="165" cy="155" r="3" fill="#FF1493"/>
+
+    <!-- 중간 당고 (젤리빈) -->
+    <circle cx="200" cy="200" r="35" fill="#32CD32"/>
+    <!-- 반짝이는 효과 -->
+    <circle cx="190" cy="190" r="3" fill="#FFFFFF" fill-opacity="0.8"/>
+    <circle cx="210" cy="190" r="2" fill="#FFFFFF" fill-opacity="0.8"/>
+    <circle cx="200" cy="210" r="2" fill="#FFFFFF" fill-opacity="0.8"/>
+    <!-- 장난스러운 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#006400" stroke-width="2"/>
+    <path d="M195 195 L190 190" stroke="#006400" stroke-width="2"/>
+    <path d="M205 195 L210 190" stroke="#006400" stroke-width="2"/>
+
+    <!-- 하단 당고 (캔디케인) -->
+    <circle cx="240" cy="240" r="35" fill="#FFFFFF"/>
+    <!-- 줄무늬 -->
+    <path d="M225 230 L255 250" stroke="#FF0000" stroke-width="4"/>
+    <path d="M225 240 L255 260" stroke="#FFFFFF" stroke-width="4"/>
+    <path d="M225 250 L255 270" stroke="#FF0000" stroke-width="4"/>
+    <!-- 즐거운 표정 -->
+    <path d="M230 245 Q240 250 250 245" stroke="#FF69B4" stroke-width="2"/>
+    <circle cx="235" cy="235" r="2" fill="#FF69B4"/>
+    <circle cx="245" cy="235" r="2" fill="#FF69B4"/>
+</svg> 

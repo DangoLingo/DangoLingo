@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 대각선 막대와 손잡이 -->
+    <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    
+    <!-- 상단 당고 (닭) -->
+    <circle cx="160" cy="160" r="35" fill="#FF6B6B"/>
+    <!-- 닭 볏 -->
+    <path d="M145 135 L155 145 L165 135 L175 145" stroke="#FF0000" stroke-width="3" fill="#FF0000"/>
+    <!-- 부리 -->
+    <path d="M155 160 L165 160" stroke="#FFD700" stroke-width="3"/>
+    <!-- 귀여운 표정 -->
+    <circle cx="155" cy="155" r="3" fill="#3F1F1F"/>
+    <circle cx="165" cy="155" r="3" fill="#3F1F1F"/>
+
+    <!-- 중간 당고 (양) -->
+    <circle cx="200" cy="200" r="35" fill="#FFFFFF"/>
+    <!-- 양털 -->
+    <path d="M180 185 Q190 180 200 185" stroke="#FFF" stroke-width="4"/>
+    <path d="M200 185 Q210 180 220 185" stroke="#FFF" stroke-width="4"/>
+    <path d="M180 195 Q190 190 200 195" stroke="#FFF" stroke-width="4"/>
+    <path d="M200 195 Q210 190 220 195" stroke="#FFF" stroke-width="4"/>
+    <!-- 귀여운 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="195" cy="195" r="3" fill="#3F1F1F"/>
+    <circle cx="205" cy="195" r="3" fill="#3F1F1F"/>
+
+    <!-- 하단 당고 (돼지) -->
+    <circle cx="240" cy="240" r="35" fill="#FFB6C1"/>
+    <!-- 돼지 코 -->
+    <circle cx="240" cy="240" r="8" fill="#FF69B4"/>
+    <!-- 귀 -->
+    <path d="M225 225 Q230 220 235 225" stroke="#FF69B4" stroke-width="3"/>
+    <path d="M245 225 Q250 220 255 225" stroke="#FF69B4" stroke-width="3"/>
+    <!-- 행복한 표정 -->
+    <path d="M230 245 Q240 250 250 245" stroke="#3F1F1F" stroke-width="2"/>
+</svg> 

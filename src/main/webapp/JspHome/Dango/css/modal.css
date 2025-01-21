@@ -1,0 +1,60 @@
+/* 모달 기본 스타일 */
+.Modal-Frame {
+    background-color: rgba(0,0,0,0.3);
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    overflow: auto;
+}
+
+.Modal-Content {
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    min-height: 400px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.Modal-Window {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 16px;
+}
+
+.Modal-Close {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    color: #868E96;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.Modal-Parent-Background {
+    filter: blur(5px);
+}
+
+.Modal-Content h2 {
+    font-family: "Pretendard JP";
+    font-size: 28px;
+    margin-left: 32px;
+    margin-top: 48px;
+}
+
+/* 반응형 스타일 추가 */
+@media screen and (max-width: 768px) {
+    .Modal-Content {
+        width: calc(100% - 32px);
+        min-height: 350px;
+    }
+} 

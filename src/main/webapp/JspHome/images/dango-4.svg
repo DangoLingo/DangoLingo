@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 대각선 막대와 손잡이 -->
+    <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
+    
+    <!-- 상단 당고 (화가) -->
+    <circle cx="160" cy="160" r="35" fill="#FFFFFF"/>
+    <!-- 베레모 -->
+    <path d="M140 145 Q160 135 180 145" fill="#8B4513"/>
+    <!-- 물감 얼룩 -->
+    <circle cx="150" cy="150" r="4" fill="#FF4500"/>
+    <circle cx="170" cy="155" r="4" fill="#4169E1"/>
+    <!-- 예술적인 표정 -->
+    <path d="M150 165 Q160 170 170 165" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="155" cy="155" r="3" fill="#3F1F1F"/>
+    <circle cx="165" cy="155" r="3" fill="#3F1F1F"/>
+
+    <!-- 중간 당고 (조각가) -->
+    <circle cx="200" cy="200" r="35" fill="#DEB887"/>
+    <!-- 조각 도구 -->
+    <path d="M185 185 L215 185" stroke="#8B4513" stroke-width="3"/>
+    <path d="M190 190 L210 190" stroke="#8B4513" stroke-width="2"/>
+    <!-- 진지한 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="195" cy="195" r="2" fill="#3F1F1F"/>
+    <circle cx="205" cy="195" r="2" fill="#3F1F1F"/>
+
+    <!-- 하단 당고 (음악가) -->
+    <circle cx="240" cy="240" r="35" fill="#E6E6FA"/>
+    <!-- 음표 -->
+    <path d="M230 230 L230 245" stroke="#3F1F1F" stroke-width="3"/>
+    <circle cx="230" cy="245" r="4" fill="#3F1F1F"/>
+    <path d="M250 225 L250 240" stroke="#3F1F1F" stroke-width="3"/>
+    <circle cx="250" cy="240" r="4" fill="#3F1F1F"/>
+    <!-- 열정적인 표정 -->
+    <path d="M235 245 Q240 250 245 245" stroke="#3F1F1F" stroke-width="2"/>
+</svg> 

@@ -4,7 +4,6 @@
 <%@ page import="BeansHome.Ranking.RankingDAO" %>
 <%@ page import="BeansHome.Ranking.RankingDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.text.SimpleDateFormat" %>
 
 <%
     request.setCharacterEncoding("UTF-8");
@@ -12,6 +11,7 @@
     // DAO 객체 생성
     UserDAO userDAO = new UserDAO();
     RankingDAO rankingDAO = new RankingDAO();
+<<<<<<< HEAD
 
     // 현재 사용자 정보 조회
     UserDTO currentUser = (UserDTO) session.getAttribute("user");
@@ -19,9 +19,34 @@
     String rankingType = request.getParameter("type");
     if (rankingType == null) rankingType = "points";
 
+=======
+    
+    // 세션에서 현재 사용자 정보 가져오기
+    Integer userId = (Integer) session.getAttribute("userId");
+    UserDTO currentUser = null;
+    if (userId != null) {
+        currentUser = userDAO.getUserById(userId);
+    }
+    
+>>>>>>> dev
     // 랭킹 목록과 현재 사용자의 랭킹 정보 조회
-    List<RankingDTO> rankings = rankingDAO.getRankings(rankingType, 10);
-    RankingDTO userRanking = rankingDAO.getUserRanking(currentUser.getUserId(), rankingType);
+    List<RankingDTO> rankings = rankingDAO.getRankings();
+    RankingDTO userRanking = null;
+    if (currentUser != null) {
+        userRanking = rankingDAO.getUserRanking(currentUser.getUserId());
+    }
+    
+    // 디버깅 출력 추가
+    System.out.println("Rankings size: " + (rankings != null ? rankings.size() : "null"));
+    System.out.println("User ranking: " + (userRanking != null ? userRanking.getRank() : "null"));
+    
+    if (rankings != null) {
+        for (RankingDTO rank : rankings) {
+            System.out.println("Rank: " + rank.getRank() + 
+                             ", User: " + rank.getNickname() + 
+                             ", Point: " + rank.getPoint());
+        }
+    }
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -37,6 +62,7 @@
     <jsp:include page="../Common/Navbar.jsp" />
 </header>
 
+<<<<<<< HEAD
 <main class="ranking-container">
     <section class="ranking-header">
         <div class="ranking-tabs">
@@ -70,6 +96,12 @@
         </div>
         <% } %>
     </section>
+=======
+    <main class="ranking-container">
+        <section class="ranking-header">
+            <h1>포인트 랭킹</h1>
+        </section>
+>>>>>>> dev
 
     <section class="ranking-list">
         <div class="my-rank">
@@ -92,6 +124,7 @@
             <% for (int i = 0; i < rankings.size(); i++) {
                 RankingDTO user = rankings.get(i);
             %>
+<<<<<<< HEAD
             <div class="rank-row <%= user.getUserId() == currentUser.getUserId() ? "current-user" : "" %>">
                 <div class="rank-number"><%= i + 1 %></div>
                 <div class="user-info">
@@ -138,3 +171,64 @@
         }
     }
 %>
+=======
+                <div class="top-rank <%= rankClass %>">
+                    <% if (i == 0) { %>
+                        <span class="medal">🥇</span>
+                    <% } else if (i == 1) { %>
+                        <span class="medal">🥈</span>
+                    <% } else if (i == 2) { %>
+                        <span class="medal">🥉</span>
+                    <% } %>
+                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/default-profile.png" 
+                         alt="<%= user.getNickname() %>님의 프로필" class="profile-image">
+                    <div class="user-name"><%= user.getNickname() %></div>
+                    <div class="user-intro"><%= user.getIntro() %></div>
+                    <div class="point"><%= user.getPoint() %>P</div>
+                </div>
+            <% } %>
+        </section>
+
+        <section class="ranking-list">
+            <% if (currentUser != null && userRanking != null) { %>
+                <div class="my-rank">
+                    <div class="rank-info">
+                        <span class="rank-number"><%= userRanking.getRank() %></span>
+                        <span class="rank-total">위</span>
+                    </div>
+                    <div class="user-info">
+                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/default-profile.png" 
+                             alt="<%= currentUser.getNickname() %>님의 프로필" class="profile-image">
+                        <span class="nickname"><%= currentUser.getNickname() %></span>
+                    </div>
+                    <div class="point"><%= userRanking.getPoint() %>P</div>
+                </div>
+            <% } %>
+
+            <div class="ranking-table">
+                <% for (int i = 0; i < rankings.size(); i++) { 
+                    RankingDTO user = rankings.get(i);
+                %>
+                    <div class="rank-row <%= user.getUserId() == currentUser.getUserId() ? "current-user" : "" %>">
+                        <div class="rank-number"><%= user.getRank() %></div>
+                        <div class="user-info">
+                            <img src="${pageContext.request.contextPath}/JspHome/Main/images/default-profile.png" 
+                                 alt="<%= user.getNickname() %>님의 프로필" class="profile-image">
+                            <div class="user-details">
+                                <div class="nickname"><%= user.getNickname() %></div>
+                                <div class="intro"><%= user.getIntro() %></div>
+                            </div>
+                        </div>
+                        <div class="point"><%= user.getPoint() %>P</div>
+                    </div>
+                <% } %>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <jsp:include page="../Common/Footer.jsp" />
+    </footer>
+</body>
+</html>
+>>>>>>> dev

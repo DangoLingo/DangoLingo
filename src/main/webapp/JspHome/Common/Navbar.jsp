@@ -18,7 +18,7 @@
             </a>
             <% if (isLoggedIn) { %>
                 <nav class="nav-menu" id="navMenu">
-                    <a href="${pageContext.request.contextPath}/JspHome/Dango/Basic.jsp" class="nav-item">당고</a>
+                    <a href="${pageContext.request.contextPath}/JspHome/Dango/Dango.jsp" class="nav-item">당고</a>
                     <a href="${pageContext.request.contextPath}/JspHome/Words/Words.jsp" class="nav-item">단어장</a>
                     <a href="${pageContext.request.contextPath}/JspHome/Ranking/Ranking.jsp" class="nav-item">랭킹</a>
                 </nav>

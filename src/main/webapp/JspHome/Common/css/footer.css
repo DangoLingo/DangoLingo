@@ -12,13 +12,14 @@
 }
 
 .footer-content {
+    width: 100%;
     max-width: 1060px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
     padding: 0 24px;
+    box-sizing: border-box;
 }
 
 .footer-links {
@@ -30,4 +31,15 @@
     color: #868E96;
     text-decoration: none;
     font-size: 13px;
+}
+
+/* 반응형 스타일 추가 */
+@media screen and (max-width: 768px) {
+    .footer {
+        padding: 16px 0;
+    }
+
+    .footer-content {
+        padding: 0 16px;
+    }
 } 

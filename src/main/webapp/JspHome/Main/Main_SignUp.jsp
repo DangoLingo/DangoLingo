@@ -20,7 +20,11 @@
     logger.setLevel(Level.ALL);
 
     request.setCharacterEncoding("UTF-8");
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> dev
     // 세션에 사용자가 있는 경우 사용자 정보 업데이트
     UserDTO currentUser = (UserDTO) session.getAttribute("user");
     if (currentUser != null) {

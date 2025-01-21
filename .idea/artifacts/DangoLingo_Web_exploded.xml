@@ -10,7 +10,6 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="ojdbc8" />
         </element>
-        <element id="library" level="project" name="javax.servlet.api" />
         <element id="library" level="project" name="ojdbc8" />
       </element>
     </root>
