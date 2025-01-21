@@ -1,7 +1,16 @@
+<%@ page import="BeansHome.Dango.DangoDAO" %>
+<%@ page import="BeansHome.Ranking.RankingDTO" %>
+<%@ page import="BeansHome.Dango.DangoDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
+    DangoDAO dangoDAO = new DangoDAO();
+    DangoDTO profileDango = new DangoDTO();
     String userNickname = (String) session.getAttribute("userNickname");
     boolean isLoggedIn = userNickname != null;
+    if (isLoggedIn) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        dangoDAO.ReadProfileDango(userId, profileDango);
+    }
 %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Common/css/navbar.css">
 
@@ -30,7 +39,7 @@
                 <button class="auth-button">회원가입</button>
             <% } else { %>
                 <div class="profile-menu">
-                    <img src="${pageContext.request.contextPath}/JspHome/Main/images/dango-profile-1.png" alt="프로필" onClick="location.href='${pageContext.request.contextPath}/JspHome/User/MyPage.jsp'" class="profile-image">
+                    <img src="<%= profileDango.getLocationImg() %>" alt="프로필" onClick="location.href='${pageContext.request.contextPath}/JspHome/User/MyPage.jsp'" class="profile-image">
                     <button class="auth-button" onclick="handleLogout()">로그아웃</button>
                 </div>
             <% } %>

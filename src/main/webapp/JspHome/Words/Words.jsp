@@ -58,7 +58,7 @@
             ArrayList<StudyDTO> studyCounts = new ArrayList<>();
             Integer userId = (Integer) session.getAttribute("userId");
             String visible = "visible";
-
+            
             // 기본값 설정
             Integer selectedNLevel = 5;  // 기본 N5
             Integer currentDay = 1;     // 기본 Day 1
@@ -68,40 +68,40 @@
             	flag = true;
             	selectedNLevel = Integer.parseInt(request.getParameter("level"));
             }
-
+            
             try {
 
                 if (flag) {
 	              	// 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
 					studyDAO.readCurrentStudy(userId, selectedNLevel, 0, currentStudy);
-					wordsId = currentStudy.getWordsId();
+					wordsId = (currentStudy.getWordsId() / 100 == 0) ? 500: currentStudy.getWordsId();
 					// 예: wordsId가 104라면 N1의 Day 04를 의미
-
+									
 					currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
 
 	                // 일자별 학습한 단어 정보 조회
 	                studyDAO.readStudyCounts(userId, selectedNLevel, studyCounts);
                 } else {
-
+                	
                 	// 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
     				studyDAO.readCurrentStudy(userId, 1, 1, currentStudy);
     				wordsId = currentStudy.getWordsId();
     				// 예: wordsId가 104라면 N1의 Day 04를 의미
 
     				// URL에서 레벨이 지정되지 않은 경우에만 현재 학습 중인 레벨을 사용
-    				selectedNLevel = wordsId / 100;  // 첫 자리 (N레벨)
-
+    				selectedNLevel = (wordsId / 100 == 0) ? 5: wordsId / 100;  // 첫 자리 (N레벨)
+    				
     				currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
 
                     // 일자별 학습한 단어 정보 조회
                     studyDAO.readStudyCounts(userId, selectedNLevel, studyCounts);
-
+                	
                 }
 
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Error retrieving information", e);
             }
-
+            
             if(studyCounts.size() == 0) {
             	for(int i = 0; i < 10; i++) {
                     StudyDTO study = new StudyDTO();
@@ -112,7 +112,7 @@
             }
 
         %>
-
+        
         // N레벨 변경 함수
         function changeLevel(level) {
             // URL에 선택한 레벨을 파라미터로 추가하고 페이지 새로고침
@@ -120,104 +120,104 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-
+        	
             const levelButton = document.querySelector('.label');
             levelButton.textContent = 'N<%= selectedNLevel %>';
-
+            
             const options = document.querySelectorAll('.option-item');
             options.forEach(option => {
                 if(option.textContent === 'N<%= selectedNLevel %>') {
                     option.classList.add('active');
                 }
             });
-
+            
         });
     </script>
 </head>
 <body class="Body">
-<%----------------------------------------------------------------------
-[HTML Page - Header 영역]
---------------------------------------------------------------------------%>
-<jsp:include page="../Common/Navbar.jsp" />
-<%----------------------------------------------------------------------
-[HTML Page - Main 디자인 영역]
---------------------------------------------------------------------------%>
-<main class="main-container">
-    <%------------------------------------------------------------------
-        단어장 급수 선택 카드 영역
-    ----------------------------------------------------------------------%>
-    <section class="nav-card">
-        <header class="nav-card-header">
-            <div class="nav-card-left">
-                <span class="nav-card-title">JLPT</span>
-                <div class="nav-dropdown">
-                    <button class="label">N<%= selectedNLevel %></button>
-                    <ul class="option-list">
-                        <li name="1" class="option-item" onclick="changeLevel(1)">N1</li>
-                        <li name="2" class="option-item" onclick="changeLevel(2)">N2</li>
-                        <li name="3" class="option-item" onclick="changeLevel(3)">N3</li>
-                        <li name="4" class="option-item" onclick="changeLevel(4)">N4</li>
-                        <li name="5" class="option-item" onclick="changeLevel(5)">N5</li>
-                    </ul>
+    <%----------------------------------------------------------------------
+    [HTML Page - Header 영역]
+    --------------------------------------------------------------------------%>
+    <jsp:include page="../Common/Navbar.jsp" />
+    <%----------------------------------------------------------------------
+    [HTML Page - Main 디자인 영역]
+    --------------------------------------------------------------------------%>
+    <main class="main-container">
+        <%------------------------------------------------------------------
+            단어장 급수 선택 카드 영역
+        ----------------------------------------------------------------------%>
+        <section class="nav-card">
+            <header class="nav-card-header">
+                <div class="nav-card-left">
+                    <span class="nav-card-title">JLPT</span>
+                    <div class="nav-dropdown">
+                        <button class="label">N<%= selectedNLevel %></button>
+                        <ul class="option-list">
+                            <li name="1" class="option-item" onclick="changeLevel(1)">N1</li>
+                            <li name="2" class="option-item" onclick="changeLevel(2)">N2</li>
+                            <li name="3" class="option-item" onclick="changeLevel(3)">N3</li>
+                            <li name="4" class="option-item" onclick="changeLevel(4)">N4</li>
+                            <li name="5" class="option-item" onclick="changeLevel(5)">N5</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="nav-card-right">
-                <time class="nav-card-date">최근 학습 날짜: <fmt:formatDate value="<%= currentStudy.getStudyDate() %>" pattern="yyyy년 MM월 dd일" /></time>
-            </div>
-        </header>
-    </section>
-    <%------------------------------------------------------------------
-        단어장 일자별 선택 카드 영역
-    ----------------------------------------------------------------------%>
-    <section class="day-cards">
-        <% for (int i = 1; i <= 10; i++) { %>
-        <article class="card">
-            <%-- 현재 선택된 N레벨과 Day가 모두 일치할 때만 북마크 표시 --%>
-            <%
+                <div class="nav-card-right">
+                    <time class="nav-card-date">최근 학습 날짜: <fmt:formatDate value="<%= currentStudy.getStudyDate() %>" pattern="yyyy년 MM월 dd일" /></time>
+                </div>
+            </header>
+        </section>
+        <%------------------------------------------------------------------
+            단어장 일자별 선택 카드 영역
+        ----------------------------------------------------------------------%>
+        <section class="day-cards">
+            <% for (int i = 1; i <= 10; i++) { %>
+            <article class="card">
+                <%-- 현재 선택된 N레벨과 Day가 모두 일치할 때만 북마크 표시 --%>
+                <% 
                 // 현재 카드의 wordsId 계산 (예: N1의 Day 04는 104)
                 int cardWordsId = (selectedNLevel * 100) + i;
-
+                
                 // 현재 학습 중인 단어장과 비교 (정수형으로 비교)
                 boolean isCurrentStudy = (wordsId == cardWordsId);
-
+                
                 // 디버깅을 위한 로그
                 logger.info("Comparing - Current Study ID: " + studyCounts.get(i - 1).getWordsId() +
-                        ", Card ID: " + cardWordsId +
-                        ", Is Current: " + isCurrentStudy);
-            %>
-
-            <% if (isCurrentStudy) { %>
-            <div class="bookmark"></div>
-            <% } %>
-            <div class="card-title-container">
-                <% if (i < 10) { %>
-                <h2 class="card-title">Day 0<%= i %></h2>
-                <% } else { %>
-                <h2 class="card-title">Day <%= i %></h2>
-                <% } %>
+                           ", Card ID: " + cardWordsId + 
+                           ", Is Current: " + isCurrentStudy);
+                %>
+                
                 <% if (isCurrentStudy) { %>
-                <p class="card-subtitle">최근 학습한 단어장</p>
-                <% } else { %>
-                <p style="visibility: hidden;" class="card-subtitle">최근 학습한 단어장</p>
+                <div class="bookmark"></div>
                 <% } %>
-            </div>
-            <div class="progress-bar-container">
-                <p class="progress-text"><%= studyCounts.get(i-1).getStudyCount() %>/50</p>
-                <progress class="progress-bar" value="<%= studyCounts.get(i-1).getStudyCount() %>" min="0" max="50">
-                </progress>
-            </div>
-            <div class="button-container">
-                <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Choose.jsp?wordsId=<%= cardWordsId %>'">퀴즈</button>
-                <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Study/Words_Study.jsp?wordsId=<%= cardWordsId %>'">학습</button>
-            </div>
-        </article>
-        <% } %>
-    </section>
-</main>
-<%----------------------------------------------------------------------
-[HTML Page - Footer 영역]
---------------------------------------------------------------------------%>
-<jsp:include page="../Common/Footer.jsp" />
+                <div class="card-title-container">
+                    <% if (i < 10) { %>
+                    <h2 class="card-title">Day 0<%= i %></h2>
+                    <% } else { %>
+                    <h2 class="card-title">Day <%= i %></h2>
+                    <% } %>
+                    <% if (isCurrentStudy) { %>
+                    <p class="card-subtitle">최근 학습한 단어장</p>
+                    <% } else { %>
+                    <p style="visibility: hidden;" class="card-subtitle">최근 학습한 단어장</p>
+                    <% } %>
+                </div>
+                <div class="progress-bar-container">
+                    <p class="progress-text"><%= studyCounts.get(i-1).getStudyCount() %>/50</p>
+                    <progress class="progress-bar" value="<%= studyCounts.get(i-1).getStudyCount() %>" min="0" max="50">
+                    </progress>
+                </div>
+                <div class="button-container">
+                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Choose.jsp?wordsId=<%= cardWordsId %>'">퀴즈</button>
+                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Study/Words_Study.jsp?wordsId=<%= cardWordsId %>'">학습</button>
+                </div>
+            </article>
+            <% } %>
+        </section>
+    </main>
+    <%----------------------------------------------------------------------
+    [HTML Page - Footer 영역]
+    --------------------------------------------------------------------------%>
+    <jsp:include page="../Common/Footer.jsp" />
 <%----------------------------------------------------------------------
 [HTML Page - END]
 --------------------------------------------------------------------------%>

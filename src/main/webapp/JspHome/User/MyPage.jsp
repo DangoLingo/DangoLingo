@@ -6,6 +6,8 @@
 <%@ page import="BeansHome.Ranking.RankingDAO" %>
 <%@ page import="BeansHome.Ranking.RankingDTO" %>
 <%@ page import="BeansHome.User.UserDAO" %>
+<%@ page import="BeansHome.Dango.DangoDAO" %>
+<%@ page import="BeansHome.Dango.DangoDTO" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8");%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -61,9 +63,17 @@
             Integer userId = (Integer) session.getAttribute("userId");
             UserDAO userDAO = new UserDAO();
             UserDTO currentUser = new UserDTO();
+            DangoDAO dangoDAO = new DangoDAO();
+            DangoDTO profileDango = new DangoDTO();
+            RankingDAO rankingDAO = new RankingDAO();
+            RankingDTO userRanking = null;
+
             if(userDAO.readUser(userId, currentUser)) {
                 session.setAttribute("user", currentUser);
             }
+            dangoDAO.ReadProfileDango(userId, profileDango);
+
+            userRanking = rankingDAO.getUserRanking(userId);
             %>
         });
         // -----------------------------------------------------------------
@@ -74,19 +84,19 @@
     </script>
         <%
             // 로거 먼저 생성
-            Logger logger = Logger.getLogger("Main_SignIn.jsp");
-            logger.setLevel(Level.ALL);
-
-            request.setCharacterEncoding("UTF-8");
-
-            StudyDAO studyDAO = new StudyDAO();
-            RankingDAO rankingDAO = new RankingDAO();
-            RankingDTO userRanking = null;
-
-            if(userDAO.readUser(userId, currentUser)) {
-                session.setAttribute("user", currentUser);
-            }
-            userRanking = rankingDAO.getUserRanking(userId);
+//            Logger logger = Logger.getLogger("Main_SignIn.jsp");
+//            logger.setLevel(Level.ALL);
+//
+//            request.setCharacterEncoding("UTF-8");
+//
+//            StudyDAO studyDAO = new StudyDAO();
+//            RankingDAO rankingDAO = new RankingDAO();
+//            RankingDTO userRanking = null;
+//
+//            if(userDAO.readUser(userId, currentUser)) {
+//                session.setAttribute("user", currentUser);
+//            }
+//            userRanking = rankingDAO.getUserRanking(userId);
 
         %>
 </head>
@@ -104,7 +114,7 @@
         ----------------------------------------------------------------------%>
         <section class="profile-section">
             <div class="profile-header">
-                <img src="../images/dango-profile-1.png" alt="프로필 이미지" class="profile-card-image">
+                <img src="<%= profileDango.getLocationImg() %>" alt="프로필 이미지" class="profile-card-image">
                 <div class="profile-info">
                     <div class="profile-name">
                         <p class="profile-title"><%= currentUser.getNickname() %></p>
@@ -123,7 +133,7 @@
             <ul class="nav-list">
                 <li class="nav-item active">정보 수정</li>
                 <li class="nav-item">학습 이력</li>
-                <li class="nav-item">친구 관리</li>
+<%--                <li class="nav-item">친구 관리</li>--%>
             </ul>
             <section id="nav-section">
                 <div id="info">
@@ -132,9 +142,9 @@
                 <div id="history">
                     <jsp:include page="History.jsp"/>
                 </div>
-                <div id="friend">
-                    <jsp:include page="Friend.jsp"/>
-                </div>
+<%--                <div id="friend">--%>
+<%--                    <jsp:include page="Friend.jsp"/>--%>
+<%--                </div>--%>
             </section>
         </section>
     </main>
@@ -153,11 +163,11 @@
 
     const info = document.getElementById("info").style;
     const history = document.getElementById("history").style;
-    const friend = document.getElementById("friend").style;
+    // const friend = document.getElementById("friend").style;
 
     info.display="block";
     history.display="none";
-    friend.display="none";
+    // friend.display="none";
 
     // 네비게이션 활성화
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -167,20 +177,20 @@
             // 여기에 페이지 전환 로직 추가
             const info = document.getElementById("info").style;
             const history = document.getElementById("history").style;
-            const friend = document.getElementById("friend").style;
+            // const friend = document.getElementById("friend").style;
 
             if(item.innerHTML == "학습 이력") {
                 info.display="none";
                 history.display="block";
-                friend.display="none";
+                // friend.display="none";
             } else if (item.innerHTML == "정보 수정") {
                 info.display="block";
                 history.display="none";
-                friend.display="none";
+                // friend.display="none";
             } else {
                 info.display="none";
                 history.display="none";
-                friend.display="block";
+                // friend.display="block";
             }
         });
     });

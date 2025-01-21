@@ -23,9 +23,9 @@ import DAO.DBOracleMgr;
 //사용자정의 클래스 영역
 //═════════════════════════════════════════════════════════════════════════════════════════
 /***********************************************************************
- * StudyDAO   : 학습 진행 기록 DAO 클래스<br>
- * Inheritance : None
- ***********************************************************************/
+* StudyDAO   : 학습 진행 기록 DAO 클래스<br>
+* Inheritance : None
+***********************************************************************/
 public class StudyDAO {
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역상수 관리 - 필수영역
@@ -37,9 +37,9 @@ public class StudyDAO {
     // 생성자 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
-     * StudyDAO()   : 생성자
-     * @param void  : None
-     ***********************************************************************/
+    * StudyDAO()   : 생성자
+    * @param void  : None
+    ***********************************************************************/
     public StudyDAO() {
         try {
             // 로거 설정
@@ -89,7 +89,7 @@ public class StudyDAO {
                 if (rs.next()) {
                     study.setWordsId(rs.getInt("WORDS_ID"));
                     study.setStudyDate(rs.getDate("STUDY_DATE"));
-                    logger.info("Study found: " + study.getWordsId());
+                   logger.info("Study found: " + study.getWordsId());
                 } else {
                     logger.warning("No study found with ID: " + userId);
                 }
@@ -165,7 +165,7 @@ public class StudyDAO {
                 }
                 return true;
             } else {
-                for(int i = 1; i < 11; i++) {
+            	for(int i = 1; i < 11; i++) {
                     StudyDTO study = new StudyDTO();
                     study.setWordsId(wordsId * 100 + i);
                     study.setStudyCount(0);
@@ -188,22 +188,22 @@ public class StudyDAO {
     }
 
     /***********************************************************************
-     * insertStudyRecord() : 학습 기록 추가
-     * @param study        : 학습 기록 DTO
-     * @return boolean     : 추가 성공 여부
-     * @throws Exception
-     ***********************************************************************/
+    * insertStudyRecord() : 학습 기록 추가
+    * @param study        : 학습 기록 DTO
+    * @return boolean     : 추가 성공 여부
+    * @throws Exception
+    ***********************************************************************/
     public boolean insertStudyRecord(StudyDTO study) throws Exception {
         String sql = "INSERT INTO TB_STUDY (USER_ID, STUDY_DATE, STUDY_COUNT, STUDY_LEVEL) " +
-                "VALUES (?, ?, ?, ?)";
-
+                     "VALUES (?, ?, ?, ?)";
+        
         Object[] params = new Object[]{
-                study.getUserId(),
-                study.getStudyDate(),
-                study.getStudyCount(),
-                study.getStudyLevel()
+            study.getUserId(),
+            study.getStudyDate(),
+            study.getStudyCount(),
+            study.getStudyLevel()
         };
-
+        
         try {
             return db.RunQuery(sql, params, 0, false); // false는 INSERT 쿼리임을 의미
         } catch (Exception Ex) {

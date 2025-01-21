@@ -7,6 +7,8 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.logging.Logger" %>
 <%@ page import="java.util.logging.Level" %>
+<%@ page import="BeansHome.Dango.DangoDAO" %>
+<%@ page import="BeansHome.Dango.DangoDTO" %>
 <% 
     // 캐시 제어
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
@@ -23,7 +25,9 @@
     StudyDAO studyDAO = new StudyDAO();
     RankingDAO rankingDAO = new RankingDAO();
     StreakDAO streakDAO = new StreakDAO();
+    DangoDAO dangoDAO = new DangoDAO();
     RankingDTO userRanking = null;
+    DangoDTO profileDango = new DangoDTO();
     List<StreakDTO> userStreaks = null;
     
     // 로그아웃 처리
@@ -40,6 +44,7 @@
     if (userId != null) {
         try {
             currentUser = userDAO.getUserById(userId);
+            dangoDAO.ReadProfileDango(userId, profileDango);
             // 세션 업데이트
             session.setAttribute("user", currentUser);
         } catch (Exception e) {
@@ -166,7 +171,7 @@
             <section class="dashboard">
                 <article class="user-profile">
                     <div class="profile-image-container">
-                        <img src="${pageContext.request.contextPath}/JspHome/Main/images/default_profile.png" 
+                        <img src="<%= profileDango.getLocationImg() %>"
                              alt="프로필 이미지">
                     </div>
                     <header class="profile-header">

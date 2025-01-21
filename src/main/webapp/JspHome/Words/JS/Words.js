@@ -5,6 +5,7 @@
 const body = document.querySelector('body');
 const label = document.querySelector('.label');
 const options = document.querySelectorAll('.option-item');
+
 // 클릭한 옵션의 텍스트를 라벨 안에 넣음
 const handleSelect = function(item) {
     label.innerHTML = item.textContent;
