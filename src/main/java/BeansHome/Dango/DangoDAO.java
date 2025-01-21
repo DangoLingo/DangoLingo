@@ -71,8 +71,8 @@ public class DangoDAO {
      ***********************************************************************/
     public boolean ReadBoardList(Integer userId) throws Exception
     {
-        String sSql = null;						// DML 문장
-        Object[] oPaValue = null;				// DML 문장에 필요한 파라미터 객체
+        String sSql = null;                      // DML 문장
+        Object[] oPaValue = null;                // DML 문장에 필요한 파라미터 객체
         boolean bResult = false;
 
         try
@@ -99,7 +99,7 @@ public class DangoDAO {
         }
         catch (Exception Ex)
         {
-            Common.ExceptionMgr.DisplayException(Ex);		// 예외처리(콘솔)
+            Common.ExceptionMgr.DisplayException(Ex);        // 예외처리(콘솔)
         }
         return bResult;
     }
