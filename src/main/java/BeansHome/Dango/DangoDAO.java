@@ -29,6 +29,7 @@ import java.util.logging.ConsoleHandler;
  * Inheritance : None
  ***********************************************************************/
 public class DangoDAO {
+    private static final Logger logger = Logger.getLogger(DangoDAO.class.getName());
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역상수 관리 - 필수영역
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -82,16 +83,16 @@ public class DangoDAO {
             // -----------------------------------------------------------------------------
             if (this.DBMgr.DbConnect() == true)
             {
-                // 사원정보 읽기
-                sSql = "BEGIN SP_IMG_R(?,?); END;";
+                // SP_IMG_R 프로시저 호출 준비
+                sSql = "BEGIN SP_IMG_R(?, ?); END;";
+                
+                // 파라미터 설정 (IN: userId, OUT: cursor)
+                oPaValue = new Object[2];
+                oPaValue[0] = userId;                   // IN parameter
+                oPaValue[1] = OracleTypes.CURSOR;      // OUT parameter (SYS_REFCURSOR)
 
-                // IN 파라미터 만큼만 할당
-                oPaValue = new Object[1];
-
-                oPaValue[0] = userId;
-
-                if (this.DBMgr.RunQuery(sSql, oPaValue, 2, true) == true)
-                {
+                // 프로시저 실행 (2개 파라미터, OUT 파라미터 있음)
+                if (this.DBMgr.RunQuery(sSql, oPaValue, 2, true)) {
                     bResult = true;
                 }
             }
@@ -99,7 +100,7 @@ public class DangoDAO {
         }
         catch (Exception Ex)
         {
-            Common.ExceptionMgr.DisplayException(Ex);        // 예외처리(콘솔)
+            ExceptionMgr.DisplayException(Ex);        // 예외처리(콘솔)
         }
         return bResult;
     }
