@@ -86,7 +86,7 @@
             if(userDAO.readUser(userId, currentUser)) {
                 session.setAttribute("user", currentUser);
             }
-            userRanking = rankingDAO.getUserRanking(userId, "points");
+            userRanking = rankingDAO.getUserRanking(userId);
 
         %>
 </head>
