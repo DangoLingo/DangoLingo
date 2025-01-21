@@ -23,59 +23,8 @@
     <title>JSP-Basic Page</title>
 	<%----------------------------------------------------------------------
 	[HTML Page - 스타일쉬트 구현 영역]
-	[외부 스타일쉬트 연결 : <link rel="stylesheet" href="Hello.css?version=1.1"/>]
 	--------------------------------------------------------------------------%>
-	<link rel="stylesheet" href="CSS/Basic.css?version=1.1"/>
-	<style type="text/css">
-		/* -----------------------------------------------------------------
-			HTML Page 스타일시트
-		   ----------------------------------------------------------------- */
-			form{
-				font-family: "Pretendard JP";
-				text-align: center;
-				justify-content: center;
-			}
-			
-			h2{
-				font-family: "Pretendard JP";
-				font-size: 28px;
-			}
-			
-			p{
-				font-family: "Pretendard JP";
-				font-size: 17px;
-			}
-			
-			button{
-				width: 436px;
-				height: 40px;
-				padding: 12px 8px 12px 8px;
-				border-radius: 16px;
-				background-color: #5C8B6C;
-				color: #ffffff;
-				border: none;
-				font-size: 15px;
-				cursor: pointer;
-			}
-			
-			img {
-				width: 160px;
-				height: 160px;
-				border-radius: 10000px;
-				object-fit:cover;
-				border: solid;
-				border-color: #E8E8E9;
-			}
-			
-			.dangoname{
-				font-size: 18px;
-			}
-	</style>
-	<%----------------------------------------------------------------------
-	[HTML Page - 자바스크립트 구현 영역 (상단)]
-	[외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
-	--------------------------------------------------------------------------%>
-	<script type="text/javascript" src="JS/Basic.js"></script>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/JspHome/Dango/css/pick.css">
 </head>
 <%--------------------------------------------------------------------------
 [JSP 전역 변수/함수 선언 영역 - 선언문 영역]

@@ -1,0 +1,130 @@
+/* 당고도감 메인 스타일 */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #F6F7F5;
+    margin: 0;
+    padding-top: 60px;
+}
+
+main.main-container {
+    flex: 1;
+    width: 100%;
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* 프로그레스 섹션 */
+.progress-section {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+}
+
+.progress-section h2 {
+    font-size: 24px;
+    margin: 0;
+    flex: 1;
+}
+
+.progress-section p {
+    font-size: 20px;
+    margin: 0 24px;
+}
+
+.modal_btn {
+    width: 60px;
+    height: 40px;
+    border-radius: 30px;
+    background-color: #324931;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* 그리드 레이아웃 */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 24px;
+}
+
+.grid-item {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.grid-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #E8E8E9;
+}
+
+.grid-image.locked {
+    filter: blur(5px);
+}
+
+.dangoname {
+    font-size: 16px;
+    color: #212529;
+}
+
+/* 등급 스타일 */
+.rarity {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #fff;
+}
+
+.rarity_unique { background-color: #324931; }
+.rarity_rare { background-color: #5C8B6C; }
+.rarity_common { background-color: #9ECE9C; }
+
+/* 반응형 디자인 */
+@media screen and (max-width: 1080px) {
+    .grid-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    main.main-container {
+        padding: 16px;
+    }
+
+    .progress-section {
+        padding: 16px;
+    }
+
+    .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    .grid-item {
+        padding: 16px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+} 

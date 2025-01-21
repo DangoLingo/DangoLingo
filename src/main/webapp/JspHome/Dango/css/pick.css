@@ -1,0 +1,66 @@
+/* 당고 뽑기 스타일 */
+.pick-container {
+    width: 100%;
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+h2 {
+    font-family: "Pretendard JP";
+    font-size: 28px;
+}
+
+p {
+    font-family: "Pretendard JP";
+    font-size: 17px;
+}
+
+button {
+    width: 100%;
+    max-width: 436px;
+    height: 48px;
+    border-radius: 16px;
+    background-color: #5C8B6C;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #4a7b5a;
+}
+
+.pick-image {
+    width: 160px;
+    height: 160px;
+    border-radius: 10000px;
+    object-fit: cover;
+    border: solid;
+    border-color: #E8E8E9;
+}
+
+.dangoname {
+    font-size: 18px;
+}
+
+/* 반응형 스타일 */
+@media screen and (max-width: 768px) {
+    .pick-container {
+        padding: 16px;
+    }
+    
+    button {
+        max-width: 100%;
+    }
+} 
