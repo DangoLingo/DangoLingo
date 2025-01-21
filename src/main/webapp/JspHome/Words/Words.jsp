@@ -57,43 +57,62 @@
             StudyDTO currentStudy = new StudyDTO();
             ArrayList<StudyDTO> studyCounts = new ArrayList<>();
             Integer userId = (Integer) session.getAttribute("userId");
+            String visible = "visible";
             
             // 기본값 설정
             Integer selectedNLevel = 5;  // 기본 N5
             Integer currentDay = 1;     // 기본 Day 1
-
+            Integer wordsId = 1;
+            boolean flag = false;
+            if (request.getParameter("level") != null) {
+            	flag = true;
+            	selectedNLevel = Integer.parseInt(request.getParameter("level"));
+            }
             
             try {
-                // 현재 사용자 정보 조회
-                if(userDAO.readUser(userId, currentUser)) {
-                    session.setAttribute("user", currentUser);
-                }
 
-                // 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
-                if(studyDAO.readCurrentStudy(userId, 1, 1, currentStudy)) {
-                    int wordsId = currentStudy.getWordsId();
-                    // 예: wordsId가 104라면 N1의 Day 04를 의미
-                    
-                    // URL에서 레벨이 지정되지 않은 경우에만 현재 학습 중인 레벨을 사용
-                    selectedNLevel = wordsId / 100;  // 첫 자리 (N레벨)
+                if (flag) {
+	              	// 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
+					studyDAO.readCurrentStudy(userId, selectedNLevel, 0, currentStudy);
+					wordsId = currentStudy.getWordsId();
+					// 예: wordsId가 104라면 N1의 Day 04를 의미
+									
+					currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
 
-                    currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
-                    
-                    // 디버깅을 위한 로그
-                    logger.info("Current Study ID: " + wordsId + 
-                               ", Selected Level: " + selectedNLevel + 
-                               ", Current Day: " + currentDay);
-                }
+	                // 일자별 학습한 단어 정보 조회
+	                studyDAO.readStudyCounts(userId, selectedNLevel, studyCounts);
+                } else {
+                	
+                	// 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
+    				studyDAO.readCurrentStudy(userId, 1, 1, currentStudy);
+    				wordsId = currentStudy.getWordsId();
+    				// 예: wordsId가 104라면 N1의 Day 04를 의미
 
-                // 일자별 학습한 단어 정보 조회
-                if(studyDAO.readStudyCounts(userId, selectedNLevel, studyCounts)) {
+    				// URL에서 레벨이 지정되지 않은 경우에만 현재 학습 중인 레벨을 사용
+    				selectedNLevel = wordsId / 100;  // 첫 자리 (N레벨)
+    				
+    				currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
+
+                    // 일자별 학습한 단어 정보 조회
+                    studyDAO.readStudyCounts(userId, selectedNLevel, studyCounts);
+                	
                 }
 
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Error retrieving information", e);
             }
-        %>
+            
+            if(studyCounts.size() == 0) {
+            	for(int i = 0; i < 10; i++) {
+                    StudyDTO study = new StudyDTO();
+                    study.setWordsId(selectedNLevel * 100 + i);
+                    study.setStudyCount(0);
+                    studyCounts.add(study);
+                }
+            }
 
+        %>
+        
         // N레벨 변경 함수
         function changeLevel(level) {
             // URL에 선택한 레벨을 파라미터로 추가하고 페이지 새로고침
@@ -101,6 +120,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+        	
             const levelButton = document.querySelector('.label');
             levelButton.textContent = 'N<%= selectedNLevel %>';
             
@@ -110,6 +130,7 @@
                     option.classList.add('active');
                 }
             });
+            
         });
     </script>
 </head>
@@ -141,8 +162,7 @@
                     </div>
                 </div>
                 <div class="nav-card-right">
-                    <!-- DB 연동 후 수정 필요 -->
-                    <time class="nav-card-date">최근 학습 날짜: <fmt:formatDate value="<%= currentUser.getStudyDate() %>" pattern="yyyy년 MM월 dd일" /></time>
+                    <time class="nav-card-date">최근 학습 날짜: <fmt:formatDate value="<%= currentStudy.getStudyDate() %>" pattern="yyyy년 MM월 dd일" /></time>
                 </div>
             </header>
         </section>
@@ -157,22 +177,11 @@
                 // 현재 카드의 wordsId 계산 (예: N1의 Day 04는 104)
                 int cardWordsId = (selectedNLevel * 100) + i;
                 
-                // 현재 단어장의 학습 정보 조회
-                StudyDTO studyInfo = new StudyDTO();
-                int studyCount = 0;
-                try {
-                    if(studyDAO.readCurrentStudy(userId, selectedNLevel, i, studyInfo)) {
-                        studyCount = studyInfo.getStudyCount();
-                    }
-                } catch(Exception e) {
-                    logger.log(Level.SEVERE, "Error retrieving study info", e);
-                }
-                
                 // 현재 학습 중인 단어장과 비교 (정수형으로 비교)
-                boolean isCurrentStudy = (currentStudy.getWordsId() == cardWordsId);
+                boolean isCurrentStudy = (wordsId == cardWordsId);
                 
                 // 디버깅을 위한 로그
-                logger.info("Comparing - Current Study ID: " + currentStudy.getWordsId() + 
+                logger.info("Comparing - Current Study ID: " + studyCounts.get(i - 1).getWordsId() +
                            ", Card ID: " + cardWordsId + 
                            ", Is Current: " + isCurrentStudy);
                 %>

@@ -118,7 +118,7 @@ public class StudyDAO {
      * @return boolean      : 업데이트 성공 여부
      * @throws Exception
      ***********************************************************************/
-    public boolean readStudyCounts(int userId, int wordsId, ArrayList<StudyDTO> studysCount) throws Exception {
+    public boolean readStudyCounts(int userId, int wordsId, ArrayList<StudyDTO> studyCounts) throws Exception {
         String sql = "BEGIN SP_STUDY_COUNT_R(?,?,?); END;";
         ArrayList<StudyDTO> temp = new ArrayList<>();
         Object[] params = new Object[]{
@@ -161,12 +161,18 @@ public class StudyDAO {
                         study.setStudyCount(0);
                     }
                     logger.info("STUDY ID: " + study.getWordsId());
-                    studysCount.add(study);
+                    studyCounts.add(study);
+                }
+                return true;
+            } else {
+            	for(int i = 1; i < 11; i++) {
+                    StudyDTO study = new StudyDTO();
+                    study.setWordsId(wordsId * 100 + i);
+                    study.setStudyCount(0);
+                    studyCounts.add(study);
                 }
                 return true;
             }
-            logger.severe("Failed to execute update procedure");
-            return false;
         } catch (Exception e) {
             logger.severe("Error during select: " + e.getMessage());
             Common.ExceptionMgr.DisplayException(e);		// 예외처리(콘솔)
