@@ -28,7 +28,7 @@ int japaneseId = 1;
 
 // words_id 파라미터 가져오기
 String wordsIdParam = request.getParameter("words_id");
-int wordsId = (wordsIdParam != null) ? Integer.parseInt(wordsIdParam) : 105;
+int wordsId = (wordsIdParam != null) ? Integer.parseInt(wordsIdParam) : 101;
 
 // 세션에서 user_id 가져오기 / 없으면 기본값 5 설정
 Integer userId = (Integer) session.getAttribute("userId"); // 세션에서 user_id 가져오기
@@ -46,18 +46,19 @@ try {
     connection = DriverManager.getConnection("jdbc:oracle:thin:@cobyserver.iptime.org:1521:xe", user, password);
 
     // 일본어 단어 데이터 조회 쿼리 실행
-    String query = "SELECT * FROM tb_japanese WHERE words_id = ? ORDER BY japanese_id";
+    String query = "SELECT japanese_id, kanji, hiragana, kanji_kr, example, example_kr FROM tb_japanese WHERE words_id = ? ORDER BY japanese_id";
     try (PreparedStatement stmt = connection.prepareStatement(query)) {
         stmt.setInt(1, wordsId);
         try (ResultSet rs = stmt.executeQuery()) {
             wordsList.clear();
             while (rs.next()) {
-                String[] wordData = new String[5];
+                String[] wordData = new String[6];
                 wordData[0] = rs.getString("kanji");
                 wordData[1] = rs.getString("hiragana");
                 wordData[2] = rs.getString("kanji_kr");
                 wordData[3] = rs.getString("example");
                 wordData[4] = rs.getString("example_kr");
+                wordData[5] = String.valueOf(rs.getInt("japanese_id")); // store japanese_id as string
                 wordsList.add(wordData);
             }
         }
@@ -176,13 +177,16 @@ try {
   // 1) Declare the array before referencing it
   const wordsList = [
     <% for (String[] word : wordsList) { %>
-      ["<%= word[0] %>", "<%= word[1] %>", "<%= word[2] %>", "<%= word[3] %>", "<%= word[4] %>"],
+      ["<%= word[0] %>", "<%= word[1] %>", "<%= word[2] %>", "<%= word[3] %>", "<%= word[4] %>", <%= word[5] %>],
     <% } %>
   ];
   // 2) Now use wordsList safely
   let localJapaneseId = wordsList.length ?  parseInt(<%= wordsId %>) : 1; // Example or any default
 
 //학습 단어 수를 업데이트하고 목표 달성 여부 확인
+  /**
+   * updateLearnedWordsCount: 학습 단어 개수를 업데이트하고 목표치 도달 시 처리 로직을 수행합니다.
+   */
   function updateLearnedWordsCount() {
     const learnedWordsCount = forgotCount + memorizedCount;
     document.getElementById('learnedWordsCount').innerText = learnedWordsCount + '/50';
@@ -193,6 +197,9 @@ try {
   }
 
   // 단어 상태 변경 버튼 비활성화
+  /**
+   * 단어 상태 변경 버튼을 비활성화하여 더 이상 클릭할 수 없도록 합니다.
+   */
   function disableButtons() {
     document.querySelectorAll('.forgot, .memorized').forEach(button => {
       button.disabled = true;
@@ -200,12 +207,14 @@ try {
   }
 
   // 사용자가 단어를 잊었을 때 처리
+  /**
+   * handleForgot: 사용자가 '몰라요' 버튼을 눌렀을 때 학습 상태를 저장하고 다음 단어로 이동합니다.
+   */
   function handleForgot() {
     updateSession('N'); // Add session update with 'N'
     forgotCount++;
     updateLearnedWordsCount();
     currentIndex++;
-    localJapaneseId++; // Increment local ID
     document.querySelector('.hurigana').classList.add('invisible');
     document.querySelector('.kangi_kr').classList.add('invisible');
     document.querySelector('.example').classList.add('invisible');
@@ -218,12 +227,14 @@ try {
   }
 
   // 사용자가 단어를 암기했을 때 처리
+  /**
+   * handleMemorized: 사용자가 '외웠어요' 버튼을 눌렀을 때 학습 상태를 저장하고 다음 단어로 이동합니다.
+   */
   function handleMemorized() {
     updateSession('Y'); // Add session update with 'Y'
     memorizedCount++;
     updateLearnedWordsCount();
     currentIndex++;
-    localJapaneseId++; // Increment local ID
     document.querySelector('.hurigana').classList.add('invisible');
     document.querySelector('.kangi_kr').classList.add('invisible');
     document.querySelector('.example').classList.add('invisible');
@@ -243,7 +254,7 @@ try {
     window.location.href = 'Words_Final.jsp?timer=' + encodeURIComponent(timerText) + 
                            '&memorizedCount=' + memorizedCount + 
                            '&forgotCount=' + forgotCount +
-                           '&japaneseId=' + localJapaneseId; // Add localJapaneseId to URL parameters
+                           '&japaneseId=' + wordsList[currentIndex][5]; // Add localJapaneseId to URL parameters
   }
 
   // 현재 단어를 화면에 표시
@@ -296,9 +307,13 @@ try {
   }
 
   // Add function to update TB_SESSION
+  /**
+   * updateSession: 현재 학습 상태(N/Y)를 서버 서블릿에 전달하여 DB를 갱신합니다.
+   */
   function updateSession(status) {
     const userId = <%=userId %>; // Replace with actual user ID
     const wordsId = <%=wordsId %>; // Replace with actual words ID
+    const currentJapaneseId = wordsList[currentIndex][5];
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '<%= request.getContextPath() %>/UpdateSession', true);
@@ -316,7 +331,7 @@ try {
 
     const params = "userId=" + userId + 
                   "&wordsId=" + wordsId + 
-                  "&japaneseId=" + localJapaneseId + 
+                  "&japaneseId=" + currentJapaneseId + 
                   "&status=" + status;
     xhr.send(params);
   }
