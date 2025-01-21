@@ -4,34 +4,34 @@
     <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     
-    <!-- 상단 당고 (쿠키) -->
-    <circle cx="160" cy="160" r="35" fill="#DEB887"/>
-    <!-- 쿠키 칩 -->
-    <circle cx="150" cy="150" r="4" fill="#8B4513"/>
-    <circle cx="170" cy="150" r="4" fill="#8B4513"/>
-    <circle cx="160" cy="170" r="4" fill="#8B4513"/>
-    <!-- 달콤한 표정 -->
-    <path d="M150 165 Q160 170 170 165" stroke="#3F1F1F" stroke-width="2"/>
-    <circle cx="155" cy="155" r="3" fill="#3F1F1F"/>
-    <circle cx="165" cy="155" r="3" fill="#3F1F1F"/>
+    <!-- 상단 당고 (광대) -->
+    <circle cx="160" cy="160" r="35" fill="#FF4500"/>
+    <!-- 광대 모자 -->
+    <path d="M145 145 L175 145" stroke="#FFD700" stroke-width="4"/>
+    <circle cx="160" cy="140" r="5" fill="#FFD700"/>
+    <!-- 재미있는 표정 -->
+    <path d="M150 170 Q160 165 170 170" stroke="#FFFFFF" stroke-width="3"/>
+    <circle cx="155" cy="155" r="5" fill="#FFFFFF"/>
+    <circle cx="165" cy="155" r="5" fill="#FFFFFF"/>
 
-    <!-- 중간 당고 (캔디) -->
-    <circle cx="200" cy="200" r="35" fill="#FF69B4"/>
-    <!-- 캔디 줄무늬 -->
-    <path d="M185 190 L215 190" stroke="#FFB6C1" stroke-width="4"/>
-    <path d="M185 200 L215 200" stroke="#FFB6C1" stroke-width="4"/>
-    <path d="M185 210 L215 210" stroke="#FFB6C1" stroke-width="4"/>
-    <!-- 즐거운 표정 -->
-    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
-    <circle cx="195" cy="195" r="3" fill="#3F1F1F"/>
-    <circle cx="205" cy="195" r="3" fill="#3F1F1F"/>
+    <!-- 중간 당고 (저글링 공) -->
+    <circle cx="200" cy="200" r="35" fill="#4169E1"/>
+    <!-- 무늬 -->
+    <path d="M185 200 L215 200" stroke="#87CEEB" stroke-width="3"/>
+    <path d="M200 185 L200 215" stroke="#87CEEB" stroke-width="3"/>
+    <!-- 활기찬 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#FFFFFF" stroke-width="2"/>
+    <path d="M195 195 L190 190" stroke="#FFFFFF" stroke-width="2"/>
+    <path d="M205 195 L210 190" stroke="#FFFFFF" stroke-width="2"/>
 
-    <!-- 하단 당고 (마카롱) -->
-    <circle cx="240" cy="240" r="35" fill="#E6E6FA"/>
-    <!-- 마카롱 크림 -->
-    <path d="M225 240 Q240 250 255 240" fill="#D8BFD8"/>
+    <!-- 하단 당고 (서커스 텐트) -->
+    <circle cx="240" cy="240" r="35" fill="#FF69B4"/>
+    <!-- 텐트 무늬 -->
+    <path d="M225 230 L255 230" stroke="#FFFFFF" stroke-width="3"/>
+    <path d="M225 240 L255 240" stroke="#FFFFFF" stroke-width="3"/>
+    <path d="M225 250 L255 250" stroke="#FFFFFF" stroke-width="3"/>
     <!-- 행복한 표정 -->
-    <path d="M230 245 Q240 250 250 245" stroke="#3F1F1F" stroke-width="2"/>
-    <circle cx="235" cy="235" r="2" fill="#3F1F1F"/>
-    <circle cx="245" cy="235" r="2" fill="#3F1F1F"/>
+    <path d="M230 245 Q240 250 250 245" stroke="#FFD700" stroke-width="2"/>
+    <circle cx="235" cy="235" r="2" fill="#FFD700"/>
+    <circle cx="245" cy="235" r="2" fill="#FFD700"/>
 </svg> 

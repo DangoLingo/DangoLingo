@@ -4,39 +4,37 @@
     <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     
-    <!-- 상단 당고 (해바라기) -->
-    <circle cx="160" cy="160" r="35" fill="#FFD700"/>
-    <!-- 꽃잎 -->
-    <path d="M145 145 L175 175" stroke="#FFA500" stroke-width="3"/>
-    <path d="M145 175 L175 145" stroke="#FFA500" stroke-width="3"/>
-    <!-- 씨앗 무늬 -->
-    <circle cx="160" cy="160" r="10" fill="#8B4513"/>
-    <!-- 밝은 표정 -->
-    <path d="M150 170 Q160 175 170 170" stroke="#3F1F1F" stroke-width="2"/>
-    <circle cx="155" cy="165" r="2" fill="#3F1F1F"/>
-    <circle cx="165" cy="165" r="2" fill="#3F1F1F"/>
+    <!-- 상단 당고 (강아지) -->
+    <circle cx="160" cy="160" r="35" fill="#F4A460"/>
+    <!-- 귀 -->
+    <path d="M145 145 Q155 140 160 145" stroke="#8B4513" stroke-width="3"/>
+    <path d="M175 145 Q165 140 160 145" stroke="#8B4513" stroke-width="3"/>
+    <!-- 귀여운 표정 -->
+    <path d="M150 165 Q160 170 170 165" stroke="#8B4513" stroke-width="2"/>
+    <circle cx="155" cy="155" r="3" fill="#8B4513"/>
+    <circle cx="165" cy="155" r="3" fill="#8B4513"/>
 
-    <!-- 중간 당고 (장미) -->
-    <circle cx="200" cy="200" r="35" fill="#FF69B4"/>
-    <!-- 장미 잎 -->
-    <path d="M185 190 Q200 180 215 190" stroke="#32CD32" stroke-width="2"/>
-    <path d="M185 195 Q200 185 215 195" stroke="#32CD32" stroke-width="2"/>
-    <!-- 가시 -->
-    <path d="M180 200 L185 195" stroke="#228B22" stroke-width="1"/>
-    <path d="M220 200 L215 195" stroke="#228B22" stroke-width="1"/>
-    <!-- 우아한 표정 -->
-    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
-    <circle cx="195" cy="195" r="2" fill="#3F1F1F"/>
-    <circle cx="205" cy="195" r="2" fill="#3F1F1F"/>
+    <!-- 중간 당고 (고양이) -->
+    <circle cx="200" cy="200" r="35" fill="#808080"/>
+    <!-- 수염 -->
+    <path d="M185 195 L175 193" stroke="#333333" stroke-width="1"/>
+    <path d="M185 200 L175 200" stroke="#333333" stroke-width="1"/>
+    <path d="M185 205 L175 207" stroke="#333333" stroke-width="1"/>
+    <path d="M215 195 L225 193" stroke="#333333" stroke-width="1"/>
+    <path d="M215 200 L225 200" stroke="#333333" stroke-width="1"/>
+    <path d="M215 205 L225 207" stroke="#333333" stroke-width="1"/>
+    <!-- 도도한 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#FFFFFF" stroke-width="2"/>
+    <path d="M195 195 L190 190" stroke="#FFFFFF" stroke-width="2"/>
+    <path d="M205 195 L210 190" stroke="#FFFFFF" stroke-width="2"/>
 
-    <!-- 하단 당고 (라벤더) -->
-    <circle cx="240" cy="240" r="35" fill="#E6E6FA"/>
-    <!-- 꽃 무늬 -->
-    <path d="M230 230 L235 225" stroke="#9370DB" stroke-width="2"/>
-    <path d="M240 230 L245 225" stroke="#9370DB" stroke-width="2"/>
-    <path d="M250 230 L255 225" stroke="#9370DB" stroke-width="2"/>
-    <!-- 평화로운 표정 -->
-    <path d="M230 245 Q240 250 250 245" stroke="#3F1F1F" stroke-width="2"/>
-    <circle cx="235" cy="235" r="2" fill="#3F1F1F"/>
-    <circle cx="245" cy="235" r="2" fill="#3F1F1F"/>
+    <!-- 하단 당고 (토끼) -->
+    <circle cx="240" cy="240" r="35" fill="#FFFFFF"/>
+    <!-- 긴 귀 -->
+    <path d="M230 220 Q235 210 240 220" stroke="#FFB6C1" stroke-width="3"/>
+    <path d="M250 220 Q245 210 240 220" stroke="#FFB6C1" stroke-width="3"/>
+    <!-- 순수한 표정 -->
+    <path d="M230 245 Q240 250 250 245" stroke="#FF69B4" stroke-width="2"/>
+    <circle cx="235" cy="235" r="2" fill="#FF69B4"/>
+    <circle cx="245" cy="235" r="2" fill="#FF69B4"/>
 </svg> 

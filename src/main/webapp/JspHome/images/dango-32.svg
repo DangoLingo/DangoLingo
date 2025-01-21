@@ -4,35 +4,33 @@
     <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     
-    <!-- 상단 당고 (원숭이) -->
-    <circle cx="160" cy="160" r="35" fill="#8B4513"/>
-    <!-- 원숭이 귀 -->
-    <circle cx="145" cy="145" r="8" fill="#6B3E26"/>
-    <circle cx="175" cy="145" r="8" fill="#6B3E26"/>
-    <!-- 귀여운 표정 -->
-    <path d="M150 165 Q160 170 170 165" stroke="#FFE4C4" stroke-width="2"/>
-    <circle cx="155" cy="155" r="3" fill="#FFE4C4"/>
-    <circle cx="165" cy="155" r="3" fill="#FFE4C4"/>
-
-    <!-- 중간 당고 (앵무새) -->
-    <circle cx="200" cy="200" r="35" fill="#32CD32"/>
-    <!-- 앵무새 부리 -->
-    <path d="M195 195 Q200 205 205 195" fill="#FFD700"/>
-    <!-- 화려한 깃털 -->
-    <path d="M180 185 Q200 180 220 185" stroke="#FF1493" stroke-width="3"/>
-    <path d="M180 190 Q200 185 220 190" stroke="#4169E1" stroke-width="3"/>
+    <!-- 상단 당고 (빨강) -->
+    <circle cx="160" cy="160" r="35" fill="#FF0000"/>
+    <!-- 무지개 효과 -->
+    <path d="M145 150 Q160 140 175 150" stroke="#FF69B4" stroke-width="3"/>
+    <path d="M145 155 Q160 145 175 155" stroke="#FFA500" stroke-width="3"/>
     <!-- 밝은 표정 -->
-    <circle cx="195" cy="195" r="2" fill="#3F1F1F"/>
-    <circle cx="205" cy="195" r="2" fill="#3F1F1F"/>
+    <path d="M150 165 Q160 170 170 165" stroke="#FFFFFF" stroke-width="2"/>
+    <circle cx="155" cy="155" r="3" fill="#FFFFFF"/>
+    <circle cx="165" cy="155" r="3" fill="#FFFFFF"/>
 
-    <!-- 하단 당고 (나비) -->
-    <circle cx="240" cy="240" r="35" fill="#FFB6C1"/>
-    <!-- 나비 날개 -->
-    <path d="M220 230 Q230 220 240 230" stroke="#FF69B4" stroke-width="3" fill="#FF69B4"/>
-    <path d="M240 230 Q250 220 260 230" stroke="#FF69B4" stroke-width="3" fill="#FF69B4"/>
-    <!-- 더듬이 -->
-    <path d="M235 225 L230 215" stroke="#3F1F1F" stroke-width="1"/>
-    <path d="M245 225 L250 215" stroke="#3F1F1F" stroke-width="1"/>
-    <!-- 귀여운 표정 -->
-    <path d="M235 245 Q240 248 245 245" stroke="#3F1F1F" stroke-width="2"/>
+    <!-- 중간 당고 (노랑) -->
+    <circle cx="200" cy="200" r="35" fill="#FFD700"/>
+    <!-- 무지개 효과 -->
+    <path d="M185 190 Q200 180 215 190" stroke="#98FB98" stroke-width="3"/>
+    <path d="M185 195 Q200 185 215 195" stroke="#87CEEB" stroke-width="3"/>
+    <!-- 행복한 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="195" cy="195" r="3" fill="#3F1F1F"/>
+    <circle cx="205" cy="195" r="3" fill="#3F1F1F"/>
+
+    <!-- 하단 당고 (파랑) -->
+    <circle cx="240" cy="240" r="35" fill="#4169E1"/>
+    <!-- 무지개 효과 -->
+    <path d="M225 235 Q240 225 255 235" stroke="#9370DB" stroke-width="3"/>
+    <path d="M225 240 Q240 230 255 240" stroke="#8A2BE2" stroke-width="3"/>
+    <!-- 신비로운 표정 -->
+    <path d="M230 245 Q240 250 250 245" stroke="#FFFFFF" stroke-width="2"/>
+    <circle cx="235" cy="235" r="2" fill="#FFFFFF"/>
+    <circle cx="245" cy="235" r="2" fill="#FFFFFF"/>
 </svg> 

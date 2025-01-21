@@ -4,33 +4,37 @@
     <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     
-    <!-- 상단 당고 (교수) -->
-    <circle cx="160" cy="160" r="35" fill="#4B0082"/>
-    <!-- 학사모 -->
-    <path d="M145 145 L175 145" stroke="#000000" stroke-width="3"/>
-    <path d="M160 145 L160 135" stroke="#000000" stroke-width="3"/>
-    <circle cx="160" cy="135" r="3" fill="#FFD700"/>
-    <!-- 지혜로운 표정 -->
-    <path d="M150 165 Q160 170 170 165" stroke="#FFFFFF" stroke-width="2"/>
-    <circle cx="155" cy="155" r="3" fill="#FFFFFF"/>
-    <circle cx="165" cy="155" r="3" fill="#FFFFFF"/>
+    <!-- 상단 당고 (별자리) -->
+    <circle cx="160" cy="160" r="35" fill="#191970"/>
+    <!-- 별 무늬 -->
+    <circle cx="150" cy="150" r="2" fill="#FFD700"/>
+    <circle cx="170" cy="150" r="2" fill="#FFD700"/>
+    <circle cx="160" cy="170" r="2" fill="#FFD700"/>
+    <path d="M150 150 L170 150" stroke="#FFD700" stroke-width="1"/>
+    <path d="M160 170 L165 155" stroke="#FFD700" stroke-width="1"/>
+    <!-- 신비로운 표정 -->
+    <path d="M150 165 Q160 170 170 165" stroke="#E6E6FA" stroke-width="2"/>
+    <circle cx="155" cy="155" r="2" fill="#E6E6FA"/>
+    <circle cx="165" cy="155" r="2" fill="#E6E6FA"/>
 
-    <!-- 중간 당고 (선생님) -->
-    <circle cx="200" cy="200" r="35" fill="#87CEEB"/>
-    <!-- 안경 -->
-    <circle cx="195" cy="195" r="5" fill="none" stroke="#3F1F1F" stroke-width="2"/>
-    <circle cx="205" cy="195" r="5" fill="none" stroke="#3F1F1F" stroke-width="2"/>
-    <path d="M200 195 L200 195" stroke="#3F1F1F" stroke-width="2"/>
-    <!-- 친절한 표정 -->
-    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
+    <!-- 중간 당고 (달) -->
+    <circle cx="200" cy="200" r="35" fill="#C0C0C0"/>
+    <!-- 달 무늬 -->
+    <path d="M190 185 Q205 195 190 205" stroke="#FFFFFF" stroke-width="3"/>
+    <!-- 고요한 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#333333" stroke-width="2"/>
+    <circle cx="195" cy="195" r="2" fill="#333333"/>
+    <circle cx="205" cy="195" r="2" fill="#333333"/>
 
-    <!-- 하단 당고 (학생) -->
-    <circle cx="240" cy="240" r="35" fill="#FFB6C1"/>
-    <!-- 책 -->
-    <path d="M230 230 L250 230" stroke="#3F1F1F" stroke-width="3"/>
-    <path d="M230 235 L250 235" stroke="#3F1F1F" stroke-width="2"/>
-    <!-- 호기심 많은 표정 -->
-    <path d="M230 245 Q240 250 250 245" stroke="#3F1F1F" stroke-width="2"/>
-    <circle cx="235" cy="235" r="3" fill="#3F1F1F"/>
-    <circle cx="245" cy="235" r="3" fill="#3F1F1F"/>
+    <!-- 하단 당고 (태양) -->
+    <circle cx="240" cy="240" r="35" fill="#FF4500"/>
+    <!-- 광채 -->
+    <path d="M225 240 L255 240" stroke="#FFD700" stroke-width="2"/>
+    <path d="M240 225 L240 255" stroke="#FFD700" stroke-width="2"/>
+    <path d="M230 230 L250 250" stroke="#FFD700" stroke-width="2"/>
+    <path d="M230 250 L250 230" stroke="#FFD700" stroke-width="2"/>
+    <!-- 빛나는 표정 -->
+    <path d="M230 245 Q240 250 250 245" stroke="#FFFFFF" stroke-width="2"/>
+    <circle cx="235" cy="235" r="2" fill="#FFFFFF"/>
+    <circle cx="245" cy="235" r="2" fill="#FFFFFF"/>
 </svg> 
