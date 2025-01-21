@@ -86,7 +86,7 @@
             if(userDAO.readUser(userId, currentUser)) {
                 session.setAttribute("user", currentUser);
             }
-            userRanking = rankingDAO.getUserRanking(userId, "points");
+            userRanking = rankingDAO.getUserRanking(userId);
 
         %>
 </head>
@@ -123,7 +123,7 @@
             <ul class="nav-list">
                 <li class="nav-item active">정보 수정</li>
                 <li class="nav-item">학습 이력</li>
-                <li class="nav-item">친구 관리</li>
+<%--                <li class="nav-item">친구 관리</li>--%>
             </ul>
             <section id="nav-section">
                 <div id="info">
@@ -132,9 +132,9 @@
                 <div id="history">
                     <jsp:include page="History.jsp"/>
                 </div>
-                <div id="friend">
-                    <jsp:include page="Friend.jsp"/>
-                </div>
+<%--                <div id="friend">--%>
+<%--                    <jsp:include page="Friend.jsp"/>--%>
+<%--                </div>--%>
             </section>
         </section>
     </main>
@@ -153,11 +153,11 @@
 
     const info = document.getElementById("info").style;
     const history = document.getElementById("history").style;
-    const friend = document.getElementById("friend").style;
+    // const friend = document.getElementById("friend").style;
 
     info.display="block";
     history.display="none";
-    friend.display="none";
+    // friend.display="none";
 
     // 네비게이션 활성화
     document.querySelectorAll('.nav-item').forEach(item => {
@@ -167,20 +167,20 @@
             // 여기에 페이지 전환 로직 추가
             const info = document.getElementById("info").style;
             const history = document.getElementById("history").style;
-            const friend = document.getElementById("friend").style;
+            // const friend = document.getElementById("friend").style;
 
             if(item.innerHTML == "학습 이력") {
                 info.display="none";
                 history.display="block";
-                friend.display="none";
+                // friend.display="none";
             } else if (item.innerHTML == "정보 수정") {
                 info.display="block";
                 history.display="none";
-                friend.display="none";
+                // friend.display="none";
             } else {
                 info.display="none";
                 history.display="none";
-                friend.display="block";
+                // friend.display="block";
             }
         });
     });

@@ -74,7 +74,7 @@
                 if (flag) {
 	              	// 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
 					studyDAO.readCurrentStudy(userId, selectedNLevel, 0, currentStudy);
-					wordsId = currentStudy.getWordsId();
+					wordsId = (currentStudy.getWordsId() / 100 == 0) ? 500: currentStudy.getWordsId();
 					// 예: wordsId가 104라면 N1의 Day 04를 의미
 									
 					currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
@@ -89,7 +89,7 @@
     				// 예: wordsId가 104라면 N1의 Day 04를 의미
 
     				// URL에서 레벨이 지정되지 않은 경우에만 현재 학습 중인 레벨을 사용
-    				selectedNLevel = wordsId / 100;  // 첫 자리 (N레벨)
+    				selectedNLevel = (wordsId / 100 == 0) ? 5: wordsId / 100;  // 첫 자리 (N레벨)
     				
     				currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
 
