@@ -1,8 +1,20 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.apache.naming.java.javaURLContextFactory"%>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.logging.Level" %>
+<%@ page import="java.util.logging.Logger" %>
+<%@ page import="BeansHome.User.UserDAO" %>
+<%@ page import="BeansHome.Study.StudyDAO" %>
+<%@ page import="BeansHome.Streak.StreakDAO" %>
+<%@ page import="BeansHome.Session.SessionDAO" %>
+<%@ page import="BeansHome.Streak.StreakDTO" %>
+<%@ page import="BeansHome.User.UserDTO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="BeansHome.Study.StudyDTO" %>
+<%@ page import="java.util.ArrayList" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8");%>
 <!DOCTYPE html>
@@ -33,196 +45,179 @@
     [HTML Page - 자바스크립트 구현 영역 (상단)]
     [외부 자바스크립트 연결 (각각) : <script type="text/javascript" src="Hello.js"></script>]
     --------------------------------------------------------------------------%>
+    <script>
+        <%
+            Logger logger = Logger.getLogger("Words.jsp");
+            logger.setLevel(Level.ALL);
 
+            UserDAO userDAO = new UserDAO();
+            StudyDAO studyDAO = new StudyDAO();
+            SessionDAO sessionDAO = new SessionDAO();
+            UserDTO currentUser = new UserDTO();
+            StudyDTO currentStudy = new StudyDTO();
+            ArrayList<StudyDTO> studyCounts = new ArrayList<>();
+            Integer userId = (Integer) session.getAttribute("userId");
+            String visible = "visible";
+
+            // 기본값 설정
+            Integer selectedNLevel = 5;  // 기본 N5
+            Integer currentDay = 1;     // 기본 Day 1
+            Integer wordsId = 1;
+            boolean flag = false;
+            if (request.getParameter("level") != null) {
+            	flag = true;
+            	selectedNLevel = Integer.parseInt(request.getParameter("level"));
+            }
+
+            try {
+
+                if (flag) {
+	              	// 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
+					studyDAO.readCurrentStudy(userId, selectedNLevel, 0, currentStudy);
+					wordsId = currentStudy.getWordsId();
+					// 예: wordsId가 104라면 N1의 Day 04를 의미
+
+					currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
+
+	                // 일자별 학습한 단어 정보 조회
+	                studyDAO.readStudyCounts(userId, selectedNLevel, studyCounts);
+                } else {
+
+                	// 현재 학습 중인 단어장 정보 조회 (최근 학습 정보)
+    				studyDAO.readCurrentStudy(userId, 1, 1, currentStudy);
+    				wordsId = currentStudy.getWordsId();
+    				// 예: wordsId가 104라면 N1의 Day 04를 의미
+
+    				// URL에서 레벨이 지정되지 않은 경우에만 현재 학습 중인 레벨을 사용
+    				selectedNLevel = wordsId / 100;  // 첫 자리 (N레벨)
+
+    				currentDay = wordsId % 100;     // 나머지 두 자리 (Day)
+
+                    // 일자별 학습한 단어 정보 조회
+                    studyDAO.readStudyCounts(userId, selectedNLevel, studyCounts);
+
+                }
+
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error retrieving information", e);
+            }
+
+            if(studyCounts.size() == 0) {
+            	for(int i = 0; i < 10; i++) {
+                    StudyDTO study = new StudyDTO();
+                    study.setWordsId(selectedNLevel * 100 + i);
+                    study.setStudyCount(0);
+                    studyCounts.add(study);
+                }
+            }
+
+        %>
+
+        // N레벨 변경 함수
+        function changeLevel(level) {
+            // URL에 선택한 레벨을 파라미터로 추가하고 페이지 새로고침
+            window.location.href = '${pageContext.request.contextPath}/JspHome/Words/Words.jsp?level=' + level;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const levelButton = document.querySelector('.label');
+            levelButton.textContent = 'N<%= selectedNLevel %>';
+
+            const options = document.querySelectorAll('.option-item');
+            options.forEach(option => {
+                if(option.textContent === 'N<%= selectedNLevel %>') {
+                    option.classList.add('active');
+                }
+            });
+
+        });
+    </script>
 </head>
-<%--------------------------------------------------------------------------
-[JSP 전역 변수/함수 선언 영역 - 선언문 영역]
-	- this 로 접근 가능 : 같은 페이지가 여러번 갱신 되더라도 변수/함수 유지 됨
-	- 즉 현재 페이지가 여러번 갱신 되는 경우 선언문은 한번만 실행 됨
-------------------------------------------------------------------------------%>
-<%!
-    // ---------------------------------------------------------------------
-    // [JSP 전역 변수/함수 선언]
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-%>
-<%--------------------------------------------------------------------------
-[JSP 지역 변수 선언 및 로직 구현 영역 - 스크립트릿 영역]
-	- this 로 접근 불가 : 같은 페이지가 여러번 갱신되면 변수/함수 유지 안 됨
-	- 즉 현재 페이지가 여러번 갱신 될 때마다 스크립트릿 영역이 다시 실행되어 모두 초기화 됨
-------------------------------------------------------------------------------%>
-<%
-    // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 웹 페이지 get/post 파라미터]
-    // ---------------------------------------------------------------------
-    String txtData1 = "";
-    String txtData2 = "";
-    // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 데이터베이스 파라미터]
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 일반 변수]
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-    // [웹 페이지 get/post 파라미터 조건 필터링]
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-    // [일반 변수 조건 필터링]
-    // ---------------------------------------------------------------------
-    if (request.getParameter("txtData1") != null)
-        txtData1 = request.getParameter("txtData1");
-
-    if (request.getParameter("txtData2") != null)
-        txtData2 = request.getParameter("txtData2");
-
-    // session & application 변수 등록
-    session.setAttribute("HelloSession", "Session-OK!");
-    application.setAttribute("HelloApplication", "Application-OK!");
-
-    // 현재 날짜 / 시간 구하기
-    SimpleDateFormat Sdf = null;
-    String Date  = "20231231 121212";
-
-    Date CurDate = new Date();
-    String Date1 = String.format("%tF %tT 입니다.", CurDate, CurDate);
-
-    Sdf = new SimpleDateFormat("yyyy년 MM월 dd일 hh시 mm분 ss초 입니다.");
-    String Date2 = Sdf.format(CurDate);
-
-    Sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss 입니다.");
-    String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
-    // ---------------------------------------------------------------------
-%>
-<%--------------------------------------------------------------------------
-[Beans/DTO 선언 및 속성 지정 영역]
-------------------------------------------------------------------------------%>
-<%----------------------------------------------------------------------
-Beans 객체 사용 선언	: id	- 임의의 이름 사용 가능(클래스 명 권장)
-                    : class	- Beans 클래스 명
-                    : scope	- Beans 사용 기간을 request 단위로 지정 Hello.HelloDTO
-------------------------------------------------------------------------
-<jsp:useBean id="HelloDTO" class="Hello.HelloDTO" scope="request"></jsp:useBean>
---%>
-<%----------------------------------------------------------------------
-Beans 속성 지정 방법1	: Beans Property에 * 사용
-                    :---------------------------------------------------
-                    : name		- <jsp:useBean>의 id
-                    : property	- HTML 태그 입력양식 객체 전체
-                    :---------------------------------------------------
-주의사항				: HTML 태그의 name 속성 값은 소문자로 시작!
-                    : HTML 태그에서 데이터 입력 없는 경우 null 입력 됨!
-------------------------------------------------------------------------
-<jsp:setProperty name="HelloDTO" property="*"/>
---%>
-<%----------------------------------------------------------------------
-Beans 속성 지정 방법2	: Beans Property에 HTML 태그 name 사용
-                    :---------------------------------------------------
-                    : name		- <jsp:useBean>의 id
-                    : property	- HTML 태그 입력양식 객체 name
-                    :---------------------------------------------------
-주의사항				: HTML 태그의 name 속성 값은 소문자로 시작!
-                    : HTML 태그에서 데이터 입력 없는 경우 null 입력 됨!
-                    : Property를 각각 지정 해야 함!
-------------------------------------------------------------------------
-<jsp:setProperty name="HelloDTO" property="data1"/>
-<jsp:setProperty name="HelloDTO" property="data2"/>
---%>
-<%----------------------------------------------------------------------
-Beans 속성 지정 방법3	: Beans 메서드 직접 호출
-                    :---------------------------------------------------
-                    : Beans 메서드를 각각 직접 호출 해야함!
---------------------------------------------------------------------------%>
-<%
-    // HelloDTO.setData1(request.getParameter("data1"));
-%>
-<%--------------------------------------------------------------------------
-[Beans DTO 읽기 및 로직 구현 영역]
-------------------------------------------------------------------------------%>
-<%
-
-%>
 <body class="Body">
-    <%----------------------------------------------------------------------
-    [HTML Page - Header 영역]
-    --------------------------------------------------------------------------%>
-    <jsp:include page="../Common/Navbar.jsp" />
-    <%----------------------------------------------------------------------
-    [HTML Page - Main 디자인 영역]
-    --------------------------------------------------------------------------%>
-    <main class="main-container">
-        <%------------------------------------------------------------------
-            단어장 급수 선택 카드 영역
-        ----------------------------------------------------------------------%>
-        <section class="nav-card">
-            <header class="nav-card-header">
-                <div class="nav-card-left">
-                    <span class="nav-card-title">JLPT</span>
-                    <div class="nav-dropdown">
-                        <!-- DB 연동 후 수정 필요 -->
-                        <button class="label">N5</button>
-                        <ul class="option-list">
-                            <li class="option-item">N1</li>
-                            <li class="option-item">N2</li>
-                            <li class="option-item">N3</li>
-                            <li class="option-item">N4</li>
-                            <li class="option-item">N5</li>
-                        </ul>
-                    </div>
+<%----------------------------------------------------------------------
+[HTML Page - Header 영역]
+--------------------------------------------------------------------------%>
+<jsp:include page="../Common/Navbar.jsp" />
+<%----------------------------------------------------------------------
+[HTML Page - Main 디자인 영역]
+--------------------------------------------------------------------------%>
+<main class="main-container">
+    <%------------------------------------------------------------------
+        단어장 급수 선택 카드 영역
+    ----------------------------------------------------------------------%>
+    <section class="nav-card">
+        <header class="nav-card-header">
+            <div class="nav-card-left">
+                <span class="nav-card-title">JLPT</span>
+                <div class="nav-dropdown">
+                    <button class="label">N<%= selectedNLevel %></button>
+                    <ul class="option-list">
+                        <li name="1" class="option-item" onclick="changeLevel(1)">N1</li>
+                        <li name="2" class="option-item" onclick="changeLevel(2)">N2</li>
+                        <li name="3" class="option-item" onclick="changeLevel(3)">N3</li>
+                        <li name="4" class="option-item" onclick="changeLevel(4)">N4</li>
+                        <li name="5" class="option-item" onclick="changeLevel(5)">N5</li>
+                    </ul>
                 </div>
-                <div class="nav-card-right">
-                    <!-- DB 연동 후 수정 필요 -->
-                    <time class="nav-card-date">최근 학습 날짜: 2024년 12월 25일</time>
-                </div>
-            </header>
-        </section>
-        <%------------------------------------------------------------------
-            단어장 일자별 선택 카드 영역
-        ----------------------------------------------------------------------%>
-        <section class="day-cards">
-            <!-- JSP 반복문을 활용해 Day 카드 출력 -->
-            <% for (int i = 1; i <= 10; i++) {
-                // 북마크 표시 조건 - DB 연동 후 수정 필요
-                boolean isBookmarked = (i == 2);
+            </div>
+            <div class="nav-card-right">
+                <time class="nav-card-date">최근 학습 날짜: <fmt:formatDate value="<%= currentStudy.getStudyDate() %>" pattern="yyyy년 MM월 dd일" /></time>
+            </div>
+        </header>
+    </section>
+    <%------------------------------------------------------------------
+        단어장 일자별 선택 카드 영역
+    ----------------------------------------------------------------------%>
+    <section class="day-cards">
+        <% for (int i = 1; i <= 10; i++) { %>
+        <article class="card">
+            <%-- 현재 선택된 N레벨과 Day가 모두 일치할 때만 북마크 표시 --%>
+            <%
+                // 현재 카드의 wordsId 계산 (예: N1의 Day 04는 104)
+                int cardWordsId = (selectedNLevel * 100) + i;
+
+                // 현재 학습 중인 단어장과 비교 (정수형으로 비교)
+                boolean isCurrentStudy = (wordsId == cardWordsId);
+
+                // 디버깅을 위한 로그
+                logger.info("Comparing - Current Study ID: " + studyCounts.get(i - 1).getWordsId() +
+                        ", Card ID: " + cardWordsId +
+                        ", Is Current: " + isCurrentStudy);
             %>
-            <article class="card">
-                <% if (isBookmarked) { %>
-                <div class="bookmark"></div>
-                <% } %>
-                <div class="card-title-container">
-                    <% if (i < 10) { %>
-                    <h2 class="card-title">Day 0<%= i %></h2>
-                    <% } else { %>
-                    <h2 class="card-title">Day <%= i %></h2>
-                    <% } %>
-                    <% if (isBookmarked) { %>
-                    <p class="card-subtitle">최근 학습한 단어장</p>
-                    <% } else { %>
-                    <p style="visibility: hidden;" class="card-subtitle">최근 학습한 단어장</p>
-                    <% } %>
-                </div>
-                <div class="progress-bar-container">
-                    <!-- DB 연동 후 수정 필요 -->
-                    <p class="progress-text">13/50</p>
-                    <progress class="progress-bar" value="13" min="0" max="50">
-                    </progress>
-                </div>
-                <div class="button-container">
-                    <!-- 페즈 버튼에 Quiz_Choose.jsp 링크 추가 -->
-                    <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Choose.jsp'">퀴즈</button>
-                    <button class="button" type="button">학습</button>
-                </div>
-            </article>
+
+            <% if (isCurrentStudy) { %>
+            <div class="bookmark"></div>
             <% } %>
-        </section>
-    </main>
-    <%----------------------------------------------------------------------
-    [HTML Page - Footer 영역]
-    --------------------------------------------------------------------------%>
-    <jsp:include page="../Common/Footer.jsp" />
+            <div class="card-title-container">
+                <% if (i < 10) { %>
+                <h2 class="card-title">Day 0<%= i %></h2>
+                <% } else { %>
+                <h2 class="card-title">Day <%= i %></h2>
+                <% } %>
+                <% if (isCurrentStudy) { %>
+                <p class="card-subtitle">최근 학습한 단어장</p>
+                <% } else { %>
+                <p style="visibility: hidden;" class="card-subtitle">최근 학습한 단어장</p>
+                <% } %>
+            </div>
+            <div class="progress-bar-container">
+                <p class="progress-text"><%= studyCounts.get(i-1).getStudyCount() %>/50</p>
+                <progress class="progress-bar" value="<%= studyCounts.get(i-1).getStudyCount() %>" min="0" max="50">
+                </progress>
+            </div>
+            <div class="button-container">
+                <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Quiz/Quiz_Choose.jsp?wordsId=<%= cardWordsId %>'">퀴즈</button>
+                <button class="button" type="button" onclick="location.href='${pageContext.request.contextPath}/JspHome/Study/Words_Study.jsp?wordsId=<%= cardWordsId %>'">학습</button>
+            </div>
+        </article>
+        <% } %>
+    </section>
+</main>
+<%----------------------------------------------------------------------
+[HTML Page - Footer 영역]
+--------------------------------------------------------------------------%>
+<jsp:include page="../Common/Footer.jsp" />
 <%----------------------------------------------------------------------
 [HTML Page - END]
 --------------------------------------------------------------------------%>
