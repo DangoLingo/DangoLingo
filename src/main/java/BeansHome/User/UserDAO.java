@@ -64,7 +64,6 @@ public class UserDAO {
     // 전역함수 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
     /***********************************************************************
-<<<<<<< HEAD
      * getUserById()   : 사용자 ID로 사용자 정보 조회 (비밀번호 제외)
      * @param userId   : 조회할 사용자 ID
      * @return UserDTO : 조회된 사용자 정보, 없으면 null
@@ -235,8 +234,6 @@ public class UserDAO {
     }
 
     /***********************************************************************
-=======
->>>>>>> dev
     * login()         : 로그인 처리
     * @param email    : 사용자 이메일
     * @param password : 사용자 비밀번호
@@ -362,177 +359,6 @@ public class UserDAO {
             } catch (Exception e) {
                 logger.warning("Error closing database connection: " + e.getMessage());
             }
-        }
-    }
-
-    /***********************************************************************
-    * getUserById()   : 사용자 ID로 사용자 정보 조회 (비밀번호 제외)
-    * @param userId   : 조회할 사용자 ID
-    * @return UserDTO : 조회된 사용자 정보, 없으면 null
-    ***********************************************************************/
-    public UserDTO getUserById(int userId) throws Exception {
-        UserDTO user = null;
-        String sql = "{ call SP_USER_GET_BY_ID(?, ?) }";
-        Object[] params = new Object[]{ userId };
-        
-        try {
-            logger.info("Attempting to get user info for ID: " + userId);
-            if (!db.DbConnect()) {
-                logger.severe("Failed to connect to database");
-                throw new Exception("데이터베이스 연결에 실패했습니다.");
-            }
-            
-            if (db.RunQuery(sql, params, 2, true)) {
-                ResultSet rs = db.Rs;
-                if (rs != null && rs.next()) {
-                    user = new UserDTO();
-                    user.setUserId(rs.getInt("USER_ID"));
-                    user.setEmail(rs.getString("EMAIL"));
-                    user.setName(rs.getString("NAME"));
-                    user.setNickname(rs.getString("NICKNAME"));
-                    user.setIntro(rs.getString("INTRO"));
-                    user.setStudyDate(rs.getDate("STUDY_DATE"));
-                    user.setStudyTime(rs.getInt("STUDY_TIME"));
-                    user.setStudyDay(rs.getInt("STUDY_DAY")); 
-                    user.setQuizCount(rs.getInt("QUIZ_COUNT"));
-                    user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
-                    user.setPoint(rs.getInt("POINT"));
-                    
-                    logger.info("Successfully retrieved user info for ID: " + userId);
-                } else {
-                    logger.warning("No user found with ID: " + userId);
-                }
-            } else {
-                logger.warning("Failed to execute getUserById query");
-            }
-        } catch (Exception e) {
-            logger.severe("Error getting user by ID: " + e.getMessage());
-            throw e;
-        } finally {
-            db.DbDisConnect();
-        }
-        
-        return user;
-    }
-  
-    /***********************************************************************
-     * readUser()           : 사용자 정보 읽어오기
-     * @param user          : 사용자 DTO
-     * @return boolean      : 업데이트 성공 여부
-     * @throws Exception
-     ***********************************************************************/
-    public boolean readUser(int userId, UserDTO user) throws Exception {
-        String sql = "BEGIN SP_USER_R(?,?); END;";
-        Object[] params = new Object[]{
-                userId
-        };
-        boolean bResult = false;
-
-        try {
-            logger.info("Attempting database connection...");
-            if (!db.DbConnect()) {
-                logger.severe("Failed to connect to database");
-                throw new Exception("데이터베이스 연결에 실패했습니다.");
-            }
-            logger.info("Database connected successfully");
-
-            if (db.RunQuery(sql, params, 2, true)) {
-                ResultSet rs = db.Rs;
-                if (rs.next()) {
-                    user.setUserId(rs.getInt("USER_ID"));
-                    user.setEmail(rs.getString("EMAIL"));
-                    user.setName(rs.getString("NAME"));
-                    user.setNickname(rs.getString("NICKNAME"));
-                    user.setIntro(rs.getString("INTRO"));
-                    user.setStudyDate(rs.getDate("STUDY_DATE"));
-                    user.setStudyTime(rs.getInt("STUDY_TIME"));
-                    user.setStudyDay(rs.getInt("STUDY_DAY"));
-                    user.setQuizCount(rs.getInt("QUIZ_COUNT"));
-                    user.setQuizRight(rs.getInt("QUIZ_RIGHT"));
-                    user.setPoint(rs.getInt("POINT"));
-                    user.setTotalPoint(rs.getInt("TOTAL_POINT"));
-                    logger.info("User found: " + user.getNickname());
-                } else {
-                    logger.warning("No user found with ID: " + userId);
-                }
-
-                bResult = true;
-            }
-            logger.severe("Failed to execute update procedure");
-            bResult = false;
-        } catch (Exception e) {
-            logger.severe("Error during update: " + e.getMessage());
-            Common.ExceptionMgr.DisplayException(e);		// 예외처리(콘솔)
-        } finally {
-            try {
-                db.DbDisConnect();
-                logger.info("Database connection closed");
-            } catch (Exception e) {
-                logger.warning("Error closing database connection: " + e.getMessage());
-            }
-            return bResult;
-        }
-    }
-
-    /***********************************************************************
-    * updateUser()          : 사용자 정보 업데이트
-    * @param user          : 사용자 DTO
-    * @return boolean      : 업데이트 성공 여부
-    * @throws Exception
-    ***********************************************************************/
-    public boolean updateUser(int userId, String nickname, String intro, String password) throws Exception {
-        String sql = "BEGIN SP_USER_U(?,?,?,?,?); END;";
-        Object[] params = new Object[]{
-            userId,
-            nickname,
-            intro,
-            password
-        };
-        boolean bResult = false;
-
-        try {
-            logger.info("Attempting database connection...");
-            if (!db.DbConnect()) {
-                logger.severe("Failed to connect to database");
-                throw new Exception("데이터베이스 연결에 실패했습니다.");
-            }
-            logger.info("Database connected successfully");
-
-            if (db.RunQuery(sql, params, 5, true)) {
-                ResultSet rs = db.Rs;
-                if (rs != null && rs.next()) {
-                    int result = rs.getInt("RESULT");
-                    String errorMsg = rs.getString("ERROR_MSG");
-                    logger.info("Registration result code: " + result);
-                    logger.info("Error message: " + errorMsg);
-
-                    switch (result) {
-                        case 1:
-                            logger.info("Update successful");
-                            bResult = true;
-                            break;
-                        case -1:
-                            logger.warning("Nickname already exists: " + nickname);
-                            throw new Exception(errorMsg);
-                        default:
-                            logger.severe("Unknown error during update");
-                            throw new Exception(errorMsg);
-                    }
-                }
-            }
-            logger.severe("Failed to execute update procedure");
-            bResult =  false;
-        } catch (Exception e) {
-            logger.severe("Error during update: " + e.getMessage());
-            Common.ExceptionMgr.DisplayException(e);		// 예외처리(콘솔)
-        } finally {
-            try {
-                db.DbDisConnect();
-                logger.info("Database connection closed");
-            } catch (Exception e) {
-                logger.warning("Error closing database connection: " + e.getMessage());
-            }
-            return bResult;
         }
     }
 }

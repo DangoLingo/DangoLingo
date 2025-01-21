@@ -13,13 +13,10 @@ import Common.ExceptionMgr;
 import DAO.DBOracleMgr;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-<<<<<<< HEAD
-=======
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import oracle.jdbc.internal.OracleTypes;
 import java.util.logging.ConsoleHandler;
->>>>>>> dev
 
 // ═════════════════════════════════════════════════════════════════════════════════════════
 // 사용자정의 클래스 영역
@@ -34,19 +31,15 @@ public class RankingDAO {
     // —————————————————————————————————————————————————————————————————————————————————————
     private static final DBOracleMgr db = new DBOracleMgr();
     private static final Logger logger = Logger.getLogger(RankingDAO.class.getName());
-<<<<<<< HEAD
-
-=======
     
->>>>>>> dev
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역변수 관리 - 필수영역(정적변수)
     // —————————————————————————————————————————————————————————————————————————————————————
-
+    
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역변수 관리 - 필수영역(인스턴스변수)
     // —————————————————————————————————————————————————————————————————————————————————————
-
+    
     // —————————————————————————————————————————————————————————————————————————————————————
     // 생성자 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -56,9 +49,6 @@ public class RankingDAO {
      ***********************************************************************/
     public RankingDAO() {
         try {
-<<<<<<< HEAD
-            logger.setLevel(Level.ALL);
-=======
             // 로거 설정
             logger.setLevel(Level.ALL);
             ConsoleHandler handler = new ConsoleHandler();
@@ -66,7 +56,6 @@ public class RankingDAO {
             logger.addHandler(handler);
             
             logger.info("\n=== RankingDAO Initialization ===");
->>>>>>> dev
             ExceptionMgr.SetMode(ExceptionMgr.RUN_MODE.DEBUG);
             db.SetConnectionStringFromProperties("db.properties");
         } catch (Exception Ex) {
@@ -74,11 +63,11 @@ public class RankingDAO {
             ExceptionMgr.DisplayException(Ex);
         }
     }
-
+    
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역함수 관리 - 필수영역(정적함수)
     // —————————————————————————————————————————————————————————————————————————————————————
-
+    
     // —————————————————————————————————————————————————————————————————————————————————————
     // 전역함수 관리 - 필수영역(인스턴스함수)
     // —————————————————————————————————————————————————————————————————————————————————————
@@ -89,40 +78,9 @@ public class RankingDAO {
      ***********************************************************************/
     public List<RankingDTO> getRankings() {
         List<RankingDTO> rankings = new ArrayList<>();
-<<<<<<< HEAD
-
-        String sql;
-        switch (type) {
-            case "words":
-                sql = "SELECT * FROM (" +
-                        "SELECT u.*, DENSE_RANK() OVER (ORDER BY quiz_right DESC) as rank " +
-                        "FROM TB_USER u) WHERE rank <= ?";
-                break;
-            case "points":
-                sql = "SELECT * FROM (" +
-                        "SELECT u.*, DENSE_RANK() OVER (ORDER BY point DESC) as rank " +
-                        "FROM TB_USER u) WHERE rank <= ?";
-                break;
-            case "dangos":
-                sql = "SELECT * FROM (" +
-                        "SELECT u.*, DENSE_RANK() OVER (ORDER BY dangos DESC) as rank " +
-                        "FROM TB_USER u) WHERE rank <= ?";
-                break;
-            default:
-                sql = "SELECT * FROM (" +
-                        "SELECT u.*, DENSE_RANK() OVER (ORDER BY point DESC) as rank " +
-                        "FROM TB_USER u) WHERE rank <= ?";
-                break;
-        }
-
-
-        Object[] params = new Object[]{limit};
-
-=======
         String sql = "{call SP_GET_POINT_RANKINGS(?)}";
         Object[] params = new Object[0]; // 파라미터 없음
         
->>>>>>> dev
         try {
             logger.info("\n=== Getting Point Rankings ===");
             
@@ -159,74 +117,13 @@ public class RankingDAO {
                 logger.warning("Error closing database connection: " + e.getMessage());
             }
         }
-
+        
         return rankings;
     }
 
     /***********************************************************************
      * getUserRanking()    : 사용자의 포인트 랭킹 정보 조회
      * @param userId       : 사용자 ID
-<<<<<<< HEAD
-     * @param type        : 랭킹 타입 (points)
-     * @return RankingDTO : 랭킹 정보
-     ***********************************************************************/
-    public RankingDTO getUserRanking(int userId, String type) {
-        RankingDTO ranking = null;
-        String sql = "{ call SP_GET_POINT_RANKING(?, ?) }";
-        Object[] params = new Object[]{ userId };
-
-        try {
-            logger.info("Getting ranking for user ID: " + userId);
-
-            if (db.DbConnect()) {
-                if (db.RunQuery(sql, params, 2, true)) {
-                    ResultSet rs = db.Rs;
-                    if (rs != null && rs.next()) {
-                        ranking = new RankingDTO();
-                        ranking.setRank(rs.getInt("rank"));
-                        ranking.setUserId(rs.getInt("user_id"));
-                        ranking.setNickname(rs.getString("nickname"));
-                        ranking.setIntro(rs.getString("intro"));
-                        ranking.setScore(rs.getInt("score"));
-                        ranking.setType(rs.getString("type"));
-
-                        logger.info("Found ranking: " + ranking.getRank() + " for user: " + ranking.getNickname());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            logger.severe("Error getting user ranking: " + e.getMessage());
-        } finally {
-            try {
-                db.DbDisConnect();
-            } catch (Exception e) {
-                logger.warning("Error closing database connection: " + e.getMessage());
-            }
-        }
-
-        return ranking;
-    }
-
-    /***********************************************************************
-     * getScoreByType()  : 랭킹 타입별 점수 조회
-     * @param rs         : ResultSet 객체
-     * @param type       : 랭킹 타입 (words/points/dangos)
-     * @return int       : 점수
-     * @throws SQLException
-     ***********************************************************************/
-    private int getScoreByType(ResultSet rs, String type) throws SQLException {
-        int result;
-        switch (type) {
-            case "words":
-                result = rs.getInt("quiz_right");
-                break;
-            case "dangos":
-                result = rs.getInt("dangos");
-                break;
-            default:
-                result = rs.getInt("point");
-                break;
-=======
      * @return RankingDTO  : 랭킹 정보
      ***********************************************************************/
     public RankingDTO getUserRanking(int userId) {
@@ -268,10 +165,9 @@ public class RankingDAO {
             } catch (Exception e) {
                 logger.warning("Error closing database connection: " + e.getMessage());
             }
->>>>>>> dev
         }
-        return result;
-
+        
+        return ranking;
     }
 }
 // #################################################################################################
