@@ -156,7 +156,7 @@
         <div><%= (currentUser.getStudyTime() / 60) %>시간&nbsp;&nbsp;<%= (currentUser.getStudyTime() % 60) %>분</div>
     </article>
     <article class="history-card">
-        <div class="history-title"> 포인트</div>
+        <div class="history-title"> 누적 포인트</div>
         <div><fmt:formatNumber value="<%= currentUser.getTotalPoint() %>" pattern="#,###,###"/></div>
     </article>
 </section>

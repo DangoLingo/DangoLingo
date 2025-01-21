@@ -6,6 +6,8 @@
 <%@ page import="BeansHome.Ranking.RankingDAO" %>
 <%@ page import="BeansHome.Ranking.RankingDTO" %>
 <%@ page import="BeansHome.User.UserDAO" %>
+<%@ page import="BeansHome.Dango.DangoDAO" %>
+<%@ page import="BeansHome.Dango.DangoDTO" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8");%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -61,9 +63,17 @@
             Integer userId = (Integer) session.getAttribute("userId");
             UserDAO userDAO = new UserDAO();
             UserDTO currentUser = new UserDTO();
+            DangoDAO dangoDAO = new DangoDAO();
+            DangoDTO profileDango = new DangoDTO();
+            RankingDAO rankingDAO = new RankingDAO();
+            RankingDTO userRanking = null;
+
             if(userDAO.readUser(userId, currentUser)) {
                 session.setAttribute("user", currentUser);
             }
+            dangoDAO.ReadProfileDango(userId, profileDango);
+
+            userRanking = rankingDAO.getUserRanking(userId);
             %>
         });
         // -----------------------------------------------------------------
@@ -74,19 +84,19 @@
     </script>
         <%
             // 로거 먼저 생성
-            Logger logger = Logger.getLogger("Main_SignIn.jsp");
-            logger.setLevel(Level.ALL);
-
-            request.setCharacterEncoding("UTF-8");
-
-            StudyDAO studyDAO = new StudyDAO();
-            RankingDAO rankingDAO = new RankingDAO();
-            RankingDTO userRanking = null;
-
-            if(userDAO.readUser(userId, currentUser)) {
-                session.setAttribute("user", currentUser);
-            }
-            userRanking = rankingDAO.getUserRanking(userId);
+//            Logger logger = Logger.getLogger("Main_SignIn.jsp");
+//            logger.setLevel(Level.ALL);
+//
+//            request.setCharacterEncoding("UTF-8");
+//
+//            StudyDAO studyDAO = new StudyDAO();
+//            RankingDAO rankingDAO = new RankingDAO();
+//            RankingDTO userRanking = null;
+//
+//            if(userDAO.readUser(userId, currentUser)) {
+//                session.setAttribute("user", currentUser);
+//            }
+//            userRanking = rankingDAO.getUserRanking(userId);
 
         %>
 </head>
@@ -104,7 +114,7 @@
         ----------------------------------------------------------------------%>
         <section class="profile-section">
             <div class="profile-header">
-                <img src="../images/dango-profile-1.png" alt="프로필 이미지" class="profile-card-image">
+                <img src="<%= profileDango.getLocationImg() %>" alt="프로필 이미지" class="profile-card-image">
                 <div class="profile-info">
                     <div class="profile-name">
                         <p class="profile-title"><%= currentUser.getNickname() %></p>

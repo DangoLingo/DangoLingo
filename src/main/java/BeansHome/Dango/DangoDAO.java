@@ -82,9 +82,8 @@ public class DangoDAO {
                 sSql = "{call SP_IMG_R(?, ?)}";  // 저장 프로시저 호출 구문 수정
                 
                 // 파라미터 설정 (IN: userId, OUT: cursor)
-                oPaValue = new Object[2];
+                oPaValue = new Object[1];
                 oPaValue[0] = userId;                   // IN parameter
-                oPaValue[1] = OracleTypes.CURSOR;      // OUT parameter (SYS_REFCURSOR)
 
                 // 프로시저 실행 (2개 파라미터, OUT 파라미터 있음)
                 if (this.DBMgr.RunQuery(sSql, oPaValue, 2, true)) {
@@ -208,6 +207,99 @@ public class DangoDAO {
                 // IN 파라미터 만큼만 할당
                 oPaValue = new Object[2];
                 
+                oPaValue[0] = userId;
+                oPaValue[1] = dangoId;
+
+                if (this.DBMgr.RunQuery(sSql, oPaValue, 3, true) == true)
+                {
+                    bResult = true;
+                }
+            }
+            // -----------------------------------------------------------------------------
+        }
+        catch (Exception Ex)
+        {
+            Common.ExceptionMgr.DisplayException(Ex);		// 예외처리(콘솔)
+        }
+        return bResult;
+    }
+
+    /***********************************************************************
+     * ReadProfileDango()	: 오라클 데이터베이스에서 프로필 당고 데이터 뽑기
+     * @param  userId		: 유저 번호(조건용)
+     * @param  dangoDTO	    : 프로필 당고 DTO(결과용)
+     * @return boolean		: 프로필 당고 이미지 검색 처리 여부(true|false)
+     * @throws Exception
+     ***********************************************************************/
+    public boolean ReadProfileDango(Integer userId, DangoDTO dangoDTO) throws Exception
+    {
+        String sSql = null;						// DML 문장
+        Object[] oPaValue = null;				// DML 문장에 필요한 파라미터 객체
+        boolean bResult = false;
+
+        try
+        {
+            // -----------------------------------------------------------------------------
+            // 당고정보 읽기
+            // -----------------------------------------------------------------------------
+            if (this.DBMgr.DbConnect() == true)
+            {
+                // 사원정보 읽기
+                sSql = "BEGIN SP_GET_DANGO_PROFILE(?,?); END;";
+
+                // IN 파라미터 만큼만 할당
+                oPaValue = new Object[1];
+
+                oPaValue[0] = userId;
+
+                if (this.DBMgr.RunQuery(sSql, oPaValue, 2, true) == true)
+                {
+                    if (this.DBMgr.Rs.next()) {
+                        dangoDTO.setDangoId(this.DBMgr.Rs.getInt("DANGO_ID"));
+                        dangoDTO.setDangoName(this.DBMgr.Rs.getString("DANGO_NAME"));
+                        dangoDTO.setLocationImg(this.DBMgr.Rs.getString("LOCATION_IMG"));
+                        dangoDTO.setRarity(this.DBMgr.Rs.getString("RARITY").charAt(0));
+                        bResult = true;
+                    } else {
+                        bResult = false;
+                    }
+                }
+            }
+            // -----------------------------------------------------------------------------
+        }
+        catch (Exception Ex)
+        {
+            Common.ExceptionMgr.DisplayException(Ex);		// 예외처리(콘솔)
+        }
+        return bResult;
+    }
+
+    /***********************************************************************
+     * UpdateProfileDango()	: 오라클 데이터베이스에서 당고 프로필 수정
+     * @param  userId		: 유저 번호(조건용)
+     * @param  dangoId		: 당고 ID (조건용)
+     * @return boolean		: 당고 프로필 수정 처리 여부(true|false)
+     * @throws Exception
+     ***********************************************************************/
+    public boolean UpdateProfileDango(Integer userId, Integer dangoId) throws Exception
+    {
+        String sSql = null;						// DML 문장
+        Object[] oPaValue = null;				// DML 문장에 필요한 파라미터 객체
+        boolean bResult = false;
+
+        try
+        {
+            // -----------------------------------------------------------------------------
+            // 당고정보 읽기
+            // -----------------------------------------------------------------------------
+            if (this.DBMgr.DbConnect() == true)
+            {
+                // 사원정보 읽기
+                sSql = "BEGIN SP_SET_DANGO_PROFILE(?,?,?); END;";
+
+                // IN 파라미터 만큼만 할당
+                oPaValue = new Object[2];
+
                 oPaValue[0] = userId;
                 oPaValue[1] = dangoId;
 

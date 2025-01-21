@@ -80,6 +80,7 @@ public class RankingDAO {
         List<RankingDTO> rankings = new ArrayList<>();
         String sql = "{call SP_GET_POINT_RANKINGS(?)}";
         Object[] params = new Object[0]; // 파라미터 없음
+        int max = 10;
         
         try {
             logger.info("\n=== Getting Point Rankings ===");
@@ -91,6 +92,8 @@ public class RankingDAO {
                     logger.info("\n=== Query executed successfully ===");
                     
                     while (rs != null && rs.next()) {
+                        if(max-- == 0)
+                            break;
                         RankingDTO ranking = new RankingDTO();
                         ranking.setRank(rs.getInt("rank"));
                         ranking.setUserId(rs.getInt("user_id"));
