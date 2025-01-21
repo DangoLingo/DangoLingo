@@ -23,30 +23,12 @@ main.main-container {
 
 /* 프로그레스 섹션 */
 .progress-section {
-    background: linear-gradient(to right, #ffffff, #f8faf8);
+    background-color: #ffffff;
     border-radius: 20px;
     padding: 24px 28px;
     display: flex;
     align-items: center;
     transition: all 0.2s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.progress-section::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 200px;
-    height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(92, 139, 108, 0.05));
-    pointer-events: none;
-}
-
-.progress-section:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    transform: translateY(-1px);
 }
 
 .progress-section h2 {
@@ -72,20 +54,18 @@ main.main-container {
     width: 64px;
     height: 36px;
     border-radius: 8px;
-    background: linear-gradient(45deg, #324931, #3d5a3c);
+    background-color: #324931;
     color: white;
     border: none;
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(50, 73, 49, 0.2);
 }
 
 .modal_btn:hover {
-    background: linear-gradient(45deg, #3d5a3c, #4a6b49);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(50, 73, 49, 0.3);
+    background-color: #3d5a3c;
+    transform: translateY(-1px);
 }
 
 /* 그리드 레이아웃 */
@@ -106,24 +86,11 @@ main.main-container {
     gap: 6px;
     transition: all 0.25s ease;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.grid-item::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(92, 139, 108, 0.05));
-    pointer-events: none;
 }
 
 .grid-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .grid-image-wrapper {
@@ -132,7 +99,7 @@ main.main-container {
     height: 120px;
     border-radius: 50%;
     padding: 3px;
-    background: linear-gradient(45deg, #E8E8E9, #F8F9FA);
+    background-color: #E8E8E9;
     margin-bottom: 2px;
 }
 
@@ -181,23 +148,19 @@ main.main-container {
 }
 
 .rarity_unique { 
-    background: linear-gradient(45deg, #324931, #3d5a3c);
-    box-shadow: 0 2px 4px rgba(50, 73, 49, 0.2);
+    background-color: #324931;
 }
 
 .rarity_rare { 
-    background: linear-gradient(45deg, #5C8B6C, #6b9c7b);
-    box-shadow: 0 2px 4px rgba(92, 139, 108, 0.2);
+    background-color: #5C8B6C;
 }
 
 .rarity_common { 
-    background: linear-gradient(45deg, #9ECE9C, #aed9ac);
-    box-shadow: 0 2px 4px rgba(158, 206, 156, 0.2);
+    background-color: #9ECE9C;
 }
 
 .grid-item:hover .rarity {
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 반응형 디자인 */
