@@ -72,19 +72,14 @@ public class DangoDAO {
      ***********************************************************************/
     public boolean ReadBoardList(Integer userId) throws Exception
     {
-        String sSql = null;                      // DML 문장
-        Object[] oPaValue = null;                // DML 문장에 필요한 파라미터 객체
+        String sSql = null;
+        Object[] oPaValue = null;
         boolean bResult = false;
 
-        try
-        {
-            // -----------------------------------------------------------------------------
-            // 당고정보 읽기
-            // -----------------------------------------------------------------------------
-            if (this.DBMgr.DbConnect() == true)
-            {
+        try {
+            if (this.DBMgr.DbConnect()) {
                 // SP_IMG_R 프로시저 호출 준비
-                sSql = "BEGIN SP_IMG_R(?, ?); END;";
+                sSql = "{call SP_IMG_R(?, ?)}";  // 저장 프로시저 호출 구문 수정
                 
                 // 파라미터 설정 (IN: userId, OUT: cursor)
                 oPaValue = new Object[2];
@@ -93,14 +88,15 @@ public class DangoDAO {
 
                 // 프로시저 실행 (2개 파라미터, OUT 파라미터 있음)
                 if (this.DBMgr.RunQuery(sSql, oPaValue, 2, true)) {
-                    bResult = true;
+                    // ResultSet 가져오기
+                    if (this.DBMgr.Rs != null) {
+                        bResult = true;
+                    }
                 }
             }
-            // -----------------------------------------------------------------------------
-        }
-        catch (Exception Ex)
-        {
-            ExceptionMgr.DisplayException(Ex);        // 예외처리(콘솔)
+        } catch (Exception Ex) {
+            logger.severe("Error in ReadBoardList: " + Ex.getMessage());
+            ExceptionMgr.DisplayException(Ex);
         }
         return bResult;
     }
