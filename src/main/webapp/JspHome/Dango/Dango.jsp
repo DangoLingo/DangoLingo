@@ -124,11 +124,22 @@
 		}
 		
 		.rarity{
-		   background-color: #A0D468;
 		   border-radius: 30px;
 		   padding:0px 7px;
 		   font-size: 12px;
 		   color: #ffffff;
+		}
+		
+		.rarity_unique{
+		   background-color: #324931;
+		}
+		
+		.rarity_rare{
+		   background-color: #5C8B6C;
+		}
+		
+		.rarity_common{
+		   background-color: #9ECE9C;
 		}
 		
 		/* -----------------------------------------------------------------
@@ -263,6 +274,7 @@
    // ---------------------------------------------------------------------
    Boolean bContinue		= false;			// 당고 검색 유무
    String sRarityName		= null;				// 등급명
+   String sRarityColor		= null;				// 등급명 색상
    String sLockState		= null;				// 잠금상태
    Integer userDangoCount   = 0;
    Integer todalDangoCount  = 0;
@@ -342,14 +354,17 @@
 		    		{
 		     		case "U":
 		     			sRarityName = "UNIQUE";
+		     			sRarityColor = "rarity_unique";
 		     			break;
 		 		
 		     		case "R":
 		     			sRarityName = "RARE";
+		     			sRarityColor = "rarity_rare";
 		     			break;
 		 		
 		     		case "C":
 		     			sRarityName = "COMMON";
+		     			sRarityColor = "rarity_common";
 		     			break;       		
 		    		}
 		    		
@@ -363,7 +378,7 @@
 					<img class="grid-image <%=sLockState%>"
 											alt="<%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%>"
 											src="<%=this.dangoDAO.DBMgr.Rs.getString("LOCATION_IMG")%>"><br>
-					<a class="rarity" name="rarity" data-value="<%=sRarityName%>"><%=sRarityName%></a><br>
+					<a class="rarity <%=sRarityColor %>"><%=sRarityName%></a><br>
 					<a class="dangoname"><%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%></a>
 		         </div>
 			<%

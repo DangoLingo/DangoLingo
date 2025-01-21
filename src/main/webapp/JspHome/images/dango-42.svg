@@ -4,37 +4,32 @@
     <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     
-    <!-- 상단 당고 (UFO) -->
-    <circle cx="160" cy="160" r="35" fill="#4169E1"/>
-    <!-- UFO 창문 -->
-    <circle cx="160" cy="160" r="10" fill="#87CEEB"/>
-    <circle cx="150" cy="160" r="5" fill="#00FFFF"/>
-    <circle cx="170" cy="160" r="5" fill="#00FFFF"/>
-    <!-- 외계인 표정 -->
-    <path d="M155 165 Q160 170 165 165" stroke="#00FF00" stroke-width="2"/>
-    <circle cx="155" cy="155" r="3" fill="#00FF00"/>
-    <circle cx="165" cy="155" r="3" fill="#00FF00"/>
+    <!-- 상단 당고 (연어) -->
+    <circle cx="160" cy="160" r="35" fill="#FA8072"/>
+    <!-- 연어 무늬 -->
+    <path d="M145 155 L175 155" stroke="#FFA07A" stroke-width="3"/>
+    <path d="M145 165 L175 165" stroke="#FFA07A" stroke-width="3"/>
+    <!-- 행복한 표정 -->
+    <path d="M150 165 Q160 170 170 165" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="155" cy="155" r="3" fill="#3F1F1F"/>
+    <circle cx="165" cy="155" r="3" fill="#3F1F1F"/>
 
-    <!-- 중간 당고 (블랙홀) -->
-    <circle cx="200" cy="200" r="35" fill="#000000"/>
-    <!-- 소용돌이 -->
-    <path d="M185 185 Q200 200 215 185" stroke="#4B0082" stroke-width="2"/>
-    <path d="M185 215 Q200 200 215 215" stroke="#4B0082" stroke-width="2"/>
-    <!-- 신비로운 표정 -->
-    <path d="M190 205 Q200 210 210 205" stroke="#9370DB" stroke-width="2"/>
-    <circle cx="195" cy="195" r="2" fill="#9370DB"/>
-    <circle cx="205" cy="195" r="2" fill="#9370DB"/>
+    <!-- 중간 당고 (새우) -->
+    <circle cx="200" cy="200" r="35" fill="#FFB6C1"/>
+    <!-- 새우 무늬 -->
+    <path d="M185 195 Q200 185 215 195" stroke="#FF69B4" stroke-width="3"/>
+    <path d="M185 205 Q200 195 215 205" stroke="#FF69B4" stroke-width="3"/>
+    <!-- 귀여운 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="195" cy="195" r="2" fill="#3F1F1F"/>
+    <circle cx="205" cy="195" r="2" fill="#3F1F1F"/>
 
-    <!-- 하단 당고 (성운) -->
-    <circle cx="240" cy="240" r="35" fill="#FF69B4"/>
-    <!-- 별무리 -->
-    <circle cx="230" cy="230" r="2" fill="#FFD700"/>
-    <circle cx="250" cy="230" r="2" fill="#FFD700"/>
-    <circle cx="240" cy="250" r="2" fill="#FFD700"/>
-    <circle cx="235" cy="240" r="1" fill="#FFD700"/>
-    <circle cx="245" cy="240" r="1" fill="#FFD700"/>
-    <!-- 몽환적인 표정 -->
-    <path d="M230 245 Q240 250 250 245" stroke="#DDA0DD" stroke-width="2"/>
-    <path d="M235 235 L230 230" stroke="#DDA0DD" stroke-width="2"/>
-    <path d="M245 235 L250 230" stroke="#DDA0DD" stroke-width="2"/>
+    <!-- 하단 당고 (계란) -->
+    <circle cx="240" cy="240" r="35" fill="#FFE4B5"/>
+    <!-- 노른자 -->
+    <circle cx="240" cy="240" r="15" fill="#FFD700"/>
+    <!-- 행복한 표정 -->
+    <path d="M230 245 Q240 250 250 245" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="235" cy="235" r="3" fill="#3F1F1F"/>
+    <circle cx="245" cy="235" r="3" fill="#3F1F1F"/>
 </svg> 

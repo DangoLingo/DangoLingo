@@ -4,34 +4,32 @@
     <path d="M160 160 L240 240" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     <path d="M240 240 L280 280" stroke="#A0522D" stroke-width="16" stroke-linecap="round"/>
     
-    <!-- 상단 당고 (번개) -->
-    <circle cx="160" cy="160" r="35" fill="#FFD700"/>
-    <!-- 번개 무늬 -->
-    <path d="M155 145 L165 155 L155 165" stroke="#FFA500" stroke-width="3"/>
-    <path d="M165 145 L175 155 L165 165" stroke="#FFA500" stroke-width="3"/>
-    <!-- 강렬한 표정 -->
-    <path d="M150 165 Q160 168 170 165" stroke="#3F1F1F" stroke-width="2"/>
+    <!-- 상단 당고 (살사) -->
+    <circle cx="160" cy="160" r="35" fill="#FF6B6B"/>
+    <!-- 토마토 조각 -->
+    <circle cx="150" cy="150" r="5" fill="#FF4500"/>
+    <circle cx="170" cy="150" r="5" fill="#FF4500"/>
+    <!-- 매운 표정 -->
+    <path d="M150 165 Q160 170 170 165" stroke="#3F1F1F" stroke-width="2"/>
     <path d="M155 155 L150 150" stroke="#3F1F1F" stroke-width="2"/>
     <path d="M165 155 L170 150" stroke="#3F1F1F" stroke-width="2"/>
 
-    <!-- 중간 당고 (구름) -->
-    <circle cx="200" cy="200" r="35" fill="#808080"/>
-    <!-- 구름 무늬 -->
-    <path d="M185 195 Q200 185 215 195" stroke="#A9A9A9" stroke-width="4"/>
-    <path d="M185 200 Q200 190 215 200" stroke="#A9A9A9" stroke-width="4"/>
-    <!-- 우울한 표정 -->
-    <path d="M190 205 Q200 200 210 205" stroke="#3F1F1F" stroke-width="2"/>
-    <circle cx="195" cy="195" r="2" fill="#3F1F1F"/>
-    <circle cx="205" cy="195" r="2" fill="#3F1F1F"/>
+    <!-- 중간 당고 (과카몰리) -->
+    <circle cx="200" cy="200" r="35" fill="#90EE90"/>
+    <!-- 아보카도 무늬 -->
+    <path d="M185 195 Q200 185 215 195" stroke="#32CD32" stroke-width="3"/>
+    <path d="M185 205 Q200 195 215 205" stroke="#32CD32" stroke-width="3"/>
+    <!-- 신선한 표정 -->
+    <path d="M190 205 Q200 210 210 205" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="195" cy="195" r="3" fill="#3F1F1F"/>
+    <circle cx="205" cy="195" r="3" fill="#3F1F1F"/>
 
-    <!-- 하단 당고 (비) -->
-    <circle cx="240" cy="240" r="35" fill="#4682B4"/>
-    <!-- 빗방울 -->
-    <path d="M230 230 L225 240" stroke="#B0E0E6" stroke-width="2"/>
-    <path d="M240 230 L235 240" stroke="#B0E0E6" stroke-width="2"/>
-    <path d="M250 230 L245 240" stroke="#B0E0E6" stroke-width="2"/>
-    <!-- 시원한 표정 -->
-    <path d="M230 245 Q240 250 250 245" stroke="#FFFFFF" stroke-width="2"/>
-    <circle cx="235" cy="235" r="2" fill="#FFFFFF"/>
-    <circle cx="245" cy="235" r="2" fill="#FFFFFF"/>
+    <!-- 하단 당고 (치즈) -->
+    <circle cx="240" cy="240" r="35" fill="#FFD700"/>
+    <!-- 치즈 녹은 효과 -->
+    <path d="M225 235 Q240 245 255 235" stroke="#FFA500" stroke-width="4"/>
+    <!-- 부드러운 표정 -->
+    <path d="M230 245 Q240 250 250 245" stroke="#3F1F1F" stroke-width="2"/>
+    <circle cx="235" cy="235" r="2" fill="#3F1F1F"/>
+    <circle cx="245" cy="235" r="2" fill="#3F1F1F"/>
 </svg> 
