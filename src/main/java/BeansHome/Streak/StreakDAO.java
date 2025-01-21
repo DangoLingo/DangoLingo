@@ -53,20 +53,12 @@ public class StreakDAO {
         List<StreakDTO> streaks = new ArrayList<>();
         String sql = "{call SP_GET_USER_STREAK(?, ?)}";
         Object[] params = new Object[]{userId};
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> dev
         try {
             if (db.DbConnect()) {
                 if (db.RunQuery(sql, params, 2, true)) {
                     ResultSet rs = db.Rs;
-<<<<<<< HEAD
 
-=======
-                    
->>>>>>> dev
                     while (rs != null && rs.next()) {
                         StreakDTO streak = new StreakDTO();
                         streak.setUserId(rs.getInt("user_id"));
@@ -85,11 +77,7 @@ public class StreakDAO {
                 ExceptionMgr.DisplayException(Ex);
             }
         }
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> dev
         return streaks;
     }
 }

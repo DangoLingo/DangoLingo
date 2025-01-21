@@ -69,20 +69,12 @@ public class StudyDAO {
      * @throws Exception
      ***********************************************************************/
     public boolean readCurrentStudy(int userId, int wordsId, int totalCheck, StudyDTO study) throws Exception {
-<<<<<<< HEAD
         String sql = "BEGIN SP_STUDY_RECENT_R(?,?,?,?); END;";
-=======
-        String sql = "BEGIN SP_USER_R(?,?); END;";
->>>>>>> dev
         Object[] params = new Object[]{
                 userId,
                 wordsId,
                 totalCheck
         };
-<<<<<<< HEAD
-=======
-        boolean bResult = false;
->>>>>>> dev
 
         try {
             logger.info("Attempting database connection...");
@@ -102,21 +94,12 @@ public class StudyDAO {
                     logger.warning("No study found with ID: " + userId);
                 }
 
-<<<<<<< HEAD
                 return true;
             }
             logger.severe("Failed to execute update procedure");
             return false;
         } catch (Exception e) {
             logger.severe("Error during select: " + e.getMessage());
-=======
-                bResult = true;
-            }
-            logger.severe("Failed to execute update procedure");
-            bResult = false;
-        } catch (Exception e) {
-            logger.severe("Error during update: " + e.getMessage());
->>>>>>> dev
             Common.ExceptionMgr.DisplayException(e);		// 예외처리(콘솔)
         } finally {
             try {
@@ -125,7 +108,6 @@ public class StudyDAO {
             } catch (Exception e) {
                 logger.warning("Error closing database connection: " + e.getMessage());
             }
-<<<<<<< HEAD
             return false;
         }
     }
@@ -202,9 +184,6 @@ public class StudyDAO {
                 logger.warning("Error closing database connection: " + e.getMessage());
             }
             return false;
-=======
-            return bResult;
->>>>>>> dev
         }
     }
 
