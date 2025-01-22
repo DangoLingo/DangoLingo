@@ -1,4 +1,5 @@
 <%@page import="BeansHome.Dango.DangoDAO"%>
+<%@page import="BeansHome.Dango.DangoDTO"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.apache.naming.java.javaURLContextFactory"%>
@@ -79,54 +80,39 @@
     // ---------------------------------------------------------------------
     // [JSP 전역 변수/함수 선언]
     // ---------------------------------------------------------------------
-    // 당고정보 검색용 DAO 객체
-    public DangoDAO dangoDAO = new DangoDAO();
-
+    // Navbar.jsp에서 이미 선언된 dangoDAO 사용
     // ---------------------------------------------------------------------
 %>
-<%--------------------------------------------------------------------------
-[JSP 지역 변수 선언 및 로직 구현 영역 - 스크립트릿 영역]
-   - this 로 접근 불가 : 같은 페이지가 여러번 갱신되면 변수/함수 유지 안 됨
-   - 즉 현재 페이지가 여러번 갱신 될 때마다 스크립트릿 영역이 다시 실행되어 모두 초기화 됨
-------------------------------------------------------------------------------%>
+<body class="has-navbar">
+<%@ include file="../Common/Navbar.jsp"%>
 <%
     // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 웹 페이지 get/post 파라미터]
+    // [JSP 지역 변수 선언 및 초기화]
     // ---------------------------------------------------------------------
-    Integer nUserId = null;
-    // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 데이터베이스 파라미터]
-    // ---------------------------------------------------------------------
+    Boolean bContinue = false;
+    Integer userDangoCount = 0;
+    Integer todalDangoCount = 0;
+    String sRarityName = null;
+    String sRarityColor = null;
+    String sLockState = null;
+    Integer nUserId = (Integer)session.getAttribute("userId");
+    
+    // 프로필 당고 설정 처리
+    String setProfile = request.getParameter("setProfile");
+    if (setProfile != null && isLoggedIn) {
+        int dangoId = Integer.parseInt(setProfile);
+        if (dangoDAO.UpdateProfileDango(nUserId, dangoId)) {
+            response.sendRedirect("Dango.jsp");
+            return;
+        }
+    }
 
-    // ---------------------------------------------------------------------
-    // [JSP 지역 변수 선언 : 일반 변수]
-    // ---------------------------------------------------------------------
-    Boolean bContinue		= false;			// 당고 검색 유무
-    String sRarityName		= null;				// 등급명
-    String sRarityColor		= null;				// 등급명 색상
-    String sLockState		= null;				// 잠금상태
-    Integer userDangoCount   = 0;
-    Integer todalDangoCount  = 0;
-    // ---------------------------------------------------------------------
-    // [웹 페이지 get/post 파라미터 조건 필터링]
-    // ---------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------
-    // [일반 변수 조건 필터링]
-    // ---------------------------------------------------------------------
-    nUserId = (Integer) session.getAttribute("userId");// 세션값을 받아서 넣어줌
-    // ---------------------------------------------------------------------
-%>
-<%--------------------------------------------------------------------------
-[Beans DTO 읽기 및 로직 구현 영역]
-------------------------------------------------------------------------------%>
-<%
     // 첫 번째 쿼리 실행 - 카운트 계산
-    if (this.dangoDAO.ReadBoardList(nUserId)) {
-        if (this.dangoDAO.DBMgr != null && this.dangoDAO.DBMgr.Rs != null) {
-            while (this.dangoDAO.DBMgr.Rs.next()) {
+    if (dangoDAO.ReadBoardList(nUserId)) {
+        if (dangoDAO.DBMgr != null && dangoDAO.DBMgr.Rs != null) {
+            while (dangoDAO.DBMgr.Rs.next()) {
                 todalDangoCount++;
-                if (this.dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") != -1) {
+                if (dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") != -1) {
                     userDangoCount++;
                 }
             }
@@ -135,15 +121,20 @@
 
     // 두 번째 쿼리 실행 - 이미지 표시용
     bContinue = false;
-    if (this.dangoDAO.ReadBoardList(nUserId)) {
-        if (this.dangoDAO.DBMgr != null && this.dangoDAO.DBMgr.Rs != null) {
+    if (dangoDAO.ReadBoardList(nUserId)) {
+        if (dangoDAO.DBMgr != null && dangoDAO.DBMgr.Rs != null) {
             bContinue = true;
         }
     }
 %>
 
-<body class="has-navbar">
-<%@ include file="../Common/Navbar.jsp"%>
+<script type="text/javascript">
+    function setProfileDango(dangoId) {
+        if (confirm('이 당고를 프로필로 설정하시겠습니까?')) {
+            location.href = 'Dango.jsp?setProfile=' + dangoId;
+        }
+    }
+</script>
 
 <main class="main-container">
     <section class="progress-section">
@@ -154,9 +145,9 @@
 
     <div class="grid-container">
         <%
-            while (bContinue && this.dangoDAO.DBMgr.Rs.next()) {
+            while (bContinue && dangoDAO.DBMgr.Rs.next()) {
                 // 등급에 따른 표시 설정
-                switch (this.dangoDAO.DBMgr.Rs.getString("RARITY")) {
+                switch (dangoDAO.DBMgr.Rs.getString("RARITY")) {
                     case "U":
                         sRarityName = "UNIQUE";
                         sRarityColor = "rarity_unique";
@@ -172,14 +163,21 @@
                 }
 
                 // 잠금 상태 설정
-                sLockState = (this.dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") == -1) ? "locked" : "";
+                sLockState = (dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") == -1) ? "locked" : "";
+                int currentDangoId = dangoDAO.DBMgr.Rs.getInt("DANGO_ID");
+                boolean isProfileDango = profileDango != null && 
+                                      profileDango.getDangoId() == currentDangoId;
         %>
-        <div class="grid-item">
-            <img class="grid-image <%=sLockState%>"
-                 alt="<%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%>"
-                 src="<%=this.dangoDAO.DBMgr.Rs.getString("LOCATION_IMG")%>"><br>
-            <a class="rarity <%=sRarityColor %>"><%=sRarityName%></a><br>
-            <a class="dangoname"><%=this.dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%></a>
+        <div class="grid-item <%=dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") == -1 ? "" : "clickable"%>" 
+             <%=dangoDAO.DBMgr.Rs.getInt("LOCKSTATE") == -1 ? "" : 
+               "onclick=\"setProfileDango(" + currentDangoId + ")\""%>>
+            <div class="image-wrapper <%=isProfileDango ? "profile-dango" : ""%>">
+                <img class="grid-image <%=sLockState%>"
+                     alt="<%=dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%>"
+                     src="<%=dangoDAO.DBMgr.Rs.getString("LOCATION_IMG")%>">
+            </div>
+            <a class="rarity <%=sRarityColor %>"><%=sRarityName%></a>
+            <a class="dangoname"><%=dangoDAO.DBMgr.Rs.getString("DANGO_NAME")%></a>
         </div>
         <%
             }

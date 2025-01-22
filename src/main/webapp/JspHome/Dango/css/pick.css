@@ -1,9 +1,11 @@
 /* 당고 뽑기 스타일 */
 .pick-container {
     width: 100%;
-    max-width: 1060px;
-    margin: 0 auto;
-    padding: 24px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -11,56 +13,74 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
+    gap: 16px;
+    width: 100%;
+    max-width: 436px;
+    padding: 16px 0;
 }
 
-h2 {
-    font-family: "Pretendard JP";
-    font-size: 28px;
+img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 0;
 }
 
 p {
     font-family: "Pretendard JP";
     font-size: 17px;
+    margin: 0;
+    color: #5C8B6C;
+    font-weight: 600;
 }
 
 button {
     width: 100%;
-    max-width: 436px;
     height: 48px;
-    border-radius: 16px;
-    background-color: #5C8B6C;
+    border-radius: 12px;
+    background-color: #324931;
     color: #fff;
     border: none;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
+    margin-top: 8px;
 }
 
-button:hover {
-    background-color: #4a7b5a;
+button:hover:not(:disabled) {
+    background-color: #3d5a3c;
+    transform: translateY(-1px);
 }
 
-.pick-image {
-    width: 160px;
-    height: 160px;
-    border-radius: 10000px;
-    object-fit: cover;
-    border: solid;
-    border-color: #E8E8E9;
+button:disabled {
+    background-color: #CED4DA;
+    color: #868E96;
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.8;
 }
 
 .dangoname {
     font-size: 18px;
+    font-weight: 600;
+    color: #324931;
 }
 
 /* 반응형 스타일 */
 @media screen and (max-width: 768px) {
     .pick-container {
-        padding: 16px;
+        padding: 0;
     }
     
-    button {
-        max-width: 100%;
+    form {
+        gap: 12px;
+        padding: 12px 0;
     }
-} 
+    
+    img {
+        width: 120px;
+        height: 120px;
+    }
+}
