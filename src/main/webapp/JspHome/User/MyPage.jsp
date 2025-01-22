@@ -120,7 +120,7 @@
                         <p class="profile-title"><%= currentUser.getNickname() %></p>
                         <p class="profile-email"><%= currentUser.getEmail() %></p>
                     </div>
-                    <p class="profile-bio"><%= currentUser.getIntro() %></p>
+                    <p class="profile-bio"><%= currentUser.getIntro() == null ? "소개글이 없습니다." : currentUser.getIntro()%></p>
                     <p class="profile-date">최근 학습한 날짜 : <fmt:formatDate value="<%= currentUser.getStudyDate() %>" pattern="yyyy년 MM월 dd일" /></p>
                 </div>
                 <div class =profile-record>
