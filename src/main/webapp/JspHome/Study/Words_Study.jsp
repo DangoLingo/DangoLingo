@@ -28,12 +28,12 @@ int japaneseId = 1;
 
 // words_id 파라미터 가져오기
 String wordsIdParam = request.getParameter("wordsId");
-int wordsId = (wordsIdParam != null) ? Integer.parseInt(wordsIdParam) : 101;
+int wordsId = Integer.parseInt(wordsIdParam);//(wordsIdParam != null) ? Integer.parseInt(wordsIdParam) : 101;
 
-// 세션에서 user_id 가져오기 / 없으면 기본값 5 설정
+// 세션에서 user_id 가져오기 / 없으면 기본값 4 설정
 Integer userId = (Integer) session.getAttribute("userId"); // 세션에서 user_id 가져오기
 if (userId == null) {
-    userId = 4; // 기본값 설정
+    //userId = 4; // 기본값 설정
     out.println("기본값으로 설정된 사용자 ID: " + userId); // 기본값 출력
 } else {
     out.println("현재 사용자 ID: " + userId);
@@ -87,8 +87,7 @@ try {
 <meta name="keywords" content="검색 엔진을 위해 웹 페이지와 관련된 키워드 목록을 콤마로 구분해서 명시" />
 <meta name="Author" content="문서의 저자를 명시" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="icon" href="../images/favicon-96x96.png" type="image/png" sizes="96x96">
-<title>당고링고</title>
+<title>Words_Study</title>
 <link rel="stylesheet" href="CSS/words_study.css" />
 <style type="text/css">
 /* 스타일시트 */
