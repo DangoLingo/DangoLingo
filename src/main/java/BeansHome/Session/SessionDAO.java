@@ -97,7 +97,7 @@ public class SessionDAO {
             {
                 logger.info("userId: " + userId);
                 // 사원정보 읽기
-                sSql = "BEGIN SP_SESSION_R(?,?); END;";
+                sSql = "BEGIN SP_SESSION_COUNT_R(?,?); END;";
 
                 // IN 파라미터 만큼만 할당
                 oPaValue = new Object[1];
