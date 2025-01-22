@@ -254,7 +254,7 @@
         window.location.href = 'Words_Final.jsp?timer=' + encodeURIComponent(timerText) +
             '&memorizedCount=' + memorizedCount +
             '&forgotCount=' + forgotCount +
-            '&wordsId' + <%=wordsId %> +
+            '&wordsId=' + <%=wordsId %> +
             '&japaneseId=' + wordsList[currentIndex][5]; // Add localJapaneseId to URL parameters
     }
 

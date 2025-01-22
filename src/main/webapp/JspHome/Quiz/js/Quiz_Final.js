@@ -98,6 +98,6 @@ if (wrongAnswerIdArray && wrongAnswerIdArray.length > 0) {
 // [ 나가기 버튼 클릭 시 Quiz_Choose.jsp 로 리다이렉트]
 // -----------------------------------------------------------------
 document.querySelector('.retry').addEventListener('click', function() {
-	const redirectUrl = 'Quiz_Choose.jsp';
+	const redirectUrl = 'Quiz_Choose.jsp?wordsId=' + words_id;
 	window.location.href = redirectUrl;
 });
