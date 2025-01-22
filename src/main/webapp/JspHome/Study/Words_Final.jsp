@@ -59,7 +59,6 @@
 		
 		// -----------------------------------------------------------------
 	</script>
-	<script type="text/javascript" src="JS/Basic.js"></script>
 </head>
 <%--------------------------------------------------------------------------
 [JSP 전역 변수/함수 선언 영역 - 선언문 영역]
@@ -83,12 +82,12 @@
 	// [JSP 지역 변수 선언 : 웹 페이지 get/post 파라미터]
 	// ---------------------------------------------------------------------
 	// 세션에서 user_id 가져오기 / 없으면 기본값 5 설정
-Integer userId = (Integer) session.getAttribute("userId"); // 세션에서 user_id 가져오기
-if (userId == null) {
-    userId = 4; // 기본값 설정
-    out.println("기본값으로 설정된 사용자 ID: " + userId); // 기본값 출력
+Integer curUserId = (Integer) session.getAttribute("userId"); // 세션에서 user_id 가져오기
+if (curUserId == null) {
+	//curUserId = 4; // 기본값 설정
+    out.println("기본값으로 설정된 사용자 ID: " + curUserId); // 기본값 출력
 } else {
-    out.println("현재 사용자 ID: " + userId);
+    out.println("현재 사용자 ID: " + curUserId);
 }
 
 	// ---------------------------------------------------------------------
@@ -133,8 +132,8 @@ if (userId == null) {
 	int japaneseId = japaneseIdParam != null ? Integer.parseInt(japaneseIdParam) : 1;
 
 	// Retrieve words_id from the URL and store it in wordsId
-	String wordsIdParam = request.getParameter("words_id");
-	int wordsId = (wordsIdParam != null) ? Integer.parseInt(wordsIdParam) : 101;
+	String wordsIdParam = request.getParameter("wordsId");
+	int wordsId = Integer.parseInt(wordsIdParam); // (wordsIdParam != null) ? Integer.parseInt(wordsIdParam) : 101;
 	// ---------------------------------------------------------------------
 	// [웹 페이지 get/post 파라미터 조건 필터링]
 	// ---------------------------------------------------------------------
@@ -190,7 +189,7 @@ if (userId == null) {
 [Beans DTO 읽기 및 로직 구현 영역]
 ------------------------------------------------------------------------------%>
 
-<body class="Body">
+<body class="body container">
 	<%----------------------------------------------------------------------
 	[HTML Page - FORM 디자인 영역]
 	--------------------------------------------------------------------------%>
@@ -265,14 +264,14 @@ if (userId == null) {
     // 버튼 이벤트 핸들러 추가
     document.querySelector('.retry').addEventListener('click', () => {
         // 다시하기 버튼 클릭 시 Words_Study 페이지로 이동
-    	window.location.href = '<%= request.getContextPath() %>/JspHome/Study/Words_Study.jsp'
+    	window.location.href = '<%= request.getContextPath() %>/JspHome/Study/Words_Study.jsp?wordsId=<%= wordsId %>'
     });
 
     document.querySelector('.exit').addEventListener('click', () => {
         const timer = '<%= timer %>'; // "00분00초" 형식
-        const userId = <%= userId %>;  // 사용자 ID 추가
-        const wordsId = <%= wordsId %>;  // 단어장 ID 추가
-        const japaneseId = <%= japaneseId %>;  // 일본어 ID 추가
+        const userId = '<%= curUserId %>';  // 사용자 ID 추가
+        const wordsId = '<%= wordsId %>';  // 단어장 ID 추가
+        const japaneseId = '<%= japaneseId %>';  // 일본어 ID 추가
 
         // 디버깅: 변수 값 확인
         console.log("Timer (원본):", timer);
