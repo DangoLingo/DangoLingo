@@ -176,8 +176,8 @@ String Date3 = Sdf.format(new SimpleDateFormat("yyyyMMdd hhmmss").parse(Date));
 	<header>
 		<%@ include file="../Common/Navbar.jsp"%>
 	</header>
-	<main>
-		<form action="QuizResultUpdate.jsp" method="POST">
+	<main class="main-container">
+		<form class="quiz-box" action="QuizResultUpdate.jsp" method="POST">
 			<%----------------------------------------------------------------------
 		[ 1) 퀴즈 결과]
 		--------------------------------------------------------------------------%>

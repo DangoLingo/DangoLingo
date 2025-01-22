@@ -151,29 +151,23 @@ main.content {
 	width: 180px;
 	height: 40px;
 	border: none;
-	border-radius: 5px;
+	border-radius: 16px;
 	font-size: 15px;
 	cursor: pointer;
 }
 
-/* 다시하기 버튼 스타일 */
 .buttons .retry {
-	background-color: #324931;
-	color: #fff;
-}
-
-/* 다시하기 버튼 호버 스타일 */
-.buttons .retry:hover {
-	background-color: #45a045;
-}
-
-/* 나가기 버튼 스타일 */
-.buttons .exit {
 	background-color: #5C8B6C;
-	color: #fff;
+	color: white;
+	border: none;
 }
 
-/* 나가기 버튼 호버 스타일 */
-.buttons .exit:hover {
-	background-color: #45a045;
+.buttons .exit {
+	background-color: white;
+	color: #5C8B6C;
+	border: 2px solid #5C8B6C;
+}
+
+.buttons button:hover {
+	opacity: 0.9;
 }
