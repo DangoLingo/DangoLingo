@@ -313,7 +313,7 @@ if (curUserId == null) {
         };
 
         // AJAX 요청 데이터
-		const params = "timer=" + minutes + "&userId=" + userId + "&wordsId=" + wordsId + "&japaneseId=" + japaneseId;
+		const params = "timer=" + minutes + "&userId=" + userId + "&wordsId=" + wordsId + "&japaneseId=" + japaneseId + "&studyCount=" + memorizedCount;
         console.log("AJAX 요청 데이터:", params);
         xhr.send(params);
     });

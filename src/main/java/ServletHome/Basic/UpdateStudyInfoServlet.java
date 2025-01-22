@@ -44,6 +44,7 @@ public class UpdateStudyInfoServlet extends HttpServlet {
             int userId = Integer.parseInt(request.getParameter("userId"));
             int wordsId = Integer.parseInt(request.getParameter("wordsId"));
             int japaneseId = Integer.parseInt(request.getParameter("japaneseId"));
+            int studyCounts = Integer.parseInt(request.getParameter("studyCounts"));
 
             // Debugging log: Check existing study_date
             String debugQuery = "SELECT study_date FROM TB_USER WHERE user_id = ?";
@@ -77,7 +78,7 @@ public class UpdateStudyInfoServlet extends HttpServlet {
                 if (rs.next()) {
                     // Update existing record
                     String updateStudyQuery = "UPDATE TB_STUDY SET japanese_id = ?, study_date = CURRENT_DATE, " +
-                                            "study_count = study_count + 50 WHERE user_id = ? AND words_id = ?";
+                                            "study_count = studyCounts WHERE user_id = ? AND words_id = ?";
                     try (PreparedStatement pstmt = connection.prepareStatement(updateStudyQuery)) {
                         pstmt.setInt(1, japaneseId);
                         pstmt.setInt(2, userId);
@@ -86,7 +87,7 @@ public class UpdateStudyInfoServlet extends HttpServlet {
                     }
                 } else {
                     // Insert new record
-                    String insertStudyQuery = "INSERT INTO TB_STUDY (study_id, user_id, words_id, japanese_id, study_count, study_date) " +
+                    String insertStudyQuery = "INSERT INTO TB_STUDY (study_id, user_id, words_id, japanese_id, studyCounts, study_date) " +
                                             "VALUES (SQ_STUDY_ID.NEXTVAL, ?, ?, ?, 50, CURRENT_DATE)";
                     try (PreparedStatement pstmt = connection.prepareStatement(insertStudyQuery)) {
                         pstmt.setInt(1, userId);
@@ -98,7 +99,7 @@ public class UpdateStudyInfoServlet extends HttpServlet {
             }
 
             // Update TB_USER
-            String updateUserQuery = "UPDATE TB_USER SET study_date = CURRENT_DATE, study_time = study_time + ?, point = point + 50, total_point = total_point + 50 WHERE user_id = ?";
+            String updateUserQuery = "UPDATE TB_USER SET study_date = CURRENT_DATE, study_time = study_time + ?, point = point + studyCounts, total_point = total_point + studyCounts WHERE user_id = ?";
             try (PreparedStatement pstmt3 = connection.prepareStatement(updateUserQuery)) {
                 pstmt3.setInt(1, studyMinutes);
                 pstmt3.setInt(2, userId);
