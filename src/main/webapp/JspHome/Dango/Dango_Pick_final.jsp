@@ -168,19 +168,18 @@
 %>
 
 <body class="Body">
-	<%----------------------------------------------------------------------
-	[HTML Page - FORM 디자인 영역]
-	--------------------------------------------------------------------------%>
-	<form name="form1" action="" method="post">
-		<%------------------------------------------------------------------
-			뽑기 모달
-		----------------------------------------------------------------------%>        
-		<br><br>
-		<img alt="당고 뽑기 결과" src=<%=dangoImgPath %>><br>
-		<a class="dangoname"><%=dangoName %></a>
-		<p>보유포인트: <%=currentPoint %>pt</p>
-		<button type="button" onclick="location.href='Dango_Pick_final.jsp'">뽑기 (100pt 차감)</button>	
-	</form>
+	<div class="pick-container">
+		<form name="form1" action="" method="post">
+			<img alt="당고 뽑기 결과" src=<%=dangoImgPath %>>
+			<span class="dangoname"><%=dangoName %></span>
+			<p>보유포인트: <%=currentPoint %>pt</p>
+			<button type="button" 
+					onclick="location.href='Dango_Pick_final.jsp'" 
+					<%=currentPoint < 100 ? "disabled" : ""%>>
+				뽑기 (100pt 차감)
+			</button>	
+		</form>
+	</div>
 	<%----------------------------------------------------------------------
 	[HTML Page - END]
 	--------------------------------------------------------------------------%>

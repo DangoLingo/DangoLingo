@@ -145,7 +145,11 @@ while (bContinue == true && this.dangoDAO.DBMgr.Rs.next())
             <br>
             <img alt="당고 뽑기" src="../images/dangoPick.svg">
             <p>보유포인트: <%=currentPoint %>pt</p>
-            <button type="button" onclick="location.href='Dango_Pick_final.jsp'" >뽑기 (100pt 차감)</button>	
+            <button type="button" 
+                    onclick="location.href='Dango_Pick_final.jsp'" 
+                    <%=currentPoint < 100 ? "disabled" : ""%>>
+                뽑기 (100pt 차감)
+            </button>	
         </form>
     </div>
     <%----------------------------------------------------------------------

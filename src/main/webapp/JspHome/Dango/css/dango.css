@@ -221,4 +221,42 @@ main.main-container {
         width: 90px;
         height: 90px;
     }
+}
+
+.grid-item.clickable {
+    cursor: pointer;
+}
+
+.image-wrapper {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+}
+
+.image-wrapper.profile-dango {
+    border: 3px solid #324931;
+    padding: 3px;
+    border-radius: 50%;
+}
+
+.image-wrapper.profile-dango::after {
+    content: '프로필';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #324931;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 768px) {
+    .image-wrapper {
+        width: 120px;
+        height: 120px;
+    }
 } 

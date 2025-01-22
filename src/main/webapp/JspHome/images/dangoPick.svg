@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 뽑기 기계 본체 -->
+    <rect x="20" y="30" width="120" height="100" rx="10" fill="#5C8B6C"/>
+    <rect x="25" y="35" width="110" height="90" rx="8" fill="#ffffff" stroke="#324931" stroke-width="2"/>
+    
+    <!-- 뽑기 기계 상단 -->
+    <path d="M30 20C30 15 35 10 40 10H120C125 10 130 15 130 20V30H30V20Z" fill="#324931"/>
+    
+    <!-- 뽑기 기계 디스플레이 -->
+    <rect x="45" y="45" width="70" height="40" rx="5" fill="#E8E8E9"/>
+    
+    <!-- 당고 캡슐 -->
+    <circle cx="80" cy="100" r="15" fill="#9ECE9C"/>
+    <circle cx="80" cy="100" r="12" fill="#ffffff"/>
+    
+    <!-- 뽑기 손잡이 -->
+    <rect x="130" y="60" width="20" height="10" rx="5" fill="#324931"/>
+    <circle cx="145" cy="65" r="8" fill="#5C8B6C"/>
+</svg>
