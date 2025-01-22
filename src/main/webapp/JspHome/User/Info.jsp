@@ -37,7 +37,7 @@
 
     // 변수 초기화
     String nickname = currentUser.getNickname();
-    String intro = currentUser.getIntro();
+    String intro = currentUser.getIntro() == null ? "" : currentUser.getIntro();
     String password = currentUser.getPassword();
     String errorMessage = "";
 
@@ -91,7 +91,7 @@
 
             <input type="text"
                    name="nickname"
-                   placeholder="닉네임"
+                   placeholder="닉네임을 입력해주세요."
                    required
                    minlength="2"
                    maxlength="20"
@@ -101,7 +101,7 @@
 
             <input type="text"
                    name="intro"
-                   placeholder="소개글"
+                   placeholder="소개글을 입력해주세요."
                    required
                    minlength="1"
                    maxlength="50"
@@ -110,7 +110,7 @@
             <input type="password"
                    name="password"
                    id="password1"
-                   placeholder="비밀번호"
+                   placeholder="비밀번호를 입력해주세요."
                    value="<%= password %>"
                    required
                    minlength="8">

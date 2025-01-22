@@ -16,7 +16,7 @@
     RankingDAO rankingDAO = new RankingDAO();
     DangoDAO dangoDAO = new DangoDAO();
     DangoDTO userProfile = new DangoDTO();
-    DangoDTO tempProfile = new DangoDTO();
+    DangoDTO tempProfile = null;
     ArrayList<DangoDTO> dangoProfiles = new ArrayList<>();
 
     // 세션에서 현재 사용자 정보 가져오기
@@ -40,10 +40,13 @@
 
     if (rankings != null) {
         for (RankingDTO rank : rankings) {
+            tempProfile = new DangoDTO();
+            dangoDAO.ReadProfileDango(rank.getUserId(), tempProfile);
             System.out.println("Rank: " + rank.getRank() +
                     ", User: " + rank.getNickname() +
-                    ", Point: " + rank.getPoint());
-            dangoDAO.ReadProfileDango(rank.getUserId(), tempProfile);
+                    ", Point: " + rank.getPoint() +
+                    ", DangoId: " + tempProfile.getDangoId() +
+                    ", LocationImg: " + tempProfile.getLocationImg());
             dangoProfiles.add(tempProfile);
         }
     }
