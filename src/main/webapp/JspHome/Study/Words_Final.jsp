@@ -268,54 +268,55 @@ if (curUserId == null) {
     });
 
     document.querySelector('.exit').addEventListener('click', () => {
-        const timer = '<%= timer %>'; // "00분00초" 형식
-        const userId = '<%= curUserId %>';  // 사용자 ID 추가
-        const wordsId = '<%= wordsId %>';  // 단어장 ID 추가
-        const japaneseId = '<%= japaneseId %>';  // 일본어 ID 추가
+		window.location.href = '<%= request.getContextPath() %>/JspHome/Words/Words.jsp';
+        <%--const timer = '<%= timer %>'; // "00분00초" 형식--%>
+        <%--const userId = '<%= curUserId %>';  // 사용자 ID 추가--%>
+        <%--const wordsId = '<%= wordsId %>';  // 단어장 ID 추가--%>
+        <%--const japaneseId = '<%= japaneseId %>';  // 일본어 ID 추가--%>
 
-        // 디버깅: 변수 값 확인
-        console.log("Timer (원본):", timer);
-        console.log("User ID:", userId);
+        <%--// 디버깅: 변수 값 확인--%>
+        <%--console.log("Timer (원본):", timer);--%>
+        <%--console.log("User ID:", userId);--%>
 
-        // 'timer' 값을 숫자로 변환 (분 단위)
-        let minutes = 10; // 기본값 10 설정
-        try {
-            if (timer && timer.includes('분')) {
-                minutes = parseInt(timer.split('분')[0], 10); // "00분"에서 숫자 추출
-            }
-            if (isNaN(minutes) || minutes === 0) {
-                minutes = 10; // 변환 실패 또는 0인 경우 기본값 설정
-            }
-        } catch (error) {
-            console.error("Timer 변환 오류:", error);
-            minutes = 10; // 변환 중 오류 발생 시 기본값 설정
-        }
+        <%--// 'timer' 값을 숫자로 변환 (분 단위)--%>
+        <%--let minutes = 10; // 기본값 10 설정--%>
+        <%--try {--%>
+        <%--    if (timer && timer.includes('분')) {--%>
+        <%--        minutes = parseInt(timer.split('분')[0], 10); // "00분"에서 숫자 추출--%>
+        <%--    }--%>
+        <%--    if (isNaN(minutes) || minutes === 0) {--%>
+        <%--        minutes = 10; // 변환 실패 또는 0인 경우 기본값 설정--%>
+        <%--    }--%>
+        <%--} catch (error) {--%>
+        <%--    console.error("Timer 변환 오류:", error);--%>
+        <%--    minutes = 10; // 변환 중 오류 발생 시 기본값 설정--%>
+        <%--}--%>
 
-        // 최종 변환된 timer 값 확인
-        console.log("변환된 Timer (minutes):", minutes);
+        <%--// 최종 변환된 timer 값 확인--%>
+        <%--console.log("변환된 Timer (minutes):", minutes);--%>
 
-        // AJAX 요청 보내기
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '<%= request.getContextPath() %>/UpdateStudyInfo', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        <%--// AJAX 요청 보내기--%>
+        <%--const xhr = new XMLHttpRequest();--%>
+        <%--xhr.open('POST', '<%= request.getContextPath() %>/UpdateStudyInfo', true);--%>
+        <%--xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');--%>
 
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    console.log('서버 응답:', xhr.responseText);
-                    setTimeout(() => {
-                        window.location.href = '<%= request.getContextPath() %>/JspHome/Words/Words.jsp';
-                    }, 500); // 0.5초 지연 후 페이지 이동
-                } else {
-                    console.error("AJAX 요청 실패:", xhr.status, xhr.statusText);
-                }
-            }
-        };
+        <%--xhr.onreadystatechange = function () {--%>
+        <%--    if (xhr.readyState === XMLHttpRequest.DONE) {--%>
+        <%--        if (xhr.status === 200) {--%>
+        <%--            console.log('서버 응답:', xhr.responseText);--%>
+        <%--            setTimeout(() => {--%>
+        <%--                window.location.href = '<%= request.getContextPath() %>/JspHome/Words/Words.jsp';--%>
+        <%--            }, 500); // 0.5초 지연 후 페이지 이동--%>
+        <%--        } else {--%>
+        <%--            console.error("AJAX 요청 실패:", xhr.status, xhr.statusText);--%>
+        <%--        }--%>
+        <%--    }--%>
+        <%--};--%>
 
-        // AJAX 요청 데이터
-		const params = "timer=" + minutes + "&userId=" + userId + "&wordsId=" + wordsId + "&japaneseId=" + japaneseId + "&studyCount=" + memorizedCount;
-        console.log("AJAX 요청 데이터:", params);
-        xhr.send(params);
+        <%--// AJAX 요청 데이터--%>
+		<%--const params = "timer=" + minutes + "&userId=" + userId + "&wordsId=" + wordsId + "&japaneseId=" + japaneseId + "&studyCount=" + memorizedCount;--%>
+        <%--console.log("AJAX 요청 데이터:", params);--%>
+        <%--xhr.send(params);--%>
     });
 
     function animateDonutChart(correctAnswers, totalAnswers, duration) {
